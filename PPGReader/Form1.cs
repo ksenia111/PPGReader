@@ -17,6 +17,7 @@ namespace PPGReader
         public Form1()
         {
             InitializeComponent();
+
         }
 
         private int[] read()
