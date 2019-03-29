@@ -8,7 +8,8 @@ namespace PPGReader
 {
     class PPG
     {
-        PointPPG [] points;
+        public PointPPG[] points { get; }
+        //добавить массивы найденных характеристик
 
         public PPG(PointPPG [] pointPPGs, int n)
         {
@@ -24,6 +25,11 @@ namespace PPGReader
         public int[] GetY()
         {
             return points.Select(p => p.GetY()).ToArray();
+        }
+
+        public void Mark10Periods()
+        {
+
         }
 
 
