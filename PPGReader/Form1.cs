@@ -14,12 +14,42 @@ namespace PPGReader
 {
     public partial class Form1 : Form
     {
+        //вынесла в глобальные, чтобы можно было обращатся к ней из событий контекстного меню
+        PPG ppg;
+        // внесла их для запоминания координат, при клике правой кнопкой мыши (тогда появляется контестное меню, мышь двигается и все координаты сбиваются)
+        double x;
+        double y;
+        // при клике правой кнопкой - был ли курсор на графике
+        bool СursorOnChart = false;
+
         public Form1()
         {
             InitializeComponent();
+            // создаем элементы меню
+            ToolStripMenuItem beginPeriobMenuItem = new ToolStripMenuItem("Beginning of period");
+            ToolStripMenuItem endPeriodMenuItem = new ToolStripMenuItem("End of period");
+            ToolStripMenuItem aMenuItem = new ToolStripMenuItem("A");
+            ToolStripMenuItem bMenuItem = new ToolStripMenuItem("B");
+            ToolStripMenuItem cMenuItem = new ToolStripMenuItem("C");
+            ToolStripMenuItem dMenuItem = new ToolStripMenuItem("D");
+            ToolStripMenuItem eMenuItem = new ToolStripMenuItem("E");
+            // добавляем элементы в меню
+            contextMenuStrip1.Items.AddRange(new[] { beginPeriobMenuItem, endPeriodMenuItem, aMenuItem,
+                                                     bMenuItem, cMenuItem, dMenuItem, eMenuItem});
+            // ассоциируем контекстное меню с текстовым полем
+            chart1.ContextMenuStrip = contextMenuStrip1;
+            // устанавливаем обработчики событий для меню
+            beginPeriobMenuItem.Click += beginPeriobMenuItem_Click;
+            endPeriodMenuItem.Click += endPeriodMenuItem_Click;
+            aMenuItem.Click += aMenuItem_Click;
+            bMenuItem.Click += bMenuItem_Click;
+            cMenuItem.Click += cMenuItem_Click;
+            dMenuItem.Click += dMenuItem_Click;
+            eMenuItem.Click += eMenuItem_Click;
+            contextMenuStrip1.Enabled = true;
         }
-
-        private int[] read()
+      
+        private int[] Read()
         {
             string filePath = @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz";
             int w = int.Parse(textBoxW.Text);
@@ -46,7 +76,7 @@ namespace PPGReader
         /// </summary>
         /// <param name="points"></param>
         /// <returns></returns>
-        private int[] singling(int[] points)
+        private int[] Singling(int[] points)
         {
            int rate = int.Parse(textBoxSinglingRate.Text); //частота прореживания
            int n = points.Length / rate;
@@ -63,10 +93,10 @@ namespace PPGReader
         private void button1_Click(object sender, EventArgs e)
         {
             //чтение
-            int[] points = read();
+            int[] points = Read();
 
             //прореживание
-            int[] singlingPoints = singling(points);
+            int[] singlingPoints = Singling(points);
 
             //создание массива точекФПГ и ФПГ
             int n = singlingPoints.Length;
@@ -78,7 +108,7 @@ namespace PPGReader
                 pointPPGs[i] = new PointPPG(i, singlingPoints[i]);
             }
 
-            PPG ppg = new PPG(pointPPGs, n);
+            ppg = new PPG(pointPPGs, n);
             Draw(ppg);
         }
 
@@ -89,15 +119,21 @@ namespace PPGReader
             chart1.Series[0].ChartType = SeriesChartType.Line;
             chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
-            chart1.Series[1].ToolTip = "X = #VALX, Y = #VALY";
+            chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
             chart1.Series[0].Points.DataBindXY(ppg.GetX(), ppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
-            chart1.Series[1].Color = Color.Blue;
-            chart1.Series[1].MarkerSize = 1;
-            chart1.Series[1].Points.DataBindXY(ppg.GetX(), ppg.GetY());
+            chart1.Series[0].Color = Color.Blue;
+            chart1.Series[0].MarkerSize = 1;
+        }
+
+        private void Mark10Periods()
+        {
+
         }
 
         private void chart1_MouseClick(object sender, MouseEventArgs e)
         {
+            var result = chart1.HitTest(e.X, e.Y);
+            
             chart1.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
             chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
 
@@ -116,7 +152,7 @@ namespace PPGReader
 
             var result = chart1.HitTest(e.X, e.Y);
             Cursor = result.ChartElementType == ChartElementType.DataPoint ? Cursors.Hand : Cursors.Default;
-            chart1.Series[1].Color = result.ChartElementType == ChartElementType.DataPoint ? Color.Coral : Color.Blue; //у всего графика меняется цвет, как у одной точки заменить, пока не придумала
+            chart1.Series[0].Color = result.ChartElementType == ChartElementType.DataPoint ? Color.Coral : Color.Blue; //у всего графика меняется цвет, как у одной точки заменить, пока не придумала
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -127,6 +163,164 @@ namespace PPGReader
         private void button3_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
+        }
+
+        void ResetValue()
+        {
+            x = 0;
+            y = 0;
+            СursorOnChart = false;
+        }
+
+        private void beginPeriobMenuItem_Click(object sender, EventArgs e)
+        {
+            if (СursorOnChart == false)
+            {
+                MessageBox.Show(
+                                "Курсор находился не на графике, попробуйте еще раз",
+                                "Сообщение",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1,
+                                MessageBoxOptions.DefaultDesktopOnly);
+            }
+            else
+            {
+                ppg.points[(int)x].IsBeginPeriod = true;
+                chart1.Series[0].Points[(int)x].Label = "T1";
+            }
+            ResetValue();
+        }
+
+        private void endPeriodMenuItem_Click(object sender, EventArgs e)
+        {
+            if (СursorOnChart == false)
+            {
+                MessageBox.Show(
+                                "Курсор находился не на графике, попробуйте еще раз",
+                                "Сообщение",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1,
+                                MessageBoxOptions.DefaultDesktopOnly);
+            }
+            else
+            {
+                ppg.points[(int)x].IsEndPeriod = true;
+                chart1.Series[0].Points[(int)x].Label = "T2";
+            }
+            ResetValue();
+        }
+
+        private void aMenuItem_Click(object sender, EventArgs e)
+        {
+            if (СursorOnChart == false)
+            {
+                MessageBox.Show(
+                                "Курсор находился не на графике, попробуйте еще раз",
+                                "Сообщение",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1,
+                                MessageBoxOptions.DefaultDesktopOnly);
+            }
+            else
+            {
+                ppg.points[(int)x].IsA = true;
+                chart1.Series[0].Points[(int)x].Label = "A";
+            }
+            ResetValue();
+        }
+
+        private void bMenuItem_Click(object sender, EventArgs e)
+        {
+            if (СursorOnChart == false)
+            {
+                MessageBox.Show(
+                                "Курсор находился не на графике, попробуйте еще раз",
+                                "Сообщение",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1,
+                                MessageBoxOptions.DefaultDesktopOnly);
+            }
+            else
+            {
+                ppg.points[(int)x].IsB = true;
+                chart1.Series[0].Points[(int)x].Label = "B";
+            }
+            ResetValue();
+        }
+
+        private void cMenuItem_Click(object sender, EventArgs e)
+        {
+            if (СursorOnChart == false)
+            {
+                MessageBox.Show(
+                                "Курсор находился не на графике, попробуйте еще раз",
+                                "Сообщение",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1,
+                                MessageBoxOptions.DefaultDesktopOnly);
+            }
+            else
+            {
+                ppg.points[(int)x].IsС = true;
+                chart1.Series[0].Points[(int)x].Label = "C";
+            }
+            ResetValue();
+        }
+
+        private void dMenuItem_Click(object sender, EventArgs e)
+        {
+            if (СursorOnChart == false)
+            {
+                MessageBox.Show(
+                                "Курсор находился не на графике, попробуйте еще раз",
+                                "Сообщение",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1,
+                                MessageBoxOptions.DefaultDesktopOnly);
+            }
+            else
+            {
+                ppg.points[(int)x].IsD = true;
+                chart1.Series[0].Points[(int)x].Label = "D";
+            }
+            ResetValue();
+        }
+
+        private void eMenuItem_Click(object sender, EventArgs e)
+        {
+            if (СursorOnChart == false)
+            {
+                MessageBox.Show(
+                                "Курсор находился не на графике, попробуйте еще раз",
+                                "Сообщение",
+                                MessageBoxButtons.YesNo,
+                                MessageBoxIcon.Information,
+                                MessageBoxDefaultButton.Button1,
+                                MessageBoxOptions.DefaultDesktopOnly);
+            }
+            else
+            {
+                ppg.points[(int)x].IsE = true;
+                chart1.Series[0].Points[(int)x].Label = "E";
+            }
+            ResetValue();
+        }
+
+        private void chart1_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Right)
+            {
+                var result = chart1.HitTest(e.X, e.Y);
+                СursorOnChart = result.ChartElementType == ChartElementType.DataPoint;
+                x = chart1.ChartAreas[0].CursorX.Position;
+                y =  chart1.ChartAreas[0].CursorY.Position;
+            }
         }
     }
 }
