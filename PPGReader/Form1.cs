@@ -21,7 +21,7 @@ namespace PPGReader
 
         private int[] read()
         {
-            string filePath = textBoxPath.Text; //@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz";
+            string filePath = @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz";
             int w = int.Parse(textBoxW.Text);
             FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             int[] points = new int[stream.Length];
