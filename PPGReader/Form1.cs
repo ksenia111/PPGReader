@@ -71,6 +71,19 @@ namespace PPGReader
             return points;
         }
 
+        public int[] CopyPoints(int[] points)  //для создания дубликата точек
+        {
+            int n = points.Length;
+            int[] duplicatePoints = new int[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                duplicatePoints[i] = points[i];
+            }
+
+            return duplicatePoints;
+        }
+
         /// <summary>
         /// прореживание
         /// </summary>
@@ -90,6 +103,39 @@ namespace PPGReader
             return singlingPoints;
         }
 
+        /// <summary>
+        /// Сглаживание
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private int[] MovingAverageMethod(int beginPeriod, int endPeriod, int window, int[] points) //метод скользящей средней
+        {
+            int p = window; //окно
+            int m = (p - 1) / 2;
+            int n = points.Length;// - m * 2;
+            int[] SmoothedData = new int[n];
+
+            for (int i = 0; i < m; i++)
+            {
+                SmoothedData[i] = points[i];
+            }
+
+            for (int i = n - m; i < n; i++)
+            {
+                SmoothedData[i] = points[i];
+            }
+
+            for (int i = m; i < n-m; i++) 
+            {
+                for (int j = i - m; j < i + m; j++) 
+                SmoothedData[i] += points[j];
+                SmoothedData[i] = SmoothedData[i] / p;
+            }
+
+            return SmoothedData;
+        }
+
+        int[] duplicatePoints;
         private void button1_Click(object sender, EventArgs e)
         {
             //чтение
@@ -98,6 +144,8 @@ namespace PPGReader
             //прореживание
             int[] singlingPoints = Singling(points);
 
+            duplicatePoints = singlingPoints;  // дубликат прореженных точек (я использую в сглаживании)
+            
             //создание массива точекФПГ и ФПГ
             int n = singlingPoints.Length;
 
@@ -155,14 +203,18 @@ namespace PPGReader
             chart1.Series[0].Color = result.ChartElementType == ChartElementType.DataPoint ? Color.Coral : Color.Blue; //у всего графика меняется цвет, как у одной точки заменить, пока не придумала
         }
 
+        int b2click = 0;
         private void button2_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
+            b2click++;
         }
 
+        int b3click = 0;
         private void button3_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
+            b3click++;
         }
 
         void ResetValue()
@@ -322,5 +374,75 @@ namespace PPGReader
                 y =  chart1.ChartAreas[0].CursorY.Position;
             }
         }
+
+        int increaseClick = 0;
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            int window = 2;
+            if (textBox1.Text != "") window = Convert.ToInt32(textBox1.Text);
+            increaseClick = window;
+            increaseClick += 1;
+            textBox1.Text = Convert.ToString(increaseClick);
+        }
+
+        int decreaseClick = 0;
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            int window = 2;
+            if (textBox1.Text != "") window = Convert.ToInt32(textBox1.Text);
+            
+            if (window >= 3)
+            {
+                decreaseClick = window;
+                decreaseClick -= 1;
+                textBox1.Text = Convert.ToString(decreaseClick);
+            }
+            if (window < 3) MessageBox.Show("Невозможно уменьшить окно сглаживания", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Hand);
+
+        }
+
+        private void button3_Click_1(object sender, EventArgs e)
+        {
+            int beginPeriod = 98;                             //нужно как-то будет брать отмеченные на графике 
+            int endPeriod = 270;                              //нужно как-то будет брать отмеченные на графике 
+            int Period = endPeriod - beginPeriod;
+            int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
+            int[] pointsForSmoothing = new int[Period];
+
+            for (int i = 0; i < Period; i++)
+            {
+                pointsForSmoothing[i] = points[beginPeriod + i];         //берем только точки внутри периода
+            }
+
+            int window = Convert.ToInt32(textBox1.Text); 
+
+            int[] smoothedData = new int[Period];
+            smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
+
+            int j = 0;
+            for (int i = 98; i < 270; i++)
+            {
+                points[i] = smoothedData[j];                //в дубликате заменяем точки в выбранном периоде на сглаженные
+                j++;
+            }
+
+            //создание массива точекФПГ и ФПГ
+            int n = points.Length;
+
+            PointPPG[] pointPPGs = new PointPPG[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                pointPPGs[i] = new PointPPG(i, points[i]);
+            }
+
+            ppg = new PPG(pointPPGs, n);
+            Draw(ppg);
+            //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
+            if (b2click != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * b2click);
+            if (b3click != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * b3click);
+        }
+
+        
     }
 }
