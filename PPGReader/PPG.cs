@@ -9,7 +9,12 @@ namespace PPGReader
     class PPG
     {
         public PointPPG[] points { get; }
-        //добавить массивы найденных характеристик
+        public List<int> idxPeriodPoints = new List<int>(); 
+        public List<int> idxAPoints = new List<int>(); 
+        public List<int> idxBPoints = new List<int>(); 
+        public List<int> idxCPoints = new List<int>(); 
+        public List<int> idxDPoints = new List<int>(); 
+        public List<int> idxEPoints = new List<int>();
 
         public PPG(PointPPG [] pointPPGs, int n)
         {

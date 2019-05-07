@@ -12,8 +12,7 @@ namespace PPGReader
         int y;
 
         public bool IsMax {get;set;} = false; // автосвойство, тут почитать можно подробнее https://metanit.com/sharp/tutorial/3.4.php
-        public bool IsBeginPeriod { get; set; } = false;
-        public bool IsEndPeriod { get; set; } = false;
+        public bool IsPeriod { get; set; } = false;
         /// <summary>
         /// точка перегиба ФПГ, обяз-я, находится между началом периода и точкой B, самый большой max ДФПГ на периоде
         /// </summary>
