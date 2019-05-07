@@ -16,6 +16,8 @@ namespace PPGReader
     {
         //вынесла в глобальные, чтобы можно было обращатся к ней из событий контекстного меню
         PPG ppg;
+        // добавила хранение для производной
+        DPPG dppg;
         // внесла их для запоминания координат, при клике правой кнопкой мыши (тогда появляется контестное меню, мышь двигается и все координаты сбиваются)
         double x;
         double y;
@@ -27,6 +29,14 @@ namespace PPGReader
         int increaseClick = 0;
         int decreaseClick = 0;
         int PeriodClick = 0;
+        int AClick = 0;
+        int BClick = 0;
+        int CClick = 0;
+        int DClick = 0;
+        int EClick = 0;
+        const int CountPeriods = 10;
+        PeriodPPG[] Periods = new PeriodPPG[CountPeriods];
+        
 
         public Form1()
         {
@@ -52,6 +62,11 @@ namespace PPGReader
             dMenuItem.Click += dMenuItem_Click;
             eMenuItem.Click += eMenuItem_Click;
             contextMenuStrip1.Enabled = true;
+
+            for(int i=0; i < Periods.Length;i++)
+            {
+                Periods[i] = new PeriodPPG();
+            }
         }
       
         private int[] Read()
@@ -177,11 +192,7 @@ namespace PPGReader
             chart1.Series[0].Points.DataBindXY(ppg.GetX(), ppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
             chart1.Series[0].Color = Color.Blue;
             chart1.Series[0].MarkerSize = 1;
-            MessageBox.Show(
-                                "Отметьте характерные точки на 10 периодах",
-                                "Сообщение",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+           
         }
 
         private void Mark10Periods()
@@ -237,6 +248,20 @@ namespace PPGReader
 
         private void PeriobMenuItem_Click(object sender, EventArgs e)
         {
+            if(PeriodClick == 0)
+            {
+                Periods[PeriodClick].begin = (int)x;
+            }
+            else if(PeriodClick != 10)
+            {
+                Periods[PeriodClick-1].end = (int)x;
+                Periods[PeriodClick].begin = (int)x;
+
+            }
+            else
+            {
+                Periods[9].end = (int)x;
+            }
             PeriodClick++;
             if (СursorOnChart == false)
             {
@@ -268,6 +293,8 @@ namespace PPGReader
        
         private void aMenuItem_Click(object sender, EventArgs e)
         {
+            Periods[AClick].A = (int)x;
+            AClick++;
             if (СursorOnChart == false)
             {
                 MessageBox.Show(
@@ -283,10 +310,13 @@ namespace PPGReader
                 chart1.Series[0].Points[(int)x].Label = "A";
             }
             ResetValue();
+            
         }
 
         private void bMenuItem_Click(object sender, EventArgs e)
         {
+            Periods[BClick].B = (int)x;
+            BClick++;
             if (СursorOnChart == false)
             {
                 MessageBox.Show(
@@ -306,6 +336,8 @@ namespace PPGReader
 
         private void cMenuItem_Click(object sender, EventArgs e)
         {
+            Periods[CClick].C = (int)x;
+            CClick++;
             if (СursorOnChart == false)
             {
                 MessageBox.Show(
@@ -325,6 +357,8 @@ namespace PPGReader
 
         private void dMenuItem_Click(object sender, EventArgs e)
         {
+            Periods[DClick].D = (int)x;
+            DClick++;
             if (СursorOnChart == false)
             {
                 MessageBox.Show(
@@ -344,6 +378,8 @@ namespace PPGReader
 
         private void eMenuItem_Click(object sender, EventArgs e)
         {
+            Periods[EClick].E = (int)x;
+            EClick++;
             if (СursorOnChart == false)
             {
                 MessageBox.Show(
@@ -443,6 +479,153 @@ namespace PPGReader
             if (b3click != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * b3click);
         }
 
-        
+        private void FindCharacteristics_Click(object sender, EventArgs e)
+        {
+            if (PeriodClick != 11)
+            { MessageBox.Show(
+                               "Отметьте характерные точки на 10 периодах",
+                               "Сообщение",
+                               MessageBoxButtons.OK,
+                               MessageBoxIcon.Information);
+            }
+            else
+            {
+                int averageLengthPeriod = CalcAverageLengthPeriod();
+                int A_RelativePosition = CalcRelativePosition(ppg.idxAPoints.ToArray(), ppg.idxAPoints.ToArray().Length);
+                int B_RelativePosition = CalcRelativePosition(ppg.idxBPoints.ToArray(), ppg.idxBPoints.ToArray().Length);
+                //int C_RelativePosition = CalcRelativePosition(ppg.idxCPoints.ToArray(), ppg.idxCPoints.ToArray().Length);
+                //int D_RelativePosition = CalcRelativePosition(ppg.idxDPoints.ToArray(), ppg.idxDPoints.ToArray().Length);
+                //int E_RelativePosition = CalcRelativePosition(ppg.idxEPoints.ToArray(), ppg.idxEPoints.ToArray().Length);
+
+                int previousIdxP = 10;
+                int currentIdxP = 0;
+
+                while (Periods[currentIdxP].end + averageLengthPeriod < ppg.points.Length)
+                {
+                    // добавить проверку на критические точки и сглаживание, обновление через 10 периодов
+                    currentIdxP = previousIdxP % 10;
+                    if (currentIdxP == 0)
+                    {
+                        Periods[currentIdxP].begin = Periods[9].end;
+                    }
+                    else
+                    {
+                        Periods[currentIdxP].begin = Periods[currentIdxP - 1].end;
+                    }
+                    Periods[currentIdxP].end = CalcEndPeriod(Periods[currentIdxP].begin, averageLengthPeriod, currentIdxP);
+                    chart1.Series[0].Points[Periods[currentIdxP].end].Label = "T";
+
+                    //Periods[currentIdxP].A = CalcA(A_RelativePosition, currentIdxP);
+                    //chart1.Series[0].Points[Periods[currentIdxP].A].Label = "A";
+
+                    Periods[currentIdxP].B = CalcB(B_RelativePosition, currentIdxP);
+                    chart1.Series[0].Points[Periods[currentIdxP].B].Label = "B";
+                    previousIdxP = currentIdxP + 1;
+
+                }
+            }
+
+
+        }
+
+        private int CalcB(int B_RelativePosition, int currentIdxPeriod)
+        {
+            int periodLength = Periods[currentIdxPeriod].Length();
+            int periodBegin = Periods[currentIdxPeriod].begin;
+            int predictionB = (B_RelativePosition / 100) * periodLength;
+            int searchInterval = 10 * predictionB / 100;
+            int idxB = -1;
+            int max = int.MinValue;
+            for (int i = periodBegin + predictionB - searchInterval; i < periodBegin + predictionB + searchInterval; i++)
+            {
+                if (ppg.points[i].y > max)
+                {
+                    max = ppg.points[i].y;
+                    idxB = i;
+                }
+            }
+
+            return idxB;
+        }
+
+        //пока не работает, тк нет производной
+        private int CalcA(int A_RelativePosition, int currentIdxPeriod)
+        {
+            int periodLength = Periods[currentIdxPeriod].Length();
+            int periodBegin = Periods[currentIdxPeriod].begin;
+            int predictionA = (A_RelativePosition / 100) * periodLength;
+            int searchInterval = 10* predictionA / 100;
+            int idxA = -1;
+            int maxDPPG = int.MinValue;
+            for (int i = periodBegin + predictionA - searchInterval; i < periodBegin + predictionA + searchInterval; i++)
+            {
+                if(dppg.points[i].y > maxDPPG)
+                {
+                    maxDPPG = dppg.points[i].y;
+                    idxA = i;
+                }
+            }
+
+            return idxA;
+        }
+
+        private int CalcEndPeriod(int begin, int averageLength, int currentIdxPeriod)
+        {
+            int searchInterval = 10 * averageLength / 100;
+            int min = int.MaxValue;
+            int idxEnd = -1;
+            for (int i = begin + averageLength - searchInterval; i< begin+averageLength + searchInterval;i++)
+            {
+                if(ppg.points[i].y <min)
+                {
+                    min = ppg.points[i].y;
+                    idxEnd = i;
+                }
+            }
+
+            return idxEnd;
+        }
+
+        private int CalcAverageLengthPeriod()
+        {
+            int sum = 0;
+            for (int i = 0; i < CountPeriods; i++)
+            {
+                sum += Periods[i].Length();
+            }
+             
+            return sum / CountPeriods;
+        }
+
+        private int CalcRelativePosition(int[] point, int n)
+        {
+            int[] RelativePosition = new int[n];
+            int idxPeriod = 0;
+            for (int i=0;i<n;i++)
+            {
+                idxPeriod = CalcPeriod(point[i]);
+                RelativePosition[i] = point[i] - Periods[idxPeriod].begin / Periods[idxPeriod].Length() * 100;
+            }
+
+            int sum = 0;
+            for (int i = 0; i < n; i++)
+            {
+                sum += RelativePosition[i];
+            }
+
+            return sum / n;
+        }
+
+        private int CalcPeriod(int k)
+        {
+            for(int i = 0; i < CountPeriods;i++)
+            {
+                if ((k>Periods[i].begin)&&(k<Periods[i].end))
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
     }
 }

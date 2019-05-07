@@ -15,6 +15,7 @@ namespace PPGReader
         public List<int> idxCPoints = new List<int>(); 
         public List<int> idxDPoints = new List<int>(); 
         public List<int> idxEPoints = new List<int>();
+       
 
         public PPG(PointPPG [] pointPPGs, int n)
         {

@@ -8,8 +8,8 @@ namespace PPGReader
 {
     class PointPPG
     {
-        int x;
-        int y;
+        public int x { get;}
+        public int y { get;}
 
         public bool IsMax {get;set;} = false; // автосвойство, тут почитать можно подробнее https://metanit.com/sharp/tutorial/3.4.php
         public bool IsPeriod { get; set; } = false;

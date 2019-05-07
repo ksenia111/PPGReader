@@ -54,6 +54,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="PeriodPPG.cs" />
     <Compile Include="PointDPPG.cs" />
     <Compile Include="PPG.cs" />
     <Compile Include="PointPPG.cs" />

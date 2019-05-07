@@ -8,8 +8,8 @@ namespace PPGReader
 {
     class PointDPPG
     {
-        int x;
-        int y;
+        public int x { get; }
+        public int y { get; }
         bool isMax = false;
 
         public PointDPPG(int a, int b)
