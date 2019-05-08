@@ -42,8 +42,7 @@ namespace PPGReader
         {
             InitializeComponent();
             // создаем элементы меню
-            ToolStripMenuItem PeriobMenuItem = new ToolStripMenuItem("Beginning/end of period");
-            ToolStripMenuItem endPeriodMenuItem = new ToolStripMenuItem("End of period");
+            ToolStripMenuItem PeriobMenuItem = new ToolStripMenuItem("Period beginning/end");
             ToolStripMenuItem aMenuItem = new ToolStripMenuItem("A");
             ToolStripMenuItem bMenuItem = new ToolStripMenuItem("B");
             ToolStripMenuItem cMenuItem = new ToolStripMenuItem("C");
@@ -251,16 +250,20 @@ namespace PPGReader
             if(PeriodClick == 0)
             {
                 Periods[PeriodClick].begin = (int)x;
+                ppg.points[(int)x].IsBeginPeriod = true;
             }
             else if(PeriodClick != 10)
             {
                 Periods[PeriodClick-1].end = (int)x;
                 Periods[PeriodClick].begin = (int)x;
+                ppg.points[(int)x].IsBeginPeriod = true;
+                ppg.points[(int)x].IsEndPeriod = true;
 
             }
             else
             {
                 Periods[9].end = (int)x;
+                ppg.points[(int)x].IsEndPeriod = true;
             }
             PeriodClick++;
             if (СursorOnChart == false)
@@ -273,8 +276,7 @@ namespace PPGReader
             }
             else
             {
-                ppg.points[(int)x].IsPeriod = true;
-                ppg.idxPeriodPoints.Add((int)x);
+                
                 chart1.Series[0].Points[(int)x].Label = "T";
             }
             if (PeriodClick == 11)
@@ -502,24 +504,33 @@ namespace PPGReader
 
                 while (Periods[currentIdxP].end + averageLengthPeriod < ppg.points.Length)
                 {
-                    // добавить проверку на критические точки и сглаживание, обновление через 10 периодов
+                    // добавить проверку на критические точки и сглаживание, обновление через 10 периодов для с,d,e
                     currentIdxP = previousIdxP % 10;
                     if (currentIdxP == 0)
                     {
+                        averageLengthPeriod = CalcAverageLengthPeriod();
+                        A_RelativePosition = CalcRelativePositionA();
+                        B_RelativePosition = CalcRelativePositionB();
                         Periods[currentIdxP].begin = Periods[9].end;
+                        ppg.points[Periods[9].end].IsBeginPeriod = true;
                     }
                     else
                     {
                         Periods[currentIdxP].begin = Periods[currentIdxP - 1].end;
                     }
                     Periods[currentIdxP].end = CalcEndPeriod(Periods[currentIdxP].begin, averageLengthPeriod, currentIdxP);
+                    ppg.points[Periods[currentIdxP].end].IsEndPeriod = true;
                     chart1.Series[0].Points[Periods[currentIdxP].end].Label = "T";
 
-                    //Periods[currentIdxP].A = CalcA(A_RelativePosition, currentIdxP);
+                    //Periods[currentIdxP].A = CalcA(A_RelativePosition, currentIdxP,10);
+                    //ppg.points[Periods[currentIdxP].A].IsA = true;
                     //chart1.Series[0].Points[Periods[currentIdxP].A].Label = "A";
 
-                    Periods[currentIdxP].B = CalcB(B_RelativePosition, currentIdxP);
+                    Periods[currentIdxP].B = CalcB(B_RelativePosition, currentIdxP, 20);
+                    
+                    ppg.points[Periods[currentIdxP].B].IsB = true;
                     chart1.Series[0].Points[Periods[currentIdxP].B].Label = "B";
+                    
                     previousIdxP = currentIdxP + 1;
 
                 }
@@ -528,15 +539,20 @@ namespace PPGReader
 
         }
 
-        private int CalcB(int B_RelativePosition, int currentIdxPeriod)
+        private int CalcB(int B_RelativePosition, int currentIdxPeriod, int percent)
         {
             int periodLength = Periods[currentIdxPeriod].Length();
             int periodBegin = Periods[currentIdxPeriod].begin;
-            int predictionB = (B_RelativePosition / 100) * periodLength;
-            int searchInterval = 10 * predictionB / 100;
+            int predictionB =(int)Math.Round((Convert.ToDouble(B_RelativePosition) / 100) * periodLength);
+            int searchInterval = (int)Math.Round(percent * Convert.ToDouble(predictionB) / 100);
             int idxB = -1;
             int max = int.MinValue;
-            for (int i = periodBegin + predictionB - searchInterval; i < periodBegin + predictionB + searchInterval; i++)
+            int iEnd = periodBegin + predictionB + searchInterval;
+            if (periodBegin + predictionB + searchInterval > ppg.points.Length)
+            {
+                iEnd = ppg.points.Length;
+            }
+            for (int i = periodBegin + predictionB - searchInterval; i < iEnd; i++)
             {
                 if (ppg.points[i].y > max)
                 {
@@ -549,12 +565,12 @@ namespace PPGReader
         }
 
         //пока не работает, тк нет производной
-        private int CalcA(int A_RelativePosition, int currentIdxPeriod)
+        private int CalcA(int A_RelativePosition, int currentIdxPeriod, int percent)
         {
             int periodLength = Periods[currentIdxPeriod].Length();
             int periodBegin = Periods[currentIdxPeriod].begin;
-            int predictionA = (A_RelativePosition / 100) * periodLength;
-            int searchInterval = 10* predictionA / 100;
+            int predictionA = (int)Math.Round((Convert.ToDouble(A_RelativePosition) / 100) * periodLength);
+            int searchInterval =(int) Math.Round(percent * Convert.ToDouble(predictionA)/ 100);
             int idxA = -1;
             int maxDPPG = int.MinValue;
             for (int i = periodBegin + predictionA - searchInterval; i < periodBegin + predictionA + searchInterval; i++)
@@ -604,7 +620,8 @@ namespace PPGReader
             for (int i=0;i<n;i++)
             {
                 idxPeriod = CalcPeriod(point[i]);
-                RelativePosition[i] = point[i] - Periods[idxPeriod].begin / Periods[idxPeriod].Length() * 100;
+                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(point[i] - Periods[idxPeriod].begin) / 
+                                        Periods[idxPeriod].Length()) * 100);
             }
 
             int sum = 0;
@@ -616,6 +633,41 @@ namespace PPGReader
             return sum / n;
         }
 
+        private int CalcRelativePositionA()
+        {
+            int[] RelativePosition = new int[CountPeriods];
+            for (int i = 0; i < CountPeriods; i++)
+            {
+                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(Periods[i].A - Periods[i].begin) /
+                                        Periods[i].Length()) * 100);
+            }
+
+            int sum = 0;
+            for (int i = 0; i < CountPeriods; i++)
+            {
+                sum += RelativePosition[i];
+            }
+
+            return sum / CountPeriods;
+        }
+
+        private int CalcRelativePositionB()
+        {
+            int[] RelativePosition = new int[CountPeriods];
+            for (int i = 0; i < CountPeriods; i++)
+            {
+                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(Periods[i].B - Periods[i].begin) /
+                                        Periods[i].Length()) * 100);
+            }
+
+            int sum = 0;
+            for (int i = 0; i < CountPeriods; i++)
+            {
+                sum += RelativePosition[i];
+            }
+
+            return sum / CountPeriods;
+        }
         private int CalcPeriod(int k)
         {
             for(int i = 0; i < CountPeriods;i++)
