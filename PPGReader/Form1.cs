@@ -36,7 +36,9 @@ namespace PPGReader
         int EClick = 0;
         const int CountPeriods = 10;
         PeriodPPG[] Periods = new PeriodPPG[CountPeriods];
-        
+        double beginSmoothingPeriod = 0;
+        double endSmoothingPeriod = 0;
+        int clickTagSmoothingPeriod = 0;
 
         public Form1()
         {
@@ -71,7 +73,7 @@ namespace PPGReader
       
         private int[] Read()
         {
-            string filePath = @"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //@"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz" //
+            string filePath = @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz";//@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; // //
             int w = int.Parse(textBoxW.Text);
             PeriodClick = 0;
             FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -132,26 +134,66 @@ namespace PPGReader
         private int[] MovingAverageMethod(int beginPeriod, int endPeriod, int window, int[] points) //метод скользящей средней
         {
             int p = window; //окно
-            int m = (p - 1) / 2;
+            if (p % 2 == 0)
+            {
+                p++; //если окно четное, увеличиваем на 1 для симметрии
+                label6.Text = Convert.ToString(p);
+            }
+            int m = (p - 1) / 2; //размах окна влево и вправо от текущей позиции
             int n = points.Length;// - m * 2;
             int[] SmoothedData = new int[n];
 
-            for (int i = 0; i < m; i++)
+            SmoothedData[0] = points[0];
+            int sum = 0;  
+            int k1 = 0;  //начало окна
+            int k2 = 0;  //конец окна
+            int z = 0;   //размер окна
+
+            for (int i=1;i<n;i++)
             {
-                SmoothedData[i] = points[i];
+                sum = 0;
+                if (i < m) //в начале 
+                {
+                    k1 = 0;
+                    k2 = 2 * i;
+                    z = k2 + 1;
+                }
+                else if ((i + m) > (n - 1))
+                {
+                    k1 = i - n + i + 1;
+                    k2 = n - 1;
+                    z = k2 - k1 + 1;
+                }
+                else
+                {
+                    k1 = i - m;
+                    k2 = i + m;
+                    z = p;
+                }
+
+                for (int j = k1; j <= k2; j++)
+                {
+                    sum += points[j];
+                }
+                SmoothedData[i] = sum / z;
             }
 
-            for (int i = n - m; i < n; i++)
-            {
-                SmoothedData[i] = points[i];
-            }
+            //for (int i = 0; i < m; i++)
+            //{
+            //    SmoothedData[i] = points[i];
+            //}
 
-            for (int i = m; i < n-m; i++) 
-            {
-                for (int j = i - m; j < i + m; j++) 
-                SmoothedData[i] += points[j];
-                SmoothedData[i] = SmoothedData[i] / p;
-            }
+            //for (int i = n - m; i < n; i++)
+            //{
+            //    SmoothedData[i] = points[i];
+            //}
+
+            //for (int i = m; i < n-m; i++) 
+            //{
+            //    for (int j = i - m; j < i + m; j++) 
+            //    SmoothedData[i] += points[j];
+            //    SmoothedData[i] = SmoothedData[i] / p;
+            //}
 
             return SmoothedData;
         }
@@ -199,7 +241,7 @@ namespace PPGReader
         {
 
         }
-
+        
         private void chart1_MouseClick(object sender, MouseEventArgs e)
         {
             var result = chart1.HitTest(e.X, e.Y);
@@ -210,6 +252,38 @@ namespace PPGReader
             double pX = chart1.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
             double pY = chart1.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
             richTextBox1.Text = Convert.ToString(pX) + "  " + Convert.ToString(pY); //вывод координат т-ки, на которую кликнули
+
+            if (tagSmoothingPeriod == true)
+            {
+                clickTagSmoothingPeriod++;
+                СursorOnChart = result.ChartElementType == ChartElementType.DataPoint;
+
+                if (СursorOnChart == false)
+                {
+                    MessageBox.Show(
+                                    "Курсор находился не на графике, попробуйте еще раз",
+                                    "Сообщение",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                    clickTagSmoothingPeriod--;
+                }
+                else
+                {
+                    if (clickTagSmoothingPeriod == 1)
+                    {
+                        beginSmoothingPeriod = chart1.ChartAreas[0].CursorX.Position;
+                        textBox2.Text = "Начало: " + Convert.ToString(beginSmoothingPeriod);
+                    }
+
+                    if (clickTagSmoothingPeriod == 2)
+                    {
+                        endSmoothingPeriod = chart1.ChartAreas[0].CursorX.Position;
+                        textBox2.Text += ". Конец: " + Convert.ToString(endSmoothingPeriod);
+                        clickTagSmoothingPeriod = 0;
+                        tagSmoothingPeriod = false;
+                    }
+                }
+            }
         }
 
         private void chart1_MouseMove(object sender, MouseEventArgs e)
@@ -411,72 +485,86 @@ namespace PPGReader
         
         private void button1_Click_1(object sender, EventArgs e)
         {
-            int window = 2;
-            if (textBox1.Text != "") window = Convert.ToInt32(textBox1.Text);
+            int window = Convert.ToInt32(label6.Text);
             increaseClick = window;
-            increaseClick += 1;
-            textBox1.Text = Convert.ToString(increaseClick);
+            increaseClick += 2;
+            label6.Text = Convert.ToString(increaseClick);
         }
 
         
         private void button2_Click_1(object sender, EventArgs e)
         {
-            int window = 2;
-            if (textBox1.Text != "") window = Convert.ToInt32(textBox1.Text);
+            int window = Convert.ToInt32(label6.Text);
             
-            if (window >= 3)
+            if (window > 3)
             {
                 decreaseClick = window;
-                decreaseClick -= 1;
-                textBox1.Text = Convert.ToString(decreaseClick);
+                decreaseClick -= 2;
+                label6.Text = Convert.ToString(decreaseClick);
             }
-            if (window < 3) MessageBox.Show("Невозможно уменьшить окно сглаживания", 
+            if (window <= 3) MessageBox.Show("Невозможно уменьшить окно сглаживания", 
                                              "Ошибка", 
                                              MessageBoxButtons.OK, 
                                              MessageBoxIcon.Hand);
 
         }
 
+        bool tagSmoothingPeriod = false;
+        private void button4_Click(object sender, EventArgs e)
+        {
+            tagSmoothingPeriod = true;
+            textBox2.Text = "";
+            beginSmoothingPeriod = 0;
+            endSmoothingPeriod = 0;
+        }
+
         private void button3_Click_1(object sender, EventArgs e)
         {
-            int beginPeriod = 98;                             //нужно как-то будет брать отмеченные на графике 
-            int endPeriod = 270;                              //нужно как-то будет брать отмеченные на графике 
-            int Period = endPeriod - beginPeriod;
-            int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
-            int[] pointsForSmoothing = new int[Period];
-
-            for (int i = 0; i < Period; i++)
+            if (endSmoothingPeriod == 0) MessageBox.Show("Отметьте период сглаживания",
+                                             "Ошибка",
+                                             MessageBoxButtons.OK,
+                                             MessageBoxIcon.Hand);
+            else
             {
-                pointsForSmoothing[i] = points[beginPeriod + i];         //берем только точки внутри периода
+                int beginPeriod = Convert.ToInt32(beginSmoothingPeriod);                             //нужно как-то будет брать отмеченные на графике 
+                int endPeriod = Convert.ToInt32(endSmoothingPeriod);                              //нужно как-то будет брать отмеченные на графике 
+                int Period = endPeriod - beginPeriod;
+                int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
+                int[] pointsForSmoothing = new int[Period];
+
+                for (int i = 0; i < Period; i++)
+                {
+                    pointsForSmoothing[i] = points[beginPeriod + i];         //берем только точки внутри периода
+                }
+
+                int window = Convert.ToInt32(label6.Text);
+
+                int[] smoothedData = new int[Period];
+                smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
+
+                int j = 0;
+                for (int i = beginPeriod; i < endPeriod; i++)
+                {
+                    points[i] = smoothedData[j];                //в дубликате заменяем точки в выбранном периоде на сглаженные
+                    j++;
+                }
+
+                //создание массива точекФПГ и ФПГ
+                int n = points.Length;
+
+                PointPPG[] pointPPGs = new PointPPG[n];
+
+                for (int i = 0; i < n; i++)
+                {
+                    pointPPGs[i] = new PointPPG(i, points[i]);
+                }
+
+                ppg = new PPG(pointPPGs, n);
+                Draw(ppg);
+                //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
+                if (b2click != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * b2click);
+                if (b3click != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * b3click);
             }
-
-            int window = Convert.ToInt32(textBox1.Text); 
-
-            int[] smoothedData = new int[Period];
-            smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
-
-            int j = 0;
-            for (int i = 98; i < 270; i++)
-            {
-                points[i] = smoothedData[j];                //в дубликате заменяем точки в выбранном периоде на сглаженные
-                j++;
-            }
-
-            //создание массива точекФПГ и ФПГ
-            int n = points.Length;
-
-            PointPPG[] pointPPGs = new PointPPG[n];
-
-            for (int i = 0; i < n; i++)
-            {
-                pointPPGs[i] = new PointPPG(i, points[i]);
-            }
-
-            ppg = new PPG(pointPPGs, n);
-            Draw(ppg);
-            //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-            if (b2click != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * b2click);
-            if (b3click != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * b3click);
         }
 
         private void FindCharacteristics_Click(object sender, EventArgs e)
@@ -627,5 +715,7 @@ namespace PPGReader
             }
             return -1;
         }
+
+        
     }
 }
