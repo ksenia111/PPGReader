@@ -17,23 +17,23 @@ namespace PPGReader
         /// <summary>
         /// точка перегиба ФПГ, обяз-я, находится между началом периода и точкой B, самый большой max ДФПГ на периоде
         /// </summary>
-        public bool IsA { get; set; } = false;
+        public bool IsA = false;
         /// <summary>
         /// точка max-ой амплитуды ФПГ, обяз-я, самый большой max на периоде
         /// </summary>
-        public bool IsB { get; set; } = false;
+        public bool IsB= false;
         /// <summary>
         /// точка амплитуды систолической волны, если есть D, то она обяз-я, нах-ся между B и D
         /// </summary>
-        public bool IsС { get; set; } = false;
+        public bool IsC = false;
         /// <summary>
         /// точка амплитуды дикротического зубца, необяз-я, первый max после B
         /// </summary>
-        public bool IsD { get; set; } = false;
+        public bool IsD  = false;
         /// <summary>
         /// необяз-я, третий max после D
         /// </summary>
-        public bool IsE { get; set; } = false;
+        public bool IsE  = false;
 
         public PointPPG(int  a, int  b)
         {

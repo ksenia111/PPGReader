@@ -29,11 +29,6 @@ namespace PPGReader
         int increaseClick = 0;
         int decreaseClick = 0;
         int PeriodClick = 0;
-        int AClick = 0;
-        int BClick = 0;
-        int CClick = 0;
-        int DClick = 0;
-        int EClick = 0;
         const int CountPeriods = 10;
         PeriodPPG[] Periods = new PeriodPPG[CountPeriods];
         double beginSmoothingPeriod = 0;
@@ -72,7 +67,7 @@ namespace PPGReader
       
         private int[] Read()
         {
-            string filePath = @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz";//@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; // //
+            string filePath = @"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //@"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz"; //
             int w = int.Parse(textBoxW.Text);
             PeriodClick = 0;
             FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -235,12 +230,7 @@ namespace PPGReader
             chart1.Series[0].MarkerSize = 1;
            
         }
-
-        private void Mark10Periods()
-        {
-
-        }
-        
+                
         private void chart1_MouseClick(object sender, MouseEventArgs e)
         {
             var result = chart1.HitTest(e.X, e.Y);
@@ -323,54 +313,72 @@ namespace PPGReader
         {
             if(PeriodClick == 0)
             {
-                Periods[PeriodClick].begin = (int)x;
+                Periods[PeriodClick].Begin = (int)x;
+                Periods[PeriodClick].MarkBegin = true;
                 ppg.points[(int)x].IsBeginPeriod = true;
             }
-            else if(PeriodClick != 10)
+            else if(PeriodClick != CountPeriods)
             {
-                Periods[PeriodClick-1].end = (int)x;
-                Periods[PeriodClick].begin = (int)x;
+                Periods[PeriodClick - 1].End = (int)x;
+                Periods[PeriodClick - 1].MarkEnd = true;
+                Periods[PeriodClick].Begin = (int)x;
+                Periods[PeriodClick].MarkBegin = true;
                 ppg.points[(int)x].IsBeginPeriod = true;
                 ppg.points[(int)x].IsEndPeriod = true;
 
             }
             else
             {
-                Periods[9].end = (int)x;
+                Periods[CountPeriods - 1].End = (int)x;
+                Periods[CountPeriods - 1].MarkEnd = true;
                 ppg.points[(int)x].IsEndPeriod = true;
             }
             PeriodClick++;
-            if (СursorOnChart == false)
+            if (CheckCursorOnChart())
             {
-                MessageBox.Show(
-                                "Курсор находился не на графике, попробуйте еще раз",
-                                "Сообщение",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
-            }
-            else
-            {
-                
                 chart1.Series[0].Points[(int)x].Label = "T";
             }
-            if (PeriodClick == 11)
+            if (PeriodClick == CountPeriods + 1)
             {
                 MessageBox.Show(
-                                "10 периодов отмечены, нажмите на кнопку \"Найти характеристики\" " +
-                                "для нахождения следующих характеристик",
+                                "10 периодов отмечены. Отметьте на них характерные точки и нажмите на кнопку \"Найти характеристики\" " +
+                                "для нахождения следующих точек",
                                 "Сообщение",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
-                contextMenuStrip1.Enabled = false;
+                
             }
             ResetValue();
         }
 
        
-        private void aMenuItem_Click(object sender, EventArgs e)
+      
+
+        private void MarkCharacteristic(int idxPeriod, ref int point, ref bool isPoint, string label)
         {
-            Periods[AClick].A = (int)x;
-            AClick++;
+            if (CheckCursorOnChart())
+            {
+                if (BelongPeriod((int)x, idxPeriod) && BelongPeriod(point, idxPeriod))
+                {
+                    MessageBox.Show(
+                                    "На этом периоде уже отмечена точка " + label + ", отметьте другую точку",
+                                    "Сообщение",
+                                    MessageBoxButtons.OK,
+                                    MessageBoxIcon.Information);
+                }
+                else
+                {
+                    point = (int)x;
+                    isPoint = true;
+                    chart1.Series[0].Points[(int)x].Label = label;
+                    ResetValue();
+
+                }
+            }
+        }
+
+        private bool CheckCursorOnChart()
+        {
             if (СursorOnChart == false)
             {
                 MessageBox.Show(
@@ -378,99 +386,71 @@ namespace PPGReader
                                 "Сообщение",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
+                return false;
+
+            }else
+             return true;
+        }
+
+        private bool CheckMarkPeriod(int idxPeriod)
+        {
+            if (idxPeriod == -1)
+            {
+                MessageBox.Show(
+                                "Сначала отметьте границы периода",
+                                "Сообщение",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Information);
+                return false;
+
             }
             else
+                return true;
+        }
+
+        private void aMenuItem_Click(object sender, EventArgs e)
+        {
+            int idxPeriod = CalcPeriod((int)x);
+            if (CheckMarkPeriod(idxPeriod))
             {
-                ppg.points[(int)x].IsA = true;
-                ppg.idxAPoints.Add((int)x);
-                chart1.Series[0].Points[(int)x].Label = "A";
+                MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].A, ref ppg.points[(int)x].IsA, "A");
             }
-            ResetValue();
-            
         }
 
         private void bMenuItem_Click(object sender, EventArgs e)
         {
-            Periods[BClick].B = (int)x;
-            BClick++;
-            if (СursorOnChart == false)
+            int idxPeriod = CalcPeriod((int)x);
+            if (CheckMarkPeriod(idxPeriod))
             {
-                MessageBox.Show(
-                                "Курсор находился не на графике, попробуйте еще раз",
-                                "Сообщение",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].B, ref ppg.points[(int)x].IsB, "B");
             }
-            else
-            {
-                ppg.points[(int)x].IsB = true;
-                ppg.idxBPoints.Add((int)x);
-                chart1.Series[0].Points[(int)x].Label = "B";
-            }
-            ResetValue();
         }
 
         private void cMenuItem_Click(object sender, EventArgs e)
         {
-            Periods[CClick].C = (int)x;
-            CClick++;
-            if (СursorOnChart == false)
+            int idxPeriod = CalcPeriod((int)x);
+            if (CheckMarkPeriod(idxPeriod))
             {
-                MessageBox.Show(
-                                "Курсор находился не на графике, попробуйте еще раз",
-                                "Сообщение",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+               MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].C, ref ppg.points[(int)x].IsC, "C");
             }
-            else
-            {
-                ppg.points[(int)x].IsС = true;
-                ppg.idxCPoints.Add((int)x);
-                chart1.Series[0].Points[(int)x].Label = "C";
-            }
-            ResetValue();
         }
 
         private void dMenuItem_Click(object sender, EventArgs e)
         {
-            Periods[DClick].D = (int)x;
-            DClick++;
-            if (СursorOnChart == false)
+            int idxPeriod = CalcPeriod((int)x);
+            if (CheckMarkPeriod(idxPeriod))
             {
-                MessageBox.Show(
-                                "Курсор находился не на графике, попробуйте еще раз",
-                                "Сообщение",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                MarkCharacteristic(idxPeriod,  ref Periods[idxPeriod].D, ref ppg.points[(int)x].IsD, "D");
             }
-            else
-            {
-                ppg.points[(int)x].IsD = true;
-                ppg.idxDPoints.Add((int)x);
-                chart1.Series[0].Points[(int)x].Label = "D";
-            }
-            ResetValue();
         }
 
         private void eMenuItem_Click(object sender, EventArgs e)
         {
-            Periods[EClick].E = (int)x;
-            EClick++;
-            if (СursorOnChart == false)
+            int idxPeriod = CalcPeriod((int)x);
+            if (CheckMarkPeriod(idxPeriod))
             {
-                MessageBox.Show(
-                                "Курсор находился не на графике, попробуйте еще раз",
-                                "Сообщение",
-                                MessageBoxButtons.OK,
-                                MessageBoxIcon.Information);
+                MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].E, ref ppg.points[(int)x].IsE, "E");
             }
-            else
-            {
-                ppg.points[(int)x].IsE = true;
-                ppg.idxEPoints.Add((int)x);
-                chart1.Series[0].Points[(int)x].Label = "E";
-            }
-            ResetValue();
         }
 
         private void chart1_MouseDown(object sender, MouseEventArgs e)
@@ -573,16 +553,17 @@ namespace PPGReader
         {
             if (PeriodClick != 11)
             { MessageBox.Show(
-                               "Отметьте характерные точки на 10 периодах",
+                               "Нарисуйте график ФПГ и отметьте характерные точки на 10 периодах",
                                "Сообщение",
                                MessageBoxButtons.OK,
                                MessageBoxIcon.Information);
             }
             else
             {
+                contextMenuStrip1.Enabled = false;
                 int averageLengthPeriod = CalcAverageLengthPeriod();
-                int A_RelativePosition = CalcRelativePosition(ppg.idxAPoints.ToArray(), ppg.idxAPoints.ToArray().Length);
-                int B_RelativePosition = CalcRelativePosition(ppg.idxBPoints.ToArray(), ppg.idxBPoints.ToArray().Length);
+                int A_RelativePosition = CalcRelativePositionA();
+                int B_RelativePosition = CalcRelativePositionB();
                 //int C_RelativePosition = CalcRelativePosition(ppg.idxCPoints.ToArray(), ppg.idxCPoints.ToArray().Length);
                 //int D_RelativePosition = CalcRelativePosition(ppg.idxDPoints.ToArray(), ppg.idxDPoints.ToArray().Length);
                 //int E_RelativePosition = CalcRelativePosition(ppg.idxEPoints.ToArray(), ppg.idxEPoints.ToArray().Length);
@@ -590,7 +571,7 @@ namespace PPGReader
                 int previousIdxP = 10;
                 int currentIdxP = 0;
 
-                while (Periods[currentIdxP].end + averageLengthPeriod < ppg.points.Length)
+                while (Periods[currentIdxP].End + averageLengthPeriod < ppg.points.Length)
                 {
                     // добавить проверку на критические точки и сглаживание, обновление через 10 периодов для с,d,e
                     currentIdxP = previousIdxP % 10;
@@ -599,22 +580,22 @@ namespace PPGReader
                         averageLengthPeriod = CalcAverageLengthPeriod();
                         A_RelativePosition = CalcRelativePositionA();
                         B_RelativePosition = CalcRelativePositionB();
-                        Periods[currentIdxP].begin = Periods[9].end;
-                        ppg.points[Periods[9].end].IsBeginPeriod = true;
+                        Periods[currentIdxP].Begin = Periods[9].End;
+                        ppg.points[Periods[9].End].IsBeginPeriod = true;
                     }
                     else
                     {
-                        Periods[currentIdxP].begin = Periods[currentIdxP - 1].end;
+                        Periods[currentIdxP].Begin = Periods[currentIdxP - 1].End;
                     }
-                    Periods[currentIdxP].end = CalcEndPeriod(Periods[currentIdxP].begin, averageLengthPeriod, currentIdxP);
-                    ppg.points[Periods[currentIdxP].end].IsEndPeriod = true;
-                    chart1.Series[0].Points[Periods[currentIdxP].end].Label = "T";
+                    Periods[currentIdxP].End = CalcEndPeriod(Periods[currentIdxP].Begin, averageLengthPeriod, currentIdxP,20);
+                    ppg.points[Periods[currentIdxP].End].IsEndPeriod = true;
+                    chart1.Series[0].Points[Periods[currentIdxP].End].Label = "T";
 
                     //Periods[currentIdxP].A = CalcA(A_RelativePosition, currentIdxP,10);
                     //ppg.points[Periods[currentIdxP].A].IsA = true;
                     //chart1.Series[0].Points[Periods[currentIdxP].A].Label = "A";
 
-                    Periods[currentIdxP].B = CalcB(B_RelativePosition, currentIdxP, 20);
+                    Periods[currentIdxP].B = CalcB(currentIdxP);
                     
                     ppg.points[Periods[currentIdxP].B].IsB = true;
                     chart1.Series[0].Points[Periods[currentIdxP].B].Label = "B";
@@ -627,20 +608,11 @@ namespace PPGReader
 
         }
 
-        private int CalcB(int B_RelativePosition, int currentIdxPeriod, int percent)
+        private int CalcB( int currentIdxPeriod)
         {
-            int periodLength = Periods[currentIdxPeriod].Length();
-            int periodBegin = Periods[currentIdxPeriod].begin;
-            int predictionB =(int)Math.Round((Convert.ToDouble(B_RelativePosition) / 100) * periodLength);
-            int searchInterval = (int)Math.Round(percent * Convert.ToDouble(predictionB) / 100);
             int idxB = -1;
             int max = int.MinValue;
-            int iEnd = periodBegin + predictionB + searchInterval;
-            if (periodBegin + predictionB + searchInterval > ppg.points.Length)
-            {
-                iEnd = ppg.points.Length;
-            }
-            for (int i = periodBegin + predictionB - searchInterval; i < iEnd; i++)
+            for (int i = Periods[currentIdxPeriod].Begin; i < Periods[currentIdxPeriod].End; i++)
             {
                 if (ppg.points[i].y > max)
                 {
@@ -656,7 +628,7 @@ namespace PPGReader
         private int CalcA(int A_RelativePosition, int currentIdxPeriod, int percent)
         {
             int periodLength = Periods[currentIdxPeriod].Length();
-            int periodBegin = Periods[currentIdxPeriod].begin;
+            int periodBegin = Periods[currentIdxPeriod].Begin;
             int predictionA = (int)Math.Round((Convert.ToDouble(A_RelativePosition) / 100) * periodLength);
             int searchInterval =(int) Math.Round(percent * Convert.ToDouble(predictionA)/ 100);
             int idxA = -1;
@@ -673,12 +645,12 @@ namespace PPGReader
             return idxA;
         }
 
-        private int CalcEndPeriod(int begin, int averageLength, int currentIdxPeriod)
+        private int CalcEndPeriod(int begin, int averageLength, int currentIdxPeriod, int percent)
         {
-            int searchInterval = 10 * averageLength / 100;
+            int searchInterval = percent * averageLength / 100;
             int min = int.MaxValue;
             int idxEnd = -1;
-            for (int i = begin + averageLength - searchInterval; i< begin+averageLength + searchInterval;i++)
+            for (int i = begin + searchInterval; i < begin+averageLength + searchInterval;i++)
             {
                 if(ppg.points[i].y <min)
                 {
@@ -708,7 +680,7 @@ namespace PPGReader
             for (int i=0;i<n;i++)
             {
                 idxPeriod = CalcPeriod(point[i]);
-                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(point[i] - Periods[idxPeriod].begin) / 
+                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(point[i] - Periods[idxPeriod].Begin) / 
                                         Periods[idxPeriod].Length()) * 100);
             }
 
@@ -726,7 +698,7 @@ namespace PPGReader
             int[] RelativePosition = new int[CountPeriods];
             for (int i = 0; i < CountPeriods; i++)
             {
-                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(Periods[i].A - Periods[i].begin) /
+                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(Periods[i].A - Periods[i].Begin) /
                                         Periods[i].Length()) * 100);
             }
 
@@ -744,7 +716,7 @@ namespace PPGReader
             int[] RelativePosition = new int[CountPeriods];
             for (int i = 0; i < CountPeriods; i++)
             {
-                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(Periods[i].B - Periods[i].begin) /
+                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(Periods[i].B - Periods[i].Begin) /
                                         Periods[i].Length()) * 100);
             }
 
@@ -756,11 +728,11 @@ namespace PPGReader
 
             return sum / CountPeriods;
         }
-        private int CalcPeriod(int k)
+        private int CalcPeriod(int point)
         {
             for(int i = 0; i < CountPeriods;i++)
             {
-                if ((k>Periods[i].begin)&&(k<Periods[i].end))
+                if ((point > Periods[i].Begin)&&(point < Periods[i].End))
                 {
                     return i;
                 }
@@ -768,6 +740,15 @@ namespace PPGReader
             return -1;
         }
 
-        
+        private bool BelongPeriod(int point, int idxPeriod)
+        {
+           if ((point > Periods[idxPeriod].Begin) && (point < Periods[idxPeriod].End))
+            {
+               return true;
+            }
+            return false;
+        }
+
+
     }
 }
