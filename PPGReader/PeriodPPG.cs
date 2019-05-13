@@ -8,18 +8,20 @@ namespace PPGReader
 {
     class PeriodPPG
     {
-        public int begin;
-        public int end;
+        public int Begin;
+        public int End;
         public int A;
         public int B;
         public int C;
         public int D;
         public int E;
+        public bool MarkBegin = false;
+        public bool MarkEnd = false;
 
         public PeriodPPG()
         {
-            begin = 0;
-            end = 0;
+            Begin = 0;
+            End = 0;
             A = 0;
             B = 0;
             C = 0;
@@ -29,7 +31,7 @@ namespace PPGReader
 
         public int Length()
         {
-            return end - begin;
+            return End - Begin;
         }
 
 
