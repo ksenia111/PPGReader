@@ -9,10 +9,10 @@ namespace PPGReader
     class PointDPPG
     {
         public int x { get; }
-        public int y { get; }
+        public double y { get; }
         bool isMax = false;
 
-        public PointDPPG(int a, int b)
+        public PointDPPG(int a, double b)
         {
             x = a;
             y = b;
@@ -23,7 +23,7 @@ namespace PPGReader
             return x;
         }
 
-        public int GetY()
+        public double GetY()
         {
             return y;
         }

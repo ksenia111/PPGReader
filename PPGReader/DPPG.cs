@@ -10,10 +10,10 @@ namespace PPGReader
     {
         public PointDPPG[] points { get; }
 
-        public DPPG(PointPPG[] pointPPGs, int n)
+        public DPPG(PointDPPG[] pointDPPGs, int n)
         {
             points = new PointDPPG[n];
-            Array.Copy(pointPPGs, points, n);
+            Array.Copy(pointDPPGs, points, n);
         }
 
         public int[] GetX()
@@ -21,7 +21,7 @@ namespace PPGReader
             return points.Select(p => p.GetX()).ToArray();
         }
 
-        public int[] GetY()
+        public double[] GetY()
         {
             return points.Select(p => p.GetY()).ToArray();
         }
