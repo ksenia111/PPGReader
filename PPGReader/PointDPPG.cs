@@ -10,7 +10,6 @@ namespace PPGReader
     {
         public int x { get; }
         public double y { get; }
-        bool isMax = false;
 
         public PointDPPG(int a, double b)
         {

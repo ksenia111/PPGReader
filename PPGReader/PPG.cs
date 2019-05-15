@@ -9,13 +9,6 @@ namespace PPGReader
     class PPG
     {
         public PointPPG[] points { get; }
-        public List<int> idxPeriodPoints = new List<int>(); 
-        public List<int> idxAPoints = new List<int>(); 
-        public List<int> idxBPoints = new List<int>(); 
-        public List<int> idxCPoints = new List<int>(); 
-        public List<int> idxDPoints = new List<int>(); 
-        public List<int> idxEPoints = new List<int>();
-       
 
         public PPG(PointPPG [] pointPPGs, int n)
         {
@@ -32,12 +25,5 @@ namespace PPGReader
         {
             return points.Select(p => p.GetY()).ToArray();
         }
-
-        public void Mark10Periods()
-        {
-
-        }
-
-
     }
 }
