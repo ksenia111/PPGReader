@@ -211,10 +211,12 @@ namespace PPGReader
 
         //Рисование ФПГ
         private void Draw(PPG ppg)
-        {
+        { 
+            
+            chart1.ChartAreas[0].AxisX.Minimum = 0;
             chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
             chart1.Series[0].ChartType = SeriesChartType.Line;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = 400;
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
             chart1.Series[0].Points.DataBindXY(ppg.GetX(), ppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
@@ -225,14 +227,26 @@ namespace PPGReader
         //Рисование ДФПГ
         private void Draw(DPPG dppg)
         {
-            chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
-            //chart1.Series[2].ChartType = SeriesChartType.Line;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
-            chart1.Series[2].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
-            chart1.Series[2].ToolTip = "X = #VALX, Y = #VALY";
-            chart1.Series[2].Points.DataBindXY(dppg.GetX(), dppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
-            chart1.Series[2].Color = Color.Red;
+            //chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            ////chart1.Series[2].ChartType = SeriesChartType.Line;
+            //chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
+            //chart1.Series[2].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
+            //chart1.Series[2].ToolTip = "X = #VALX, Y = #VALY";
+            //chart1.Series[2].Points.DataBindXY(dppg.GetX(), dppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
+            //chart1.Series[2].Color = Color.Red;
             //chart1.Series[2].MarkerSize = 1;
+            chart2.ChartAreas[0].AxisX.MaximumAutoSize = 20;//chart1.ChartAreas[0].AxisX.Interval;
+
+            chart2.ChartAreas[0].AxisX.Minimum = 0;
+            chart2.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            //chart1.Series[2].ChartType = SeriesChartType.Line;
+            chart2.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
+            chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chart2.Series[0].Points.DataBindXY(dppg.GetX(), dppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
+            chart2.Series[0].Color = Color.ForestGreen;
+            chart2.Series[0].MarkerSize = 1;
+
         }
 
         //Рисование массива х и у
@@ -240,7 +254,7 @@ namespace PPGReader
         {
             chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
             chart1.Series[0].ChartType = SeriesChartType.Line;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = 400;
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
             chart1.Series[0].Points.DataBindXY(x, y); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
@@ -306,12 +320,22 @@ namespace PPGReader
             Cursor = result.ChartElementType == ChartElementType.DataPoint ? Cursors.Hand : Cursors.Default;
             //chart1.Series[0].Color = result.ChartElementType == ChartElementType.DataPoint ? Color.Coral : Color.Blue; //у всего графика меняется цвет, как у одной точки заменить, пока не придумала
             chart1.Series[0].Color = result.Series == chart1.Series[0] ? Color.Coral : Color.Blue;
+
+            chart2.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+            chart2.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+
+            double dpX = chart2.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
+            double dpY = chart2.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
+
+            var dresult = chart2.HitTest(e.X, e.Y);
+            Cursor = dresult.ChartElementType == ChartElementType.DataPoint ? Cursors.Hand : Cursors.Default;
         }
 
         
         private void button2_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
+            chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
             increaseScaleClick++;
         }
 
@@ -319,6 +343,7 @@ namespace PPGReader
         private void button3_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
+            chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
             decreaseScaleClick++;
         }
 
@@ -921,9 +946,9 @@ namespace PPGReader
                 int n = duplicatePoints.Length;
                 PointDPPG[] pointDPPG = new PointDPPG[n];
                 double[] derivativePoints = new double[n];
-                //derivativePoints = differentiation1orderAccuracy(duplicatePoints);
+                derivativePoints = differentiation1orderAccuracy(duplicatePoints);
                 //derivativePoints = differentiation2orderAccuracy(duplicatePoints);
-                derivativePoints = differentiation4points(duplicatePoints);
+                //derivativePoints = differentiation4points(duplicatePoints);
 
                 for (int i = 0; i < n; i++)
                 {
@@ -935,6 +960,15 @@ namespace PPGReader
                 if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick); 
                 if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
             }
+        }
+
+        private bool BelongPeriod(int point, int idxPeriod)
+        {
+            if ((point > Periods[idxPeriod].Begin) && (point < Periods[idxPeriod].End))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
