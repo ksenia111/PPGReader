@@ -59,13 +59,14 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
-            this.FindCharacteristics = new System.Windows.Forms.Button();
+            this.FullSearchCharacteristics = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.button5 = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
+            this.WriteCharacteristics = new System.Windows.Forms.Button();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
@@ -76,7 +77,7 @@
             this.buttonCalc.Location = new System.Drawing.Point(839, 83);
             this.buttonCalc.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCalc.Name = "buttonCalc";
-            this.buttonCalc.Size = new System.Drawing.Size(200, 28);
+            this.buttonCalc.Size = new System.Drawing.Size(150, 23);
             this.buttonCalc.TabIndex = 0;
             this.buttonCalc.Text = "Нарисовать график";
             this.buttonCalc.UseVisualStyleBackColor = true;
@@ -141,7 +142,7 @@
             this.label1.Location = new System.Drawing.Point(840, 13);
             this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 17);
+            this.label1.Size = new System.Drawing.Size(36, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Файл";
             // 
@@ -151,7 +152,7 @@
             this.label2.Location = new System.Drawing.Point(1272, 16);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(17, 17);
+            this.label2.Size = new System.Drawing.Size(15, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "w";
             // 
@@ -160,7 +161,7 @@
             this.textBoxPath.Location = new System.Drawing.Point(893, 13);
             this.textBoxPath.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxPath.Name = "textBoxPath";
-            this.textBoxPath.Size = new System.Drawing.Size(371, 22);
+            this.textBoxPath.Size = new System.Drawing.Size(279, 20);
             this.textBoxPath.TabIndex = 5;
             // 
             // textBoxW
@@ -168,7 +169,7 @@
             this.textBoxW.Location = new System.Drawing.Point(1297, 13);
             this.textBoxW.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxW.Name = "textBoxW";
-            this.textBoxW.Size = new System.Drawing.Size(25, 22);
+            this.textBoxW.Size = new System.Drawing.Size(20, 20);
             this.textBoxW.TabIndex = 6;
             this.textBoxW.Text = "5";
             // 
@@ -202,7 +203,7 @@
             this.label3.Location = new System.Drawing.Point(840, 53);
             this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(163, 17);
+            this.label3.Size = new System.Drawing.Size(126, 13);
             this.label3.TabIndex = 9;
             this.label3.Text = "Частота прореживания";
             // 
@@ -211,7 +212,7 @@
             this.textBoxSinglingRate.Location = new System.Drawing.Point(1011, 53);
             this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSinglingRate.Name = "textBoxSinglingRate";
-            this.textBoxSinglingRate.Size = new System.Drawing.Size(34, 22);
+            this.textBoxSinglingRate.Size = new System.Drawing.Size(26, 20);
             this.textBoxSinglingRate.TabIndex = 10;
             this.textBoxSinglingRate.Text = "5";
             // 
@@ -220,7 +221,7 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(840, 194);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(130, 17);
+            this.label4.Size = new System.Drawing.Size(103, 13);
             this.label4.TabIndex = 11;
             this.label4.Text = "Окно сглаживания";
             // 
@@ -231,7 +232,7 @@
             this.button1.Location = new System.Drawing.Point(996, 182);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(43, 18);
+            this.button1.Size = new System.Drawing.Size(32, 15);
             this.button1.TabIndex = 13;
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
@@ -243,7 +244,7 @@
             this.button2.Location = new System.Drawing.Point(996, 204);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(43, 18);
+            this.button2.Size = new System.Drawing.Size(32, 15);
             this.button2.TabIndex = 14;
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click_1);
@@ -264,20 +265,19 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(1062, 53);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(68, 17);
+            this.label5.Size = new System.Drawing.Size(53, 13);
             this.label5.TabIndex = 16;
             this.label5.Text = "Масштаб";
             // 
-            // FindCharacteristics
+            // FullSearchCharacteristics
             // 
-            this.FindCharacteristics.Location = new System.Drawing.Point(840, 245);
-            this.FindCharacteristics.Margin = new System.Windows.Forms.Padding(4);
-            this.FindCharacteristics.Name = "FindCharacteristics";
-            this.FindCharacteristics.Size = new System.Drawing.Size(200, 28);
-            this.FindCharacteristics.TabIndex = 17;
-            this.FindCharacteristics.Text = "Найти характеристики";
-            this.FindCharacteristics.UseVisualStyleBackColor = true;
-            this.FindCharacteristics.Click += new System.EventHandler(this.FindCharacteristics_Click);
+            this.FullSearchCharacteristics.Location = new System.Drawing.Point(840, 245);
+            this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
+            this.FullSearchCharacteristics.Size = new System.Drawing.Size(335, 23);
+            this.FullSearchCharacteristics.TabIndex = 17;
+            this.FullSearchCharacteristics.Text = "Найти характеристики с помощью полного перебора";
+            this.FullSearchCharacteristics.UseVisualStyleBackColor = true;
+            this.FullSearchCharacteristics.Click += new System.EventHandler(this.FullSearchCharacteristics_Click);
             // 
             // button4
             // 
@@ -293,7 +293,7 @@
             // 
             this.textBox2.Location = new System.Drawing.Point(1046, 142);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(194, 22);
+            this.textBox2.Size = new System.Drawing.Size(146, 20);
             this.textBox2.TabIndex = 19;
             // 
             // label6
@@ -301,7 +301,7 @@
             this.label6.AutoSize = true;
             this.label6.Location = new System.Drawing.Point(974, 194);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(16, 17);
+            this.label6.Size = new System.Drawing.Size(13, 13);
             this.label6.TabIndex = 20;
             this.label6.Text = "3";
             // 
@@ -309,7 +309,7 @@
             // 
             this.button5.Location = new System.Drawing.Point(839, 280);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(200, 25);
+            this.button5.Size = new System.Drawing.Size(150, 20);
             this.button5.TabIndex = 21;
             this.button5.Text = "Найти производную";
             this.button5.UseVisualStyleBackColor = true;
@@ -369,9 +369,19 @@
             this.chart2.TabIndex = 24;
             this.chart2.Text = "chart2";
             // 
+            // WriteCharacteristics
+            // 
+            this.WriteCharacteristics.Location = new System.Drawing.Point(803, 346);
+            this.WriteCharacteristics.Name = "WriteCharacteristics";
+            this.WriteCharacteristics.Size = new System.Drawing.Size(176, 23);
+            this.WriteCharacteristics.TabIndex = 24;
+            this.WriteCharacteristics.Text = "Записать характеристики";
+            this.WriteCharacteristics.UseVisualStyleBackColor = true;
+            this.WriteCharacteristics.Click += new System.EventHandler(this.WriteCharacteristics_Click);
+            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1585, 1055);
             this.Controls.Add(this.chart2);
@@ -381,7 +391,7 @@
             this.Controls.Add(this.label6);
             this.Controls.Add(this.textBox2);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.FindCharacteristics);
+            this.Controls.Add(this.FullSearchCharacteristics);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
@@ -398,7 +408,6 @@
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.buttonCalc);
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
@@ -427,7 +436,7 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.Button FindCharacteristics;
+        private System.Windows.Forms.Button FullSearchCharacteristics;
         private System.Windows.Forms.Button button4;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label6;
@@ -435,6 +444,7 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
+        private System.Windows.Forms.Button WriteCharacteristics;
     }
 }
 

@@ -15,8 +15,6 @@ namespace PPGReader
         public int C;
         public int D;
         public int E;
-        public bool MarkBegin = false;
-        public bool MarkEnd = false;
 
         public PeriodPPG()
         {
@@ -33,7 +31,5 @@ namespace PPGReader
         {
             return End - Begin;
         }
-
-
     }
 }
