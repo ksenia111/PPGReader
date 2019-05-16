@@ -74,10 +74,10 @@
             // 
             // buttonCalc
             // 
-            this.buttonCalc.Location = new System.Drawing.Point(839, 83);
-            this.buttonCalc.Margin = new System.Windows.Forms.Padding(4);
+            this.buttonCalc.Location = new System.Drawing.Point(1119, 102);
+            this.buttonCalc.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.buttonCalc.Name = "buttonCalc";
-            this.buttonCalc.Size = new System.Drawing.Size(150, 23);
+            this.buttonCalc.Size = new System.Drawing.Size(200, 28);
             this.buttonCalc.TabIndex = 0;
             this.buttonCalc.Text = "Нарисовать график";
             this.buttonCalc.UseVisualStyleBackColor = true;
@@ -90,8 +90,8 @@
             this.chart1.ContextMenuStrip = this.contextMenuStrip1;
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(13, 6);
-            this.chart1.Margin = new System.Windows.Forms.Padding(4);
+            this.chart1.Location = new System.Drawing.Point(17, 7);
+            this.chart1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -113,7 +113,7 @@
             this.chart1.Series.Add(series2);
             this.chart1.Series.Add(series3);
             this.chart1.Series.Add(series4);
-            this.chart1.Size = new System.Drawing.Size(819, 391);
+            this.chart1.Size = new System.Drawing.Size(1092, 481);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
             this.chart1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseClick);
@@ -129,47 +129,47 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(839, 312);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.richTextBox1.Location = new System.Drawing.Point(1118, 302);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(302, 355);
+            this.richTextBox1.Size = new System.Drawing.Size(401, 436);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(840, 13);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(1120, 16);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 13);
+            this.label1.Size = new System.Drawing.Size(45, 17);
             this.label1.TabIndex = 3;
             this.label1.Text = "Файл";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1272, 16);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(1572, 19);
+            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(15, 13);
+            this.label2.Size = new System.Drawing.Size(17, 17);
             this.label2.TabIndex = 4;
             this.label2.Text = "w";
             // 
             // textBoxPath
             // 
-            this.textBoxPath.Location = new System.Drawing.Point(893, 13);
-            this.textBoxPath.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxPath.Location = new System.Drawing.Point(1191, 16);
+            this.textBoxPath.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.textBoxPath.Name = "textBoxPath";
-            this.textBoxPath.Size = new System.Drawing.Size(279, 20);
+            this.textBoxPath.Size = new System.Drawing.Size(371, 22);
             this.textBoxPath.TabIndex = 5;
             // 
             // textBoxW
             // 
-            this.textBoxW.Location = new System.Drawing.Point(1297, 13);
-            this.textBoxW.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxW.Location = new System.Drawing.Point(1599, 19);
+            this.textBoxW.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.textBoxW.Name = "textBoxW";
-            this.textBoxW.Size = new System.Drawing.Size(20, 20);
+            this.textBoxW.Size = new System.Drawing.Size(25, 22);
             this.textBoxW.TabIndex = 6;
             this.textBoxW.Text = "5";
             // 
@@ -177,10 +177,10 @@
             // 
             this.buttonIncrease.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonIncrease.Image = ((System.Drawing.Image)(resources.GetObject("buttonIncrease.Image")));
-            this.buttonIncrease.Location = new System.Drawing.Point(1136, 41);
-            this.buttonIncrease.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonIncrease.Location = new System.Drawing.Point(1481, 45);
+            this.buttonIncrease.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.buttonIncrease.Name = "buttonIncrease";
-            this.buttonIncrease.Size = new System.Drawing.Size(43, 18);
+            this.buttonIncrease.Size = new System.Drawing.Size(57, 22);
             this.buttonIncrease.TabIndex = 7;
             this.buttonIncrease.UseVisualStyleBackColor = false;
             this.buttonIncrease.Click += new System.EventHandler(this.button2_Click);
@@ -189,10 +189,10 @@
             // 
             this.buttonDecrease.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonDecrease.Image = ((System.Drawing.Image)(resources.GetObject("buttonDecrease.Image")));
-            this.buttonDecrease.Location = new System.Drawing.Point(1136, 57);
-            this.buttonDecrease.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonDecrease.Location = new System.Drawing.Point(1481, 67);
+            this.buttonDecrease.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.buttonDecrease.Name = "buttonDecrease";
-            this.buttonDecrease.Size = new System.Drawing.Size(43, 18);
+            this.buttonDecrease.Size = new System.Drawing.Size(57, 22);
             this.buttonDecrease.TabIndex = 8;
             this.buttonDecrease.UseVisualStyleBackColor = false;
             this.buttonDecrease.Click += new System.EventHandler(this.button3_Click);
@@ -200,28 +200,29 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(840, 53);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(1120, 55);
+            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(126, 13);
+            this.label3.Size = new System.Drawing.Size(163, 17);
             this.label3.TabIndex = 9;
             this.label3.Text = "Частота прореживания";
             // 
             // textBoxSinglingRate
             // 
-            this.textBoxSinglingRate.Location = new System.Drawing.Point(1011, 53);
-            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxSinglingRate.Location = new System.Drawing.Point(1293, 53);
+            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.textBoxSinglingRate.Name = "textBoxSinglingRate";
-            this.textBoxSinglingRate.Size = new System.Drawing.Size(26, 20);
+            this.textBoxSinglingRate.Size = new System.Drawing.Size(33, 22);
             this.textBoxSinglingRate.TabIndex = 10;
             this.textBoxSinglingRate.Text = "5";
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(840, 194);
+            this.label4.Location = new System.Drawing.Point(1120, 187);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(103, 13);
+            this.label4.Size = new System.Drawing.Size(130, 17);
             this.label4.TabIndex = 11;
             this.label4.Text = "Окно сглаживания";
             // 
@@ -229,10 +230,10 @@
             // 
             this.button1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(996, 182);
-            this.button1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button1.Location = new System.Drawing.Point(1291, 174);
+            this.button1.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(32, 15);
+            this.button1.Size = new System.Drawing.Size(43, 18);
             this.button1.TabIndex = 13;
             this.button1.UseVisualStyleBackColor = false;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
@@ -241,20 +242,20 @@
             // 
             this.button2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
-            this.button2.Location = new System.Drawing.Point(996, 204);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button2.Location = new System.Drawing.Point(1291, 196);
+            this.button2.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(32, 15);
+            this.button2.Size = new System.Drawing.Size(43, 18);
             this.button2.TabIndex = 14;
             this.button2.UseVisualStyleBackColor = false;
             this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(1046, 179);
-            this.button3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.button3.Location = new System.Drawing.Point(1342, 178);
+            this.button3.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(117, 47);
+            this.button3.Size = new System.Drawing.Size(131, 34);
             this.button3.TabIndex = 15;
             this.button3.Text = "Сгладить период";
             this.button3.UseVisualStyleBackColor = true;
@@ -263,17 +264,19 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(1062, 53);
+            this.label5.Location = new System.Drawing.Point(1405, 58);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 13);
+            this.label5.Size = new System.Drawing.Size(68, 17);
             this.label5.TabIndex = 16;
             this.label5.Text = "Масштаб";
             // 
             // FullSearchCharacteristics
             // 
-            this.FullSearchCharacteristics.Location = new System.Drawing.Point(840, 245);
+            this.FullSearchCharacteristics.Location = new System.Drawing.Point(1119, 232);
+            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
-            this.FullSearchCharacteristics.Size = new System.Drawing.Size(335, 23);
+            this.FullSearchCharacteristics.Size = new System.Drawing.Size(447, 28);
             this.FullSearchCharacteristics.TabIndex = 17;
             this.FullSearchCharacteristics.Text = "Найти характеристики с помощью полного перебора";
             this.FullSearchCharacteristics.UseVisualStyleBackColor = true;
@@ -281,9 +284,10 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(840, 130);
+            this.button4.Location = new System.Drawing.Point(1118, 139);
+            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(200, 47);
+            this.button4.Size = new System.Drawing.Size(253, 29);
             this.button4.TabIndex = 18;
             this.button4.Text = "Отметить период сглаживания";
             this.button4.UseVisualStyleBackColor = true;
@@ -291,25 +295,28 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(1046, 142);
+            this.textBox2.Location = new System.Drawing.Point(1379, 142);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(146, 20);
+            this.textBox2.Size = new System.Drawing.Size(193, 22);
             this.textBox2.TabIndex = 19;
             // 
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(974, 194);
+            this.label6.Location = new System.Drawing.Point(1267, 187);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(13, 13);
+            this.label6.Size = new System.Drawing.Size(16, 17);
             this.label6.TabIndex = 20;
             this.label6.Text = "3";
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(839, 280);
+            this.button5.Location = new System.Drawing.Point(1118, 268);
+            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(150, 20);
+            this.button5.Size = new System.Drawing.Size(200, 25);
             this.button5.TabIndex = 21;
             this.button5.Text = "Найти производную";
             this.button5.UseVisualStyleBackColor = true;
@@ -317,9 +324,10 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(1169, 179);
+            this.button6.Location = new System.Drawing.Point(1481, 178);
+            this.button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(200, 47);
+            this.button6.Size = new System.Drawing.Size(256, 34);
             this.button6.TabIndex = 22;
             this.button6.Text = "Отменить сглаживание периода";
             this.button6.UseVisualStyleBackColor = true;
@@ -327,13 +335,24 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(1375, 190);
+            this.button7.Location = new System.Drawing.Point(1745, 178);
+            this.button7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(101, 25);
+            this.button7.Size = new System.Drawing.Size(128, 34);
             this.button7.TabIndex = 23;
             this.button7.Text = "Применить";
             this.button7.UseVisualStyleBackColor = true;
             this.button7.Click += new System.EventHandler(this.button7_Click);
+            // 
+            // WriteCharacteristics
+            // 
+            this.WriteCharacteristics.Location = new System.Drawing.Point(803, 346);
+            this.WriteCharacteristics.Name = "WriteCharacteristics";
+            this.WriteCharacteristics.Size = new System.Drawing.Size(176, 23);
+            this.WriteCharacteristics.TabIndex = 24;
+            this.WriteCharacteristics.Text = "Записать характеристики";
+            this.WriteCharacteristics.UseVisualStyleBackColor = true;
+            this.WriteCharacteristics.Click += new System.EventHandler(this.WriteCharacteristics_Click);
             // 
             // chart2
             // 
@@ -342,8 +361,8 @@
             this.chart2.ContextMenuStrip = this.contextMenuStrip1;
             legend2.Name = "Legend1";
             this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(17, 405);
-            this.chart2.Margin = new System.Windows.Forms.Padding(4);
+            this.chart2.Location = new System.Drawing.Point(17, 498);
+            this.chart2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.chart2.Name = "chart2";
             series5.ChartArea = "ChartArea1";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -365,25 +384,15 @@
             this.chart2.Series.Add(series6);
             this.chart2.Series.Add(series7);
             this.chart2.Series.Add(series8);
-            this.chart2.Size = new System.Drawing.Size(815, 254);
+            this.chart2.Size = new System.Drawing.Size(1092, 313);
             this.chart2.TabIndex = 24;
             this.chart2.Text = "chart2";
             // 
-            // WriteCharacteristics
-            // 
-            this.WriteCharacteristics.Location = new System.Drawing.Point(803, 346);
-            this.WriteCharacteristics.Name = "WriteCharacteristics";
-            this.WriteCharacteristics.Size = new System.Drawing.Size(176, 23);
-            this.WriteCharacteristics.TabIndex = 24;
-            this.WriteCharacteristics.Text = "Записать характеристики";
-            this.WriteCharacteristics.UseVisualStyleBackColor = true;
-            this.WriteCharacteristics.Click += new System.EventHandler(this.WriteCharacteristics_Click);
-            // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1585, 1055);
+            this.ClientSize = new System.Drawing.Size(1924, 1055);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -408,6 +417,7 @@
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.buttonCalc);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();

@@ -183,6 +183,114 @@ namespace PPGReader
             return SmoothedData;
         }
 
+        /// Сглаживание
+        private void Smoothing(int beginPeriod, int endPeriod, int window)
+        {
+            int Period = endPeriod - beginPeriod;
+            int[] pointsForSmoothing = new int[Period];
+            fixSmoothing = false;
+            smoothingClick = true;
+
+            for (int i = 0; i < Period; i++)
+            {
+                pointsForSmoothing[i] = forDrawing[beginPeriod + i];         //берем только точки внутри периода
+            }
+
+            int[] smoothedData = new int[Period];
+            smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
+
+            int j = 0;
+            for (int i = beginPeriod; i < endPeriod; i++)
+            {
+                //duplicatePoints[i] = smoothedData[j];
+                forDrawing[i] = smoothedData[j];
+                //points[i] = smoothedData[j];                //в дубликате заменяем точки в выбранном периоде на сглаженные
+                j++;
+            }
+
+            int n = forDrawing.Length;
+            int[] x = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                x[i] = i;
+            }
+
+            Draw(x, forDrawing);
+
+            //добавить на график отмеченные точки, пока:
+            WriteLabelForChart();
+
+            //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
+            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
+            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+        }
+
+        /// <summary>
+        /// Отмена сглаживания
+        /// </summary>
+        /// <param name="beginPeriod"></param>
+        /// <param name="endPeriod"></param>
+        /// <param name="SmoothedData"></param>
+        /// <param name="DuplicatePoints"></param>
+        /// <returns></returns>
+        private void CancelSmoothing(int beginPeriod, int endPeriod, int[] SmoothedData, int[] DuplicatePoints)
+        {
+            int n = DuplicatePoints.Length;
+            int[] dataAfterCancel = new int[n];
+
+            for (int i = beginPeriod; i <= endPeriod; i++) 
+            {
+                SmoothedData[i] = DuplicatePoints[i];
+            }
+            dataAfterCancel = SmoothedData;
+
+            int[] x = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                x[i] = i;
+            }
+
+            Draw(x, forDrawing);
+
+            //добавить на график отмеченные точки, пока:
+            WriteLabelForChart();
+
+            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
+            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+        }
+
+        /// <summary>
+        /// Применить сглаживание
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ApplySmoothing()
+        {
+            int n = duplicatePoints.Length;
+            for (int i = 0; i < n; i++)
+            {
+                duplicatePoints[i] = forDrawing[i];
+            }
+
+            //создание массива точекФПГ и ФПГ
+
+            PointPPG[] pointPPGs = new PointPPG[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                pointPPGs[i] = new PointPPG(i, duplicatePoints[i]);
+            }
+
+            ppg = new PPG(pointPPGs, n);
+            Draw(ppg);
+
+            //дабавить на график отмеченные точки, пока:
+            WriteLabelForChart();
+
+            //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
+            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
+            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+        }
         
         private void button1_Click(object sender, EventArgs e)
         {
@@ -231,14 +339,6 @@ namespace PPGReader
         //Рисование ДФПГ
         private void Draw(DPPG dppg)
         {
-            //chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
-            ////chart1.Series[2].ChartType = SeriesChartType.Line;
-            //chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
-            //chart1.Series[2].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
-            //chart1.Series[2].ToolTip = "X = #VALX, Y = #VALY";
-            //chart1.Series[2].Points.DataBindXY(dppg.GetX(), dppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
-            //chart1.Series[2].Color = Color.Red;
-            //chart1.Series[2].MarkerSize = 1;
             chart2.ChartAreas[0].AxisX.MaximumAutoSize = 20;//chart1.ChartAreas[0].AxisX.Interval;
 
             chart2.ChartAreas[0].AxisX.Minimum = 0;
@@ -590,57 +690,10 @@ namespace PPGReader
                 int endPeriod = Convert.ToInt32(endSmoothingPeriod);                              
                 int Period = endPeriod - beginPeriod;
                 //int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
-                int[] pointsForSmoothing = new int[Period];
-                fixSmoothing = false;
-                smoothingClick = true;
-
-                for (int i = 0; i < Period; i++)
-                {
-                    pointsForSmoothing[i] = forDrawing[beginPeriod + i];         //берем только точки внутри периода
-                }
 
                 int window = Convert.ToInt32(label6.Text);
 
-                int[] smoothedData = new int[Period];
-                smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
-
-                int j = 0;
-                for (int i = beginPeriod; i < endPeriod; i++)
-                {
-                    //duplicatePoints[i] = smoothedData[j];
-                    forDrawing[i] = smoothedData[j];
-                    //points[i] = smoothedData[j];                //в дубликате заменяем точки в выбранном периоде на сглаженные
-                    j++;
-                }
-
-                int n = forDrawing.Length;
-                int[] x = new int[n];
-                for (int i = 0; i < n; i++) 
-                {
-                    x[i] = i;
-                }
-
-                Draw(x, forDrawing);
-
-                //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-                if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-                if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
-
-                ////создание массива точекФПГ и ФПГ
-                //int n = points.Length;
-
-                //PointPPG[] pointPPGs = new PointPPG[n];
-
-                //for (int i = 0; i < n; i++)
-                //{
-                //    pointPPGs[i] = new PointPPG(i, points[i]);
-                //}
-
-                //ppg = new PPG(pointPPGs, n);
-                //Draw(ppg);
-                ////если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-                //if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-                //if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+                Smoothing(beginPeriod, endPeriod, window);
             }
         }
 
@@ -663,21 +716,7 @@ namespace PPGReader
                     int endPeriod = Convert.ToInt32(endSmoothingPeriod);
                     int Period = endPeriod - beginPeriod;
 
-                    for (int i = beginPeriod; i < endPeriod; i++)
-                    {
-                        forDrawing[i] = duplicatePoints[i];
-                    }
-
-                    int n = duplicatePoints.Length;
-                    int[] x = new int[n];
-                    for (int i = 0; i < n; i++) 
-                    {
-                        x[i] = i;
-                    }
-
-                    Draw(x, forDrawing);
-                    if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-                    if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+                    CancelSmoothing(beginPeriod, endPeriod, forDrawing, duplicatePoints);
                 }
             }
         }
@@ -696,26 +735,7 @@ namespace PPGReader
                 fixSmoothing = true;
                 smoothingClick = false;
 
-                int n = duplicatePoints.Length;
-                for (int i = 0; i < n; i++)
-                {
-                    duplicatePoints[i] = forDrawing[i];
-                }
-
-                //создание массива точекФПГ и ФПГ
-
-                PointPPG[] pointPPGs = new PointPPG[n];
-
-                for (int i = 0; i < n; i++)
-                {
-                    pointPPGs[i] = new PointPPG(i, duplicatePoints[i]);
-                }
-
-                ppg = new PPG(pointPPGs, n);
-                Draw(ppg);
-                //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-                if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-                if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+                ApplySmoothing();
             }
         }
 
