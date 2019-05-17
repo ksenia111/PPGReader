@@ -26,6 +26,7 @@ namespace PPGReader
         bool СursorOnChart = false;
         bool IsDrawn = false;
         bool IsFoundDerivative = false;
+        bool IsEndWatch = true;
         int[] duplicatePoints;
         int increaseScaleClick = 0;
         int decreaseScaleClick = 0;
@@ -66,13 +67,12 @@ namespace PPGReader
             dMenuItem.Click += dMenuItem_Click;
             eMenuItem.Click += eMenuItem_Click;
             contextMenuStrip1.Enabled = true;
-
-            for(int i=0; i < Periods.Length;i++)
+            for (int i = 0; i < Periods.Length; i++)
             {
                 Periods[i] = new PeriodPPG();
             }
         }
-      
+
         private int[] Read()
         {
             string filePath = @"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //  @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz";//
@@ -88,7 +88,7 @@ namespace PPGReader
                 while (reader.PeekChar() > -1)
                 {
                     byte number = reader.ReadByte();
-                    points[i] = Convert.ToInt16(Convert.ToString(number, 10))*w;
+                    points[i] = Convert.ToInt16(Convert.ToString(number, 10)) * w;
                     i++;
                 }
             }
@@ -116,14 +116,14 @@ namespace PPGReader
         /// <returns></returns>
         private int[] Singling(int[] points)
         {
-           int rate = int.Parse(textBoxSinglingRate.Text); //частота прореживания
-           int n = points.Length / rate;
-           int[] singlingPoints = new int[n];
+            int rate = int.Parse(textBoxSinglingRate.Text); //частота прореживания
+            int n = points.Length / rate;
+            int[] singlingPoints = new int[n];
 
-           for (int i=0; i < n; i++)
+            for (int i = 0; i < n; i++)
             {
 
-                singlingPoints[i] = points[(i+1) * rate - 1];
+                singlingPoints[i] = points[(i + 1) * rate - 1];
             }
             return singlingPoints;
         }
@@ -146,12 +146,12 @@ namespace PPGReader
             int[] SmoothedData = new int[n];
 
             SmoothedData[0] = points[0];
-            int sum = 0;  
+            int sum = 0;
             int k1 = 0;  //начало окна
             int k2 = 0;  //конец окна
             int z = 0;   //размер окна
 
-            for (int i=1;i<n;i++)
+            for (int i = 1; i < n; i++)
             {
                 sum = 0;
                 if (i < m) //в начале 
@@ -183,7 +183,7 @@ namespace PPGReader
             return SmoothedData;
         }
 
-        
+
         private void button1_Click(object sender, EventArgs e)
         {
             drowChartClick = true;
@@ -202,7 +202,7 @@ namespace PPGReader
             int n = singlingPoints.Length;
 
             PointPPG[] pointPPGs = new PointPPG[n];
-            
+
             for (int i = 0; i < n; i++)
             {
                 pointPPGs[i] = new PointPPG(i, singlingPoints[i]);
@@ -240,7 +240,7 @@ namespace PPGReader
         }
 
         //Рисование массива х и у
-        private void Draw(int[] x,int[] y)
+        private void Draw(int[] x, int[] y)
         {
             chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
             chart1.Series[0].ChartType = SeriesChartType.Line;
@@ -253,11 +253,11 @@ namespace PPGReader
         }
 
 
-        
+
         private void chart1_MouseClick(object sender, MouseEventArgs e)
         {
             var result = chart1.HitTest(e.X, e.Y);
-            
+
             chart1.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
             chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
 
@@ -312,21 +312,21 @@ namespace PPGReader
             chart1.Series[0].Color = result.Series == chart1.Series[0] ? Color.Coral : Color.Blue;
         }
 
-        
+
         private void button2_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
             increaseScaleClick++;
         }
 
-        
+
         private void button3_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
             decreaseScaleClick++;
         }
 
-        //подписи к первым 10 периодам, Юля, тебе нужно использовать этот метод, а не для 1 периода
+        //подписи к первым 10 отмеченным периодам
         private void WriteLabelForChart()
         {
             for (int i = 0; i < CountPeriods; i++)
@@ -341,16 +341,26 @@ namespace PPGReader
             }
         }
 
+
         //подписи к 1 периоду
         private void WriteLabelForChart(PeriodPPG periodPPG)
         {
-           if (periodPPG.Begin != 0) chart1.Series[0].Points[periodPPG.Begin].Label = "T";
-           if (periodPPG.End != 0) chart1.Series[0].Points[periodPPG.End].Label = "T";
-           if (periodPPG.A != 0) chart1.Series[0].Points[periodPPG.A].Label = "A";
-           if (periodPPG.B != 0) chart1.Series[0].Points[periodPPG.B].Label = "B";
-           if (periodPPG.C != 0) chart1.Series[0].Points[periodPPG.C].Label = "C";
-           if (periodPPG.D != 0) chart1.Series[0].Points[periodPPG.D].Label = "D";
-           if (periodPPG.E != 0) chart1.Series[0].Points[periodPPG.E].Label = "E";
+            if (periodPPG.Begin != 0) chart1.Series[0].Points[periodPPG.Begin].Label = "T";
+            if (periodPPG.End != 0) chart1.Series[0].Points[periodPPG.End].Label = "T";
+            if (periodPPG.A != 0) chart1.Series[0].Points[periodPPG.A].Label = "A";
+            if (periodPPG.B != 0) chart1.Series[0].Points[periodPPG.B].Label = "B";
+            if (periodPPG.C != 0) chart1.Series[0].Points[periodPPG.C].Label = "C";
+            if (periodPPG.D != 0) chart1.Series[0].Points[periodPPG.D].Label = "D";
+            if (periodPPG.E != 0) chart1.Series[0].Points[periodPPG.E].Label = "E";
+        }
+
+        //подписи ко всем периодам
+        private void WriteLabelForChart(PeriodPPG[] periodPPG)
+        {
+            for (int i = 0; i < periodPPG.Length; i++)
+            {
+                WriteLabelForChart(periodPPG[i]);
+            }
         }
 
         void ResetValue()
@@ -362,11 +372,11 @@ namespace PPGReader
 
         private void PeriobMenuItem_Click(object sender, EventArgs e)
         {
-            if(PeriodClick == 0)
+            if (PeriodClick == 0)
             {
                 Periods[PeriodClick].Begin = (int)x;
             }
-            else if(PeriodClick != CountPeriods)
+            else if (PeriodClick != CountPeriods)
             {
                 Periods[PeriodClick - 1].End = (int)x;
                 Periods[PeriodClick].Begin = (int)x;
@@ -375,7 +385,7 @@ namespace PPGReader
             {
                 Periods[CountPeriods - 1].End = (int)x;
             }
-            
+
             if (CheckCursorOnChart())
             {
                 chart1.Series[0].Points[(int)x].Label = "T";
@@ -389,13 +399,13 @@ namespace PPGReader
                                 "Сообщение",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Information);
-                
+
             }
             ResetValue();
         }
 
-       
-      
+
+
 
         private void MarkCharacteristic(int idxPeriod, ref int point, string label)
         {
@@ -439,8 +449,8 @@ namespace PPGReader
                                 MessageBoxIcon.Information);
                 return false;
 
-            }else
-             return true;
+            } else
+                return true;
         }
 
         private bool CheckMarkPeriod(int idxPeriod)
@@ -461,7 +471,7 @@ namespace PPGReader
 
         private void aMenuItem_Click(object sender, EventArgs e)
         {
-            int idxPeriod = CalcPeriod((int)x);
+            int idxPeriod = CalcPeriod(Periods, (int)x, CountPeriods);
             if (CheckMarkPeriod(idxPeriod))
             {
                 MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].A, "A");
@@ -470,7 +480,7 @@ namespace PPGReader
 
         private void bMenuItem_Click(object sender, EventArgs e)
         {
-            int idxPeriod = CalcPeriod((int)x);
+            int idxPeriod = CalcPeriod(Periods, (int)x, CountPeriods);
             if (CheckMarkPeriod(idxPeriod))
             {
                 MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].B, "B");
@@ -479,25 +489,25 @@ namespace PPGReader
 
         private void cMenuItem_Click(object sender, EventArgs e)
         {
-            int idxPeriod = CalcPeriod((int)x);
+            int idxPeriod = CalcPeriod(Periods, (int)x, CountPeriods);
             if (CheckMarkPeriod(idxPeriod))
             {
-               MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].C, "C");
+                MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].C, "C");
             }
         }
 
         private void dMenuItem_Click(object sender, EventArgs e)
         {
-            int idxPeriod = CalcPeriod((int)x);
+            int idxPeriod = CalcPeriod(Periods, (int)x, CountPeriods);
             if (CheckMarkPeriod(idxPeriod))
             {
-                MarkCharacteristic(idxPeriod,  ref Periods[idxPeriod].D, "D");
+                MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].D, "D");
             }
         }
 
         private void eMenuItem_Click(object sender, EventArgs e)
         {
-            int idxPeriod = CalcPeriod((int)x);
+            int idxPeriod = CalcPeriod(Periods, (int)x, CountPeriods);
             if (CheckMarkPeriod(idxPeriod))
             {
                 MarkCharacteristic(idxPeriod, ref Periods[idxPeriod].E, "E");
@@ -511,7 +521,7 @@ namespace PPGReader
                 var result = chart1.HitTest(e.X, e.Y);
                 СursorOnChart = result.ChartElementType == ChartElementType.DataPoint;
                 x = chart1.ChartAreas[0].CursorX.Position;
-                y =  chart1.ChartAreas[0].CursorY.Position;
+                y = chart1.ChartAreas[0].CursorY.Position;
             }
         }
 
@@ -528,16 +538,16 @@ namespace PPGReader
         private void button2_Click_1(object sender, EventArgs e)
         {
             int window = Convert.ToInt32(label6.Text);
-            
+
             if (window > 3)
             {
                 decreaseClick = window;
                 decreaseClick -= 2;
                 label6.Text = Convert.ToString(decreaseClick);
             }
-            if (window <= 3) MessageBox.Show("Невозможно уменьшить окно сглаживания", 
-                                             "Ошибка", 
-                                             MessageBoxButtons.OK, 
+            if (window <= 3) MessageBox.Show("Невозможно уменьшить окно сглаживания",
+                                             "Ошибка",
+                                             MessageBoxButtons.OK,
                                              MessageBoxIcon.Hand);
 
         }
@@ -551,7 +561,7 @@ namespace PPGReader
             endSmoothingPeriod = 0;
         }
 
-        
+
         //сглаживание
         private void button3_Click_1(object sender, EventArgs e)
         {
@@ -561,8 +571,8 @@ namespace PPGReader
                                              MessageBoxIcon.Hand);
             else
             {
-                int beginPeriod = Convert.ToInt32(beginSmoothingPeriod);                             
-                int endPeriod = Convert.ToInt32(endSmoothingPeriod);                              
+                int beginPeriod = Convert.ToInt32(beginSmoothingPeriod);
+                int endPeriod = Convert.ToInt32(endSmoothingPeriod);
                 int Period = endPeriod - beginPeriod;
                 //int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
                 int[] pointsForSmoothing = new int[Period];
@@ -590,7 +600,7 @@ namespace PPGReader
 
                 int n = forDrawing.Length;
                 int[] x = new int[n];
-                for (int i = 0; i < n; i++) 
+                for (int i = 0; i < n; i++)
                 {
                     x[i] = i;
                 }
@@ -633,7 +643,7 @@ namespace PPGReader
                                                MessageBoxButtons.OK,
                                                MessageBoxIcon.Hand);
                 else
-                { 
+                {
                     int beginPeriod = Convert.ToInt32(beginSmoothingPeriod);
                     int endPeriod = Convert.ToInt32(endSmoothingPeriod);
                     int Period = endPeriod - beginPeriod;
@@ -645,7 +655,7 @@ namespace PPGReader
 
                     int n = duplicatePoints.Length;
                     int[] x = new int[n];
-                    for (int i = 0; i < n; i++) 
+                    for (int i = 0; i < n; i++)
                     {
                         x[i] = i;
                     }
@@ -658,7 +668,7 @@ namespace PPGReader
         }
 
 
-        
+
         //применить сглаживание
         private void button7_Click(object sender, EventArgs e)
         {
@@ -699,28 +709,48 @@ namespace PPGReader
             DialogResult mesageResult = CheckData();
             if (mesageResult == DialogResult.OK)
             {
-                ReadStartCharacteristics();
-                contextMenuStrip1.Enabled = false;
-                int averageLengthPeriod = 0, A_RelativePosition = 0, B_RelativePosition = 0, C_RelativePosition = 0, D_RelativePosition = 0, E_RelativePosition = 0;
-                UpdateRelativePosition(ref averageLengthPeriod, ref A_RelativePosition, ref B_RelativePosition,
-                                       ref C_RelativePosition, ref D_RelativePosition, ref E_RelativePosition);
+                FindCharacteristicsExcel();
+            }
+            else if (PeriodClick == CountPeriods + 1)
+            {
+                FindCharacteristics();
+            }
+        }
 
-                int previousIdxP = CountPeriods-1;
-                int currentIdxP = CountPeriods;
+        private void FindCharacteristicsExcel()
+        {
+            Statistics statistics = new Statistics();
+            int countPeriods;
+            for (int i = statistics.CountStatPeriodsBegin; i <=statistics.CountStatPeriodsEnd; i++)
+            {
+                countPeriods = i;
+                PeriodPPG[] periods = ReadStartCharacteristics(countPeriods);
+                contextMenuStrip1.Enabled = false;
+                int averageLengthPeriod = 0;
+                int A_RelativePosition = 0;
+                int B_RelativePosition = 0;
+                int C_RelativePosition = 0;
+                int D_RelativePosition = 0;
+                int E_RelativePosition = 0;
+                int previousIdxP = countPeriods - 1;
+                int currentIdxP = countPeriods;
                 List<PeriodPPG> periodPPGs = new List<PeriodPPG>();
-                
-                AddMarkedPeriods(ref periodPPGs);
-                int updateData = CountPeriods;
+
+                AddMarkedPeriods(ref periodPPGs, countPeriods, periods);
+                int updateData = countPeriods;
+                int updateFrequency = 10;
+                UpdateRelativePosition(periodPPGs, countPeriods, ref averageLengthPeriod, ref A_RelativePosition, ref B_RelativePosition,
+                                     ref C_RelativePosition, ref D_RelativePosition, ref E_RelativePosition);
 
                 while (periodPPGs.Last().End + averageLengthPeriod < ppg.points.Length)
                 {
                     // добавить проверку на критические точки и сглаживание, обновление через 10 периодов для с,d,e
                     PeriodPPG currentPeriod = new PeriodPPG();
-                    updateData = currentIdxP % CountPeriods;
+                    updateData = currentIdxP % updateFrequency;
                     if (updateData == 0)
                     {
-                        UpdateRelativePosition(ref averageLengthPeriod, ref A_RelativePosition, ref B_RelativePosition,
-                                       ref C_RelativePosition, ref D_RelativePosition, ref E_RelativePosition);
+                        UpdateRelativePosition(periodPPGs, countPeriods, ref averageLengthPeriod, ref A_RelativePosition, ref B_RelativePosition,
+                                      ref C_RelativePosition, ref D_RelativePosition, ref E_RelativePosition);
                     }
 
                     /* if(CalcCountExtr(Periods[currentIdxP].Begin, Periods[currentIdxP].End)>5)
@@ -728,25 +758,206 @@ namespace PPGReader
 
                      }*/
 
-                    currentPeriod = CalcCurrentPeriod(averageLengthPeriod, D_RelativePosition, C_RelativePosition,50, 5,10,5,10,5,periodPPGs);
+                    int end_percent = 50;
+                    int end_percentD = 5;
+                    int c_percent = 10;
+                    int c_percentD = 5;
+                    int c_percentC = 60;
+                    int d_percent = 10;
+                    int d_percentD = 5;
+                    /*currentPeriod = CalcCurrentPeriod(averageLengthPeriod, D_RelativePosition, C_RelativePosition, end_percent,
+                      end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);*/
+                    currentPeriod = CalcCurrentPeriodGrad(averageLengthPeriod, B_RelativePosition, D_RelativePosition, C_RelativePosition, end_percent,
+                   end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);
                     WriteLabelForChart(currentPeriod);
                     periodPPGs.Add(currentPeriod);
 
                     previousIdxP = currentIdxP;
                     currentIdxP++;
                 }
+
+                WriteIteration(periodPPGs, i - 2, statistics);
+
+                MessageBox.Show(
+                               "Характеристики найдены. " + "Количество начальных периодов = " + countPeriods +
+                               " После просмотра периодов нажмите на кнопку \"Просмотр периодов закончен\"",
+                               "Сообщение",
+                               MessageBoxButtons.OK,
+                               MessageBoxIcon.Information);
+                Wait();
+                IsEndWatch = true;
+                if(i!= statistics.CountStatPeriodsEnd) Draw(ppg);
+            }
+            WriteStatisticsToExcel(statistics);
+        }
+
+        private void Wait()
+        {
+            while (IsEndWatch)
+            {
+                Application.DoEvents();
             }
         }
 
-        private PeriodPPG CalcCurrentPeriod(int averageLengthPeriod, int D_RelativePosition, int С_RelativePosition,
-                                            int end_percent, int end_percentD, int c_percent, int c_percentD, int d_percent, int d_percentD, List<PeriodPPG> periodPPGs)
+        //обновить перед заливкой
+        private void FindCharacteristics()
         {
+            contextMenuStrip1.Enabled = false;
+            int averageLengthPeriod = 0;
+            int A_RelativePosition = 0;
+            int B_RelativePosition = 0;
+            int C_RelativePosition = 0;
+            int D_RelativePosition = 0;
+            int E_RelativePosition = 0;
+            int previousIdxP = CountPeriods - 1;
+            int currentIdxP = CountPeriods;
+            List<PeriodPPG> periodPPGs = new List<PeriodPPG>();
+
+            AddMarkedPeriods(ref periodPPGs,CountPeriods,Periods);
+            int updateData = CountPeriods;
+
+            while (periodPPGs.Last().End + averageLengthPeriod < ppg.points.Length)
+            {
+                // добавить проверку на критические точки и сглаживание, обновление через 10 периодов для с,d,e
+                PeriodPPG currentPeriod = new PeriodPPG();
+                updateData = currentIdxP % CountPeriods;
+                if (updateData == 0)
+                {
+                    UpdateRelativePosition(periodPPGs, CountPeriods,ref averageLengthPeriod, ref A_RelativePosition, ref B_RelativePosition,
+                                  ref C_RelativePosition, ref D_RelativePosition, ref E_RelativePosition);
+                }
+
+                /* if(CalcCountExtr(Periods[currentIdxP].Begin, Periods[currentIdxP].End)>5)
+                 {
+
+                 }*/
+
+                int end_percent = 50;
+                int end_percentD = 5;
+                int c_percent = 10;
+                int c_percentD = 5;
+                int c_percentC = 60;
+                int d_percent = 10;
+                int d_percentD = 5;
+                currentPeriod = CalcCurrentPeriod(averageLengthPeriod, D_RelativePosition, C_RelativePosition, end_percent,
+                  end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);
+                WriteLabelForChart(currentPeriod);
+                periodPPGs.Add(currentPeriod);
+
+                previousIdxP = currentIdxP;
+                currentIdxP++;
+            }
+        }
+
+        private PeriodPPG[] FindPeriods(int countPeriods)
+        {
+            PeriodPPG[] periods = ReadStartCharacteristics(countPeriods);
+            contextMenuStrip1.Enabled = false;
+            int averageLengthPeriod = 0;
+            int previousIdxP = countPeriods - 1;
+            int currentIdxP = countPeriods;
+            List<PeriodPPG> periodPPGs = new List<PeriodPPG>();
+
+            AddMarkedPeriods(ref periodPPGs, countPeriods, periods);
+            int updateData = countPeriods;
+            int updateFrequency = 10;
+            averageLengthPeriod = CalcAverageLengthPeriod(countPeriods, periods);
+
+            while (periodPPGs.Last().End + averageLengthPeriod < ppg.points.Length)
+            {
+                PeriodPPG currentPeriod = new PeriodPPG();
+                updateData = currentIdxP % updateFrequency;
+                if (updateData == 0)
+                {
+                    averageLengthPeriod = CalcAverageLengthPeriod(countPeriods, periods);
+                }
+
+                int end_percent = 50;
+                int end_percentD = 5;
+                currentPeriod.Begin = periodPPGs.Last().End;
+                currentPeriod.End = CalcEndPeriod(currentPeriod, currentPeriod.Begin, averageLengthPeriod, end_percent, end_percentD);
+
+                periodPPGs.Add(currentPeriod);
+
+                previousIdxP = currentIdxP;
+                currentIdxP++;
+            }
+
+            WriteLabelForChart(periodPPGs.ToArray());
+            return periodPPGs.ToArray();
+        }
+
+        private void WriteStatisticsToExcel(Statistics statistics)
+        {
+            int countColumns = statistics.CountStatPeriodsEnd - 1;
+            int countRow = statistics.CountStatCharacteristics;
+            string[] nameColumns = new string[countColumns];
+            double[,] valueColumns = new double[countColumns, countRow];
+            for (int i = statistics.CountStatPeriodsBegin; i <= statistics.CountStatPeriodsEnd; i++)
+            {
+                nameColumns[i - 2] = Convert.ToString(i);
+                for (int j = 0; j < countRow; j++)
+                {
+                    switch (j)
+                    {
+                        case 0:
+                            valueColumns[i-2, j] = statistics.IterationEnd[j];
+                            break;
+                        case 1:
+                            valueColumns[i-2, j] = statistics.IterationA[j];
+                            break;
+                        case 2:
+                            valueColumns[i-2, j] = statistics.IterationB[j];
+                            break;
+                        case 3:
+                            valueColumns[i-2, j] = statistics.IterationC[j];
+                            break;
+                        case 4:
+                            valueColumns[i-2, j] = statistics.IterationD[j];
+                            break;
+                        case 5:
+                            valueColumns[i-2, j] = statistics.IterationE[j];
+                            break;
+                    }
+                }
+            }
+            string nameFile = @"D:\ВУЗ\4 курс\Диплом\DATA\Statistics.xlsx";
+            string nameSheet = "Statistics";
+            WriteExcel(nameColumns, valueColumns, countColumns, countRow,
+                      nameFile, nameSheet);
+        }
+
+        private void WriteIteration(List<PeriodPPG>  periodPPGs, int idxStatPeriod, Statistics statistics)
+        {
+           
+            PeriodPPG[] periods = periodPPGs.ToArray();
+            int sumEnd = 0;
+            int sumA = 0;
+            int sumB = 0;
+
+            for(int i =0; i<periods.Length;i++)
+            {
+                sumEnd = sumEnd + periods[i].IterationEnd;
+                sumA = sumA + periods[i].IterationA;
+                sumB = sumB + periods[i].IterationB;
+            }
+
+            statistics.IterationEnd[idxStatPeriod] = Math.Round(Convert.ToDouble(sumEnd)/ periods.Length);
+            statistics.IterationA[idxStatPeriod] = Math.Round(Convert.ToDouble(sumA) / periods.Length);
+            statistics.IterationB[idxStatPeriod] = Math.Round(Convert.ToDouble(sumB) / periods.Length);
+
+        }
+
+        private PeriodPPG CalcCurrentPeriod(int averageLengthPeriod, int D_RelativePosition, int С_RelativePosition,
+                                            int end_percent, int end_percentD, int c_percent, int c_percentD, int c_percentC,int d_percent, int d_percentD, List<PeriodPPG> periodPPGs)
+        {
+            //убрать лишние переменные периода
             PeriodPPG currentPeriod = new PeriodPPG();
             currentPeriod.Begin = periodPPGs.Last().End;
-            currentPeriod.End = CalcEndPeriod(currentPeriod.Begin, averageLengthPeriod, end_percent, end_percentD);
-            currentPeriod.B = CalcB(currentPeriod.Begin, currentPeriod.End);
-            currentPeriod.A = CalcA(currentPeriod.Begin, currentPeriod.B);
-            currentPeriod.C = CalcС(С_RelativePosition, currentPeriod.Length(), c_percent, c_percentD, currentPeriod.Begin, currentPeriod.B, currentPeriod.End);
+            currentPeriod.End = CalcEndPeriod(currentPeriod,currentPeriod.Begin, averageLengthPeriod, end_percent, end_percentD);
+            currentPeriod.B = CalcB(currentPeriod,currentPeriod.Begin, currentPeriod.End);
+            currentPeriod.A = CalcA(currentPeriod,currentPeriod.Begin, currentPeriod.B);
+            /*currentPeriod.C = CalcС(С_RelativePosition, currentPeriod.Length(), c_percent, c_percentD, c_percentC, currentPeriod.Begin, currentPeriod.B, currentPeriod.End);
             if (currentPeriod.C == -1)
             {
                 currentPeriod.C = 0;
@@ -754,15 +965,37 @@ namespace PPGReader
             else
             {
                 currentPeriod.D = CalcD(D_RelativePosition, currentPeriod.Length(), d_percent, d_percentD, currentPeriod.Begin, currentPeriod.C, currentPeriod.End);
-            }
+            }*/
             return currentPeriod;
         }
 
-        private void AddMarkedPeriods(ref List<PeriodPPG> periodPPGs)
+        private PeriodPPG CalcCurrentPeriodGrad(int averageLengthPeriod, int B_RelativePosition, int D_RelativePosition, int С_RelativePosition,
+                                            int end_percent, int end_percentD, int c_percent, int c_percentD, int c_percentC, int d_percent, int d_percentD, List<PeriodPPG> periodPPGs)
         {
-            for(int i = 0; i < CountPeriods;i++)
+            //убрать лишние переменные периода
+            PeriodPPG currentPeriod = new PeriodPPG();
+            currentPeriod.Begin = periodPPGs.Last().End;
+            currentPeriod.End = CalcEndPeriodGrad(currentPeriod, currentPeriod.Begin, averageLengthPeriod, end_percent, end_percentD);
+            currentPeriod.B = CalcBGrad(B_RelativePosition, currentPeriod, currentPeriod.Begin, currentPeriod.End);
+            currentPeriod.A = CalcA(currentPeriod, currentPeriod.Begin, currentPeriod.B);
+            /*currentPeriod.C = CalcС(С_RelativePosition, currentPeriod.Length(), c_percent, c_percentD, c_percentC, currentPeriod.Begin, currentPeriod.B, currentPeriod.End);
+            if (currentPeriod.C == -1)
             {
-                periodPPGs.Add(Periods[i]);
+                currentPeriod.C = 0;
+            }
+            else
+            {
+                currentPeriod.D = CalcD(D_RelativePosition, currentPeriod.Length(), d_percent, d_percentD, currentPeriod.Begin, currentPeriod.C, currentPeriod.End);
+            }*/
+            return currentPeriod;
+        }
+
+
+        private void AddMarkedPeriods(ref List<PeriodPPG> periodPPGs, int countPeriods, PeriodPPG [] periods)
+        {
+            for(int i = 0; i < countPeriods; i++)
+            {
+                periodPPGs.Add(periods[i]);
             }
         }
 
@@ -776,7 +1009,8 @@ namespace PPGReader
                                "Сообщение",
                                MessageBoxButtons.OK,
                                MessageBoxIcon.Information);
-            } else if(IsFoundDerivative == false)
+            }
+            else if (IsFoundDerivative == false)
             {
                 MessageBox.Show(
                                "Нажмите на кнопку \"Найти производную\"",
@@ -784,7 +1018,7 @@ namespace PPGReader
                                MessageBoxButtons.OK,
                                MessageBoxIcon.Information);
             }
-            else if (PeriodClick != CountPeriods+1)
+            else if (PeriodClick != CountPeriods + 1)
             {
                 mesageResult = MessageBox.Show(
                                  "Отметьте характерные точки на 10 периодах," +
@@ -793,19 +1027,34 @@ namespace PPGReader
                                  MessageBoxButtons.OKCancel,
                                  MessageBoxIcon.Information);
             }
-
+            
             return mesageResult;
         }
 
-        private void UpdateRelativePosition(ref int averageLengthPeriod, ref int A_RelativePosition, ref int B_RelativePosition, 
+        private void UpdateRelativePosition(List<PeriodPPG> periodPPGs, int countPeriods, ref int averageLengthPeriod, ref int A_RelativePosition, ref int B_RelativePosition, 
                                             ref int C_RelativePosition, ref int D_RelativePosition, ref int E_RelativePosition)
         {
-            averageLengthPeriod = CalcAverageLengthPeriod();
-            A_RelativePosition = CalcRelativePosition(Periods.Select(p => p.A).ToArray(), CountPeriods);
-            B_RelativePosition = CalcRelativePosition(Periods.Select(p => p.B).ToArray(), CountPeriods);
-            C_RelativePosition = CalcRelativePosition(Periods.Select(p => p.B).ToArray(), CountPeriods);
-            D_RelativePosition = CalcRelativePosition(Periods.Select(p => p.B).ToArray(), CountPeriods);
-            E_RelativePosition = CalcRelativePosition(Periods.Select(p => p.B).ToArray(), CountPeriods);
+            PeriodPPG[] periods = PeriodsToArray(periodPPGs, countPeriods);
+            averageLengthPeriod = CalcAverageLengthPeriod(countPeriods, periods);
+            A_RelativePosition = CalcRelativePosition(periods,periods.Select(p => p.A).ToArray(), countPeriods);
+            B_RelativePosition = CalcRelativePosition(periods,periods.Select(p => p.B).ToArray(), countPeriods);
+            /*C_RelativePosition = CalcRelativePosition(periods,periods.Select(p => p.C).ToArray(), countPeriods);
+            D_RelativePosition = CalcRelativePosition(periods,periods.Select(p => p.D).ToArray(), countPeriods);
+            E_RelativePosition = CalcRelativePosition(periods,periods.Select(p => p.E).ToArray(), countPeriods);*/
+        }
+
+        private PeriodPPG[] PeriodsToArray(List<PeriodPPG> periodPPGs, int countPeriods)
+        {
+            PeriodPPG[] periods = new PeriodPPG[countPeriods];
+            int end = periodPPGs.Count - 1;
+            int begin = periodPPGs.Count - countPeriods;
+
+            for (int i= countPeriods - 1; i>=0;i--)
+            {
+                periods[i] = periodPPGs.Last();
+            }
+
+            return periods;
         }
 
         private int CalcCountExtr(int begin, int end)
@@ -822,7 +1071,7 @@ namespace PPGReader
             return count;
         }
 
-        private int CalcB( int begin, int  end)
+        private int CalcB( PeriodPPG period, int begin, int  end)
         {
             int idxB = -1;
             int max = int.MinValue;
@@ -833,6 +1082,7 @@ namespace PPGReader
                     max = ppg.points[i].y;
                     idxB = i;
                 }
+                period.IterationB++;
             }
 
             return idxB;
@@ -842,10 +1092,18 @@ namespace PPGReader
         private int CalcD(int D_RelativePosition, int periodLength, int percent, int percentD, int beginPeriod, int begin, int end)
         {
             int predictionD = (int)Math.Round((Convert.ToDouble(D_RelativePosition) / 100) * periodLength);
-            int idxD = beginPeriod + predictionD;
+            int idxD = -1;
             int searchInterval = percent * periodLength / 100;
+            int interval = percentD * periodLength / 100;
+            int beginSearch = beginPeriod + predictionD - searchInterval;
+            int endSearch = beginPeriod + predictionD + searchInterval;
+            if ( beginSearch < begin)
+            {
+                beginSearch = begin;
+                endSearch = begin + 2*searchInterval;
+            }
             
-            for (int i = begin; i < end; i++)
+            for (int i = beginSearch; i < endSearch; i++)
             {
                 if (IsMax(dppg.points[i].y, dppg.points[i - 1].y, dppg.points[i + 1].y))
                 {
@@ -853,31 +1111,52 @@ namespace PPGReader
                 }
             }
 
-            idxD = CheckDerivativeMax(periodLength, percentD, idxD);
-
+            while((idxD == -1)||(endSearch<end))
+            {
+                beginSearch = endSearch;
+                endSearch = endSearch + searchInterval;
+                for (int i = beginSearch; i < endSearch; i++)
+                {
+                    if (IsMax(dppg.points[i].y, dppg.points[i - 1].y, dppg.points[i + 1].y))
+                    {
+                        idxD = i;
+                    }
+                }
+            }
 
             return idxD;
         }
 
         //не правильно находит
-        private int CalcС(int С_RelativePosition, int periodLength, int percent, int percentD, int beginPeriod, int begin, int end)
+        private int CalcС(int С_RelativePosition, int periodLength, int percent, int percentD, int percentC, int beginPeriod, int begin, int end)
         {
             int predictionС = (int)Math.Round((Convert.ToDouble(С_RelativePosition) / 100) * periodLength);
             int idxC =-1;
             int searchInterval = percent * periodLength / 100;
-            for (int i = begin; i < end; i++)
+            for (int i = beginPeriod + predictionС- searchInterval; i < beginPeriod + predictionС + searchInterval; i++)
             {
                 if (IsMin(dppg.points[i].y, dppg.points[i - 1].y, dppg.points[i + 1].y))
                 {
                     return i;
                 }
             }
-
-            return idxC;
+            if (idxC == -1)
+            {
+                searchInterval = percentC * periodLength / 100;
+                for (int i = begin; i < beginPeriod + searchInterval; i++)
+                {
+                    if (IsMin(dppg.points[i].y, dppg.points[i - 1].y, dppg.points[i + 1].y))
+                    {
+                        return i;
+                    }
+                }
+            }
+            
+             return idxC;
         }
 
 
-        private int CalcA(int begin, int end)
+        private int CalcA(PeriodPPG period,int begin, int end)
         {
             int idxA = -1;
             double maxDPPG = int.MinValue;
@@ -888,11 +1167,12 @@ namespace PPGReader
                     maxDPPG = dppg.points[i].y;
                     idxA = i;
                 }
+                period.IterationA++;
             }
             return idxA;
         }
 
-        private int CalcEndPeriod(int begin, int averageLength, int percent, int percentD)
+        private int CalcEndPeriod(PeriodPPG periodPPG, int begin, int averageLength, int percent, int percentD)
         {
             int searchInterval = percent * averageLength / 100;
             int min = int.MaxValue;
@@ -909,25 +1189,68 @@ namespace PPGReader
                     min = ppg.points[i].y;
                     idxEnd = i;
                 }
+                periodPPG.IterationEnd++;
             }
             
-            idxEnd = CheckDerivativeMax(averageLength, percentD,  idxEnd);
+            idxEnd = CheckDerivativeMax(periodPPG, averageLength, percentD,  idxEnd);
 
             return idxEnd;
 
         }
 
-        bool IsMax(double Derivative, double previousDerivative, double nextDerivative)
+        private int CalcEndPeriodGrad(PeriodPPG periodPPG, int begin, int averageLength, int percent, int percentD)
         {
-            return ((Derivative == 0) && (previousDerivative < 0) && (nextDerivative > 0));
+            int predictionEnd = begin + averageLength;
+            int idxEnd = predictionEnd;
+            
+            while (!IsMin(ppg.points[idxEnd].y, ppg.points[idxEnd-1].y, ppg.points[idxEnd+1].y))
+             {
+                if(dppg.points[idxEnd].y<0)
+                {
+                    idxEnd++;
+                }
+                else
+                {
+                    idxEnd--;
+                }
+                periodPPG.IterationEnd++;
+            }
+             
+            return idxEnd;
+        }
+
+
+        private int CalcBGrad(int B_RelativePosition, PeriodPPG period, int begin, int end)
+        {
+            int predictionB = (int)Math.Round((Convert.ToDouble(B_RelativePosition) / 100) * period.Length());
+            int idxB = begin + predictionB;
+            while (!IsMax(ppg.points[idxB].y, ppg.points[idxB - 1].y, ppg.points[idxB + 1].y))
+            {
+                if (dppg.points[idxB].y < 0)
+                {
+                    idxB++;
+                }
+                else
+                {
+                    idxB--;
+                }
+                period.IterationB++;
+            }
+
+            return idxB;
         }
 
         bool IsMin(double Derivative, double previousDerivative, double nextDerivative)
         {
+            return ((Derivative == 0) && (previousDerivative < 0) && (nextDerivative > 0));
+        }
+
+        bool IsMax(double Derivative, double previousDerivative, double nextDerivative)
+        {
             return ((Derivative == 0) && (previousDerivative > 0) && (nextDerivative < 0));
         }
 
-        private int CheckDerivativeMax(int lengthPeriod, int percentD, int idx)
+        private int CheckDerivativeMax(PeriodPPG periodPPG, int lengthPeriod, int percentD, int idx)
         {
             if (IsMax(dppg.points[idx].y,dppg.points[idx-1].y ,dppg.points[idx + 1].y))
             {
@@ -948,6 +1271,7 @@ namespace PPGReader
                 {
                     idx = i;
                 }
+                periodPPG.IterationEnd++;
             }
 
             return idx;
@@ -980,42 +1304,65 @@ namespace PPGReader
         }
 
 
-        private int CalcAverageLengthPeriod()
+        private int CalcAverageLengthPeriod(int countPeriods, PeriodPPG[] periods)
         {
             int sum = 0;
-            for (int i = 0; i < CountPeriods; i++)
+            for (int i = 0; i < countPeriods; i++)
             {
-                sum += Periods[i].Length();
+                sum += periods[i].Length();
             }
              
-            return sum / CountPeriods;
+            return sum / countPeriods;
         }
 
-        private int CalcRelativePosition(int[] point, int lengthForCalc)
+        private bool IsZeroPoint(int[] point)
         {
-            int[] RelativePosition = new int[lengthForCalc];
-            int idxPeriod = 0;
-            for (int i=0;i< lengthForCalc; i++)
+            bool isZero = true;
+            for(int i =0; i<point.Length;i++)
             {
-                idxPeriod = CalcPeriod(point[i]);
-                RelativePosition[i] = (int)Math.Round((Convert.ToDouble(point[i] - Periods[idxPeriod].Begin) / 
-                                        Periods[idxPeriod].Length()) * 100);
+                if(point[i]!=0)
+                {
+                    isZero = false;
+                    return false;
+                }
             }
 
-            int sum = 0;
-            for (int i = 0; i < lengthForCalc; i++)
-            {
-                sum += RelativePosition[i];
-            }
-
-            return sum / lengthForCalc;
+            return isZero;
         }
 
-        private int CalcPeriod(int point)
+        private int CalcRelativePosition(PeriodPPG[] periods, int[] point, int lengthForCalc)
         {
-            for(int i = 0; i < CountPeriods;i++)
+            
+            if (IsZeroPoint(point))
             {
-                if ((point > Periods[i].Begin)&&(point < Periods[i].End))
+                return 0;
+            }
+            else
+            {
+                int[] RelativePosition = new int[lengthForCalc];
+                int idxPeriod = 0;
+                for (int i = 0; i < lengthForCalc; i++)
+                {
+                    idxPeriod = CalcPeriod(periods, point[i], lengthForCalc);
+                    RelativePosition[i] = (int)Math.Round((Convert.ToDouble(point[i] - periods[idxPeriod].Begin) /
+                                            periods[idxPeriod].Length()) * 100);
+                }
+
+                int sum = 0;
+                for (int i = 0; i < lengthForCalc; i++)
+                {
+                    sum += RelativePosition[i];
+                }
+
+                return sum / lengthForCalc;
+            }
+        }
+
+        private int CalcPeriod(PeriodPPG[] periods, int point, int countPeriods)
+        {
+            for(int i = 0; i < countPeriods; i++)
+            {
+                if ((point > periods[i].Begin)&&(point < periods[i].End))
                 {
                     return i;
                 }
@@ -1138,45 +1485,82 @@ namespace PPGReader
             }
 
         }
+        private void WriteExcel(string[] nameСolumns, double[,] valueColumns, int countColumns, int countValues,
+                               string nameFile, string nameSheet)
+        {
+            //Create a new ExcelPackage
+            using (ExcelPackage excelPackage = new ExcelPackage())
+            {
+                //Set some properties of the Excel document
+                excelPackage.Workbook.Properties.Author = "PPGReader";
+                excelPackage.Workbook.Properties.Title = "Characteristics";
+                excelPackage.Workbook.Properties.Created = DateTime.Now;
 
-        private void ReadStartCharacteristics()
+                //Create the WorkSheet
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(nameSheet);
+
+                for (int j = 1; j <= countColumns; j++)
+                {
+                    worksheet.Cells[1, j].Value = nameСolumns[j - 1];
+                }
+                for (int j = 1; j <= countColumns; j++)
+                {
+                    for (int i = 2; i <= countValues + 1; i++)
+                    {
+                        worksheet.Cells[i, j].Value = valueColumns[j - 1, i - 2];
+                    }
+                }
+
+                //Save your file
+                FileInfo file = new FileInfo(nameFile);//"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx"
+                excelPackage.SaveAs(file);
+            }
+
+        }
+        private PeriodPPG[] ReadStartCharacteristics(int countPeriods)
         {
             string namefile = @"D:\ВУЗ\4 курс\Диплом\DATA\StartCharacteristics.xlsx";
             string[,] excelData = ReadExcelSheet(namefile);
             int rows = excelData.GetUpperBound(0) + 1;
             int columns = excelData.Length / rows;
-            for (int j = 1; j < columns; j++)
+            PeriodPPG[] periods = new PeriodPPG[countPeriods];
+            for(int i =0; i< countPeriods;i++)
+            {
+                periods[i] = new PeriodPPG();
+            }
+            for (int j = 1; j < countPeriods+1; j++)
             {
                 for(int i = 1; i < rows; i++)
                 {
                     switch (i)
                     {
                         case 1:
-                            Periods[j-1].Begin = Convert.ToInt32(excelData[i,j]);
+                            periods[j-1].Begin = Convert.ToInt32(excelData[i,j]);
                             break;
                         case 2:
-                            Periods[j-1].End = Convert.ToInt32(excelData[i, j]); ;
+                            periods[j-1].End = Convert.ToInt32(excelData[i, j]); ;
                             break;
                         case 3:
-                            Periods[j-1].A = Convert.ToInt32(excelData[i, j]); ;
+                            periods[j-1].A = Convert.ToInt32(excelData[i, j]); ;
                             break;
                         case 4:
-                            Periods[j-1].B = Convert.ToInt32(excelData[i, j]); ;
+                            periods[j-1].B = Convert.ToInt32(excelData[i, j]); ;
                             break;
                         case 5:
-                            Periods[j-1].C = Convert.ToInt32(excelData[i, j]);
+                            periods[j-1].C = Convert.ToInt32(excelData[i, j]);
                             break;
                         case 6:
-                            Periods[j-1].D = Convert.ToInt32(excelData[i, j]); ;
+                            periods[j-1].D = Convert.ToInt32(excelData[i, j]); ;
                             break;
                         case 7:
-                            Periods[j-1].E = Convert.ToInt32(excelData[i, j]); ;
+                            periods[j-1].E = Convert.ToInt32(excelData[i, j]); ;
                             break;
                     }
                 }
             }
 
-            WriteLabelForChart();
+            WriteLabelForChart(periods);
+            return periods;
         }
 
        
@@ -1266,6 +1650,11 @@ namespace PPGReader
                 string nameSheet = "Characteristics";
                 WriteExcel(nameСolumns, valueColumns, countColumns, CountPeriods, nameFile, nameSheet);
             }
+        }
+
+        private void EndWatch_Click(object sender, EventArgs e)
+        {
+            IsEndWatch = false;
         }
     }
 }

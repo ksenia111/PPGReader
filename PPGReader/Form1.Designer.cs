@@ -61,6 +61,7 @@
             this.button6 = new System.Windows.Forms.Button();
             this.button7 = new System.Windows.Forms.Button();
             this.WriteCharacteristics = new System.Windows.Forms.Button();
+            this.EndWatch = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -163,7 +164,7 @@
             this.buttonIncrease.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonIncrease.Image = ((System.Drawing.Image)(resources.GetObject("buttonIncrease.Image")));
             this.buttonIncrease.Location = new System.Drawing.Point(608, 357);
-            this.buttonIncrease.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonIncrease.Margin = new System.Windows.Forms.Padding(2);
             this.buttonIncrease.Name = "buttonIncrease";
             this.buttonIncrease.Size = new System.Drawing.Size(32, 15);
             this.buttonIncrease.TabIndex = 7;
@@ -175,7 +176,7 @@
             this.buttonDecrease.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonDecrease.Image = ((System.Drawing.Image)(resources.GetObject("buttonDecrease.Image")));
             this.buttonDecrease.Location = new System.Drawing.Point(608, 375);
-            this.buttonDecrease.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonDecrease.Margin = new System.Windows.Forms.Padding(2);
             this.buttonDecrease.Name = "buttonDecrease";
             this.buttonDecrease.Size = new System.Drawing.Size(32, 15);
             this.buttonDecrease.TabIndex = 8;
@@ -214,7 +215,7 @@
             this.button1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
             this.button1.Location = new System.Drawing.Point(608, 393);
-            this.button1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(32, 15);
             this.button1.TabIndex = 13;
@@ -226,7 +227,7 @@
             this.button2.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
             this.button2.Location = new System.Drawing.Point(608, 413);
-            this.button2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(32, 15);
             this.button2.TabIndex = 14;
@@ -236,7 +237,7 @@
             // button3
             // 
             this.button3.Location = new System.Drawing.Point(647, 405);
-            this.button3.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(150, 20);
             this.button3.TabIndex = 15;
@@ -267,7 +268,7 @@
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(186, 395);
-            this.button4.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button4.Margin = new System.Windows.Forms.Padding(2);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(146, 38);
             this.button4.TabIndex = 18;
@@ -278,7 +279,7 @@
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(340, 405);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(2);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(146, 20);
             this.textBox2.TabIndex = 19;
@@ -296,7 +297,7 @@
             // button5
             // 
             this.button5.Location = new System.Drawing.Point(646, 428);
-            this.button5.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button5.Margin = new System.Windows.Forms.Padding(2);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(150, 20);
             this.button5.TabIndex = 21;
@@ -307,7 +308,7 @@
             // button6
             // 
             this.button6.Location = new System.Drawing.Point(801, 405);
-            this.button6.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button6.Margin = new System.Windows.Forms.Padding(2);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(178, 20);
             this.button6.TabIndex = 22;
@@ -318,7 +319,7 @@
             // button7
             // 
             this.button7.Location = new System.Drawing.Point(983, 405);
-            this.button7.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.button7.Margin = new System.Windows.Forms.Padding(2);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(76, 20);
             this.button7.TabIndex = 23;
@@ -336,11 +337,22 @@
             this.WriteCharacteristics.UseVisualStyleBackColor = true;
             this.WriteCharacteristics.Click += new System.EventHandler(this.WriteCharacteristics_Click);
             // 
+            // EndWatch
+            // 
+            this.EndWatch.Location = new System.Drawing.Point(987, 373);
+            this.EndWatch.Name = "EndWatch";
+            this.EndWatch.Size = new System.Drawing.Size(188, 23);
+            this.EndWatch.TabIndex = 25;
+            this.EndWatch.Text = "Просмотр периодов закончен";
+            this.EndWatch.UseVisualStyleBackColor = true;
+            this.EndWatch.Click += new System.EventHandler(this.EndWatch_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1233, 459);
+            this.Controls.Add(this.EndWatch);
             this.Controls.Add(this.WriteCharacteristics);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -366,7 +378,7 @@
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.buttonCalc);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "PPGReader";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -400,6 +412,7 @@
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button WriteCharacteristics;
+        private System.Windows.Forms.Button EndWatch;
     }
 }
 

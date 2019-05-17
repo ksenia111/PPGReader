@@ -16,6 +16,14 @@ namespace PPGReader
         public int D;
         public int E;
 
+        public int IterationBegin= 0;
+        public int IterationEnd = 0;
+        public int IterationA = 0;
+        public int IterationB = 0;
+        public int IterationC = 0;
+        public int IterationD = 0;
+        public int IterationE = 0;
+
         public PeriodPPG()
         {
             Begin = 0;
@@ -31,5 +39,6 @@ namespace PPGReader
         {
             return End - Begin;
         }
+
     }
 }
