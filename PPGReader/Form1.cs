@@ -129,7 +129,7 @@ namespace PPGReader
         }
 
         /// <summary>
-        /// Сглаживание
+        /// Скользящее среднее
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -183,7 +183,111 @@ namespace PPGReader
             return SmoothedData;
         }
 
+        /// Сглаживание
+        private void Smoothing(int beginPeriod, int endPeriod, int window)
+        {
+            int Period = endPeriod - beginPeriod;
+            int[] pointsForSmoothing = new int[Period];
+            fixSmoothing = false;
+            smoothingClick = true;
 
+            for (int i = 0; i < Period; i++)
+            {
+                pointsForSmoothing[i] = forDrawing[beginPeriod + i];         //берем только точки внутри периода
+            }
+
+            int[] smoothedData = new int[Period];
+            smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
+
+            int j = 0;
+            for (int i = beginPeriod; i < endPeriod; i++)
+            {
+                //duplicatePoints[i] = smoothedData[j];
+                forDrawing[i] = smoothedData[j];
+                //points[i] = smoothedData[j];                //в дубликате заменяем точки в выбранном периоде на сглаженные
+                j++;
+            }
+
+            int n = forDrawing.Length;
+            int[] x = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                x[i] = i;
+            }
+
+            Draw(x, forDrawing);
+
+            //добавить на график отмеченные точки, пока:
+            WriteLabelForChart();
+
+            //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
+            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
+            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+        }
+
+        /// <summary>
+        /// Отмена сглаживания
+        /// </summary>
+        /// <param name="beginPeriod"></param>
+        /// <param name="endPeriod"></param>
+        /// <param name="SmoothedData"></param>
+        /// <param name="DuplicatePoints"></param>
+        /// <returns></returns>
+        private void CancelSmoothing(int beginPeriod, int endPeriod, int[] SmoothedData, int[] DuplicatePoints)
+        {
+            int n = DuplicatePoints.Length;
+            int[] dataAfterCancel = new int[n];
+
+            for (int i = beginPeriod; i <= endPeriod; i++) 
+            {
+                SmoothedData[i] = DuplicatePoints[i];
+            }
+            dataAfterCancel = SmoothedData;
+
+            int[] x = new int[n];
+            for (int i = 0; i < n; i++)
+            {
+                x[i] = i;
+            }
+
+            Draw(x, forDrawing);
+
+
+            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
+            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+        }
+
+        /// <summary>
+        /// Применить сглаживание
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void ApplySmoothing()
+        {
+            int n = duplicatePoints.Length;
+            for (int i = 0; i < n; i++)
+            {
+                duplicatePoints[i] = forDrawing[i];
+            }
+
+            //создание массива точекФПГ и ФПГ
+
+            PointPPG[] pointPPGs = new PointPPG[n];
+
+            for (int i = 0; i < n; i++)
+            {
+                pointPPGs[i] = new PointPPG(i, duplicatePoints[i]);
+            }
+
+            ppg = new PPG(pointPPGs, n);
+            Draw(ppg);
+
+
+            //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
+            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
+            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+        }
+        
         private void button1_Click(object sender, EventArgs e)
         {
             drowChartClick = true;
@@ -214,10 +318,12 @@ namespace PPGReader
 
         //Рисование ФПГ
         private void Draw(PPG ppg)
-        {
+        { 
+            
+            chart1.ChartAreas[0].AxisX.Minimum = 0;
             chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
             chart1.Series[0].ChartType = SeriesChartType.Line;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = 400;
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
             chart1.Series[0].Points.DataBindXY(ppg.GetX(), ppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
@@ -229,14 +335,18 @@ namespace PPGReader
         //Рисование ДФПГ
         private void Draw(DPPG dppg)
         {
-            chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            chart2.ChartAreas[0].AxisX.MaximumAutoSize = 20;//chart1.ChartAreas[0].AxisX.Interval;
+
+            chart2.ChartAreas[0].AxisX.Minimum = 0;
+            chart2.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
             //chart1.Series[2].ChartType = SeriesChartType.Line;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
-            chart1.Series[2].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
-            chart1.Series[2].ToolTip = "X = #VALX, Y = #VALY";
-            chart1.Series[2].Points.DataBindXY(dppg.GetX(), dppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
-            chart1.Series[2].Color = Color.Red;
-            //chart1.Series[2].MarkerSize = 1;
+            chart2.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
+            chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chart2.Series[0].Points.DataBindXY(dppg.GetX(), dppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
+            chart2.Series[0].Color = Color.ForestGreen;
+            chart2.Series[0].MarkerSize = 1;
+
         }
 
         //Рисование массива х и у
@@ -244,7 +354,7 @@ namespace PPGReader
         {
             chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
             chart1.Series[0].ChartType = SeriesChartType.Line;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 1000;
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = 400;
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
             chart1.Series[0].Points.DataBindXY(x, y); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
@@ -310,12 +420,22 @@ namespace PPGReader
             Cursor = result.ChartElementType == ChartElementType.DataPoint ? Cursors.Hand : Cursors.Default;
             //chart1.Series[0].Color = result.ChartElementType == ChartElementType.DataPoint ? Color.Coral : Color.Blue; //у всего графика меняется цвет, как у одной точки заменить, пока не придумала
             chart1.Series[0].Color = result.Series == chart1.Series[0] ? Color.Coral : Color.Blue;
+
+            chart2.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+            chart2.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+
+            double dpX = chart2.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
+            double dpY = chart2.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
+
+            var dresult = chart2.HitTest(e.X, e.Y);
+            Cursor = dresult.ChartElementType == ChartElementType.DataPoint ? Cursors.Hand : Cursors.Default;
         }
 
 
         private void button2_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
+            chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
             increaseScaleClick++;
         }
 
@@ -323,6 +443,7 @@ namespace PPGReader
         private void button3_Click(object sender, EventArgs e)
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
+            chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
             decreaseScaleClick++;
         }
 
@@ -575,57 +696,10 @@ namespace PPGReader
                 int endPeriod = Convert.ToInt32(endSmoothingPeriod);
                 int Period = endPeriod - beginPeriod;
                 //int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
-                int[] pointsForSmoothing = new int[Period];
-                fixSmoothing = false;
-                smoothingClick = true;
-
-                for (int i = 0; i < Period; i++)
-                {
-                    pointsForSmoothing[i] = forDrawing[beginPeriod + i];         //берем только точки внутри периода
-                }
 
                 int window = Convert.ToInt32(label6.Text);
 
-                int[] smoothedData = new int[Period];
-                smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
-
-                int j = 0;
-                for (int i = beginPeriod; i < endPeriod; i++)
-                {
-                    //duplicatePoints[i] = smoothedData[j];
-                    forDrawing[i] = smoothedData[j];
-                    //points[i] = smoothedData[j];                //в дубликате заменяем точки в выбранном периоде на сглаженные
-                    j++;
-                }
-
-                int n = forDrawing.Length;
-                int[] x = new int[n];
-                for (int i = 0; i < n; i++)
-                {
-                    x[i] = i;
-                }
-
-                Draw(x, forDrawing);
-
-                //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-                if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-                if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
-
-                ////создание массива точекФПГ и ФПГ
-                //int n = points.Length;
-
-                //PointPPG[] pointPPGs = new PointPPG[n];
-
-                //for (int i = 0; i < n; i++)
-                //{
-                //    pointPPGs[i] = new PointPPG(i, points[i]);
-                //}
-
-                //ppg = new PPG(pointPPGs, n);
-                //Draw(ppg);
-                ////если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-                //if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-                //if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+                Smoothing(beginPeriod, endPeriod, window);
             }
         }
 
@@ -648,21 +722,7 @@ namespace PPGReader
                     int endPeriod = Convert.ToInt32(endSmoothingPeriod);
                     int Period = endPeriod - beginPeriod;
 
-                    for (int i = beginPeriod; i < endPeriod; i++)
-                    {
-                        forDrawing[i] = duplicatePoints[i];
-                    }
-
-                    int n = duplicatePoints.Length;
-                    int[] x = new int[n];
-                    for (int i = 0; i < n; i++)
-                    {
-                        x[i] = i;
-                    }
-
-                    Draw(x, forDrawing);
-                    if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-                    if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+                    CancelSmoothing(beginPeriod, endPeriod, forDrawing, duplicatePoints);
                 }
             }
         }
@@ -681,26 +741,7 @@ namespace PPGReader
                 fixSmoothing = true;
                 smoothingClick = false;
 
-                int n = duplicatePoints.Length;
-                for (int i = 0; i < n; i++)
-                {
-                    duplicatePoints[i] = forDrawing[i];
-                }
-
-                //создание массива точекФПГ и ФПГ
-
-                PointPPG[] pointPPGs = new PointPPG[n];
-
-                for (int i = 0; i < n; i++)
-                {
-                    pointPPGs[i] = new PointPPG(i, duplicatePoints[i]);
-                }
-
-                ppg = new PPG(pointPPGs, n);
-                Draw(ppg);
-                //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-                if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-                if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+                ApplySmoothing();
             }
         }
 
@@ -1422,6 +1463,7 @@ namespace PPGReader
             return derivativePoints;
         }
 
+        double[] derivativePoints;
         private void button5_Click(object sender, EventArgs e)
         {
             if (drowChartClick == false)
@@ -1436,10 +1478,21 @@ namespace PPGReader
                 richTextBox1.Text = "";
                 int n = duplicatePoints.Length;
                 PointDPPG[] pointDPPG = new PointDPPG[n];
-                double[] derivativePoints = new double[n];
-                //derivativePoints = differentiation1orderAccuracy(duplicatePoints);
-                //derivativePoints = differentiation2orderAccuracy(duplicatePoints);
-                derivativePoints = differentiation4points(duplicatePoints);
+                
+
+                if (selectedState == null || selectedState == "Дифференцирование первого порядка точности")
+                derivativePoints = differentiation1orderAccuracy(duplicatePoints);
+
+
+                if (selectedState == "Дифференцирование второго порядка точности") 
+                {
+                    derivativePoints = differentiation2orderAccuracy(duplicatePoints);
+                }
+
+                if (selectedState == "Дифференцирование по 4 узловым точкам")
+                {
+                    derivativePoints = differentiation4points(duplicatePoints);
+                }
 
                 for (int i = 0; i < n; i++)
                 {
@@ -1485,6 +1538,48 @@ namespace PPGReader
             }
 
         }
+
+        private void WriteExcel(string[] nameСolumns, string[,] valueColumns, int countColumns, int countValues,
+string nameFile, string nameSheet)
+        {
+            //Create a new ExcelPackage 
+            using (ExcelPackage excelPackage = new ExcelPackage())
+            {
+                //Set some properties of the Excel document 
+                excelPackage.Workbook.Properties.Author = "PPGReader";
+                excelPackage.Workbook.Properties.Title = "Characteristics";
+                excelPackage.Workbook.Properties.Created = DateTime.Now;
+
+                //Create the WorkSheet 
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(nameSheet);
+
+                for (int j = 1; j <= countColumns; j++)
+                {
+                    worksheet.Cells[1, j].Value = nameСolumns[j - 1];
+                }
+
+                for (int j = 2; j <= countColumns + 1; j++)
+                    for (int i = 1; i <= countValues; i++)
+                    {
+                        worksheet.Cells[j, i].Value = valueColumns[j - 2, i - 1];
+                    }
+
+                //for (int j = 1; j <= countColumns; j++) 
+                //{ 
+                // for (int i = 2; i <= countValues + 1; i++) 
+                // { 
+                // worksheet.Cells[i, j].Value = valueColumns[j - 1, i - 2]; 
+                // } 
+                //} 
+
+                //Save your file 
+                FileInfo file = new FileInfo(nameFile);//"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx" 
+                excelPackage.SaveAs(file);
+            }
+
+        }
+
+
         private void WriteExcel(string[] nameСolumns, double[,] valueColumns, int countColumns, int countValues,
                                string nameFile, string nameSheet)
         {
@@ -1517,9 +1612,10 @@ namespace PPGReader
             }
 
         }
+      
         private PeriodPPG[] ReadStartCharacteristics(int countPeriods)
         {
-            string namefile = @"D:\ВУЗ\4 курс\Диплом\DATA\StartCharacteristics.xlsx";
+            string namefile = @"J:\Documents\8 семестр\Диплом\StartCharacteristics.xlsx";
             string[,] excelData = ReadExcelSheet(namefile);
             int rows = excelData.GetUpperBound(0) + 1;
             int columns = excelData.Length / rows;
@@ -1598,9 +1694,296 @@ namespace PPGReader
             return excelData;
         }
 
-        private void WriteCharacteristics_Click(object sender, EventArgs e)
+        string selectedState;
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (PeriodClick != CountPeriods+1)
+            selectedState = comboBox1.SelectedItem.ToString();
+        }
+
+        private int[] CountZero()
+        {
+            int n = derivativePoints.Length;
+            int T1, T2;
+            int[] countZero = new int[100];
+            int u = 0;
+            
+            for (int i = 0; i < n; i++)
+            {
+                if (chart1.Series[0].Points[i].Label == "T")
+                {
+                    T1 = i;
+                    for (int j = T1 + 1; j < n; j++)
+                    {
+                        if (chart1.Series[0].Points[j].Label == "T")
+                        {
+                            T2 = j;
+                            for (int k = T1; k <= T2; k++)
+                            {
+                                if (derivativePoints[k] == 0) countZero[u]++;
+                            }
+                            u++;
+                            if (u == 101) i = n;
+                            else i = T2 - 1;
+                            j = n;
+                        }
+                    }
+                }
+            }
+
+            return countZero;
+        }
+
+        //private string[,] fillingExcel(int[] countZeroInInterval, int countColumns, int countLines, int column)
+        //{
+        //    string[,] valueColumns = new string[countColumns, countLines];
+        //    for (int i = 0; i < countLines; i++)
+        //    {
+        //        valueColumns[i, column] = Convert.ToString(countZeroInInterval[i]);
+                    
+        //    }
+        //    return valueColumns;
+        //}
+
+        private int[] CountZeroInInterval(int[] countZero)
+        {
+            int countInterval = 7;
+            int[] countZeroInInterval = new int[countInterval];
+
+            for (int i = 0; i < 100; i++)
+            {
+                if (countZero[i] < 11) countZeroInInterval[0]++;
+                else
+                {
+                    if (countZero[i] < 21 && countZero[i] > 10) countZeroInInterval[1]++;
+                    else
+                    {
+                        if (countZero[i] < 41 && countZero[i] > 20) countZeroInInterval[2]++;
+                        else
+                        {
+                            if (countZero[i] < 61 && countZero[i] > 40) countZeroInInterval[3]++;
+                            else
+                            {
+                                if (countZero[i] < 81 && countZero[i] > 60) countZeroInInterval[4]++;
+                                else
+                                {
+                                    if (countZero[i] < 101 && countZero[i] > 80) countZeroInInterval[5]++;
+                                    else
+                                    {
+                                        if (countZero[i] > 100) countZeroInInterval[6]++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return countZeroInInterval;
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            int[] countZero = CountZero();
+
+            int thinning = int.Parse(textBoxSinglingRate.Text);
+            int window;
+            if (fixSmoothing == true) window = int.Parse(label6.Text);
+            else window = 0;
+
+            const int countColumns = 15;
+            const int countLines = 7;
+            string[] nameColumns = new string[countColumns] {"Интервалы | Параметры", "Коэф.прореж.= 5", "Коэф. прореж. = 10", "Коэф.прореж.= 5, окно сглаж. = 3",
+            "Коэф.прореж.= 5, окно сглаж. = 5", "Коэф.прореж.= 5, окно сглаж. = 7", "Коэф.прореж.= 5, окно сглаж. = 9", "Коэф.прореж.= 5, окно сглаж. = 11",
+            "Коэф.прореж.= 5, окно сглаж. = 13", "Коэф.прореж.= 10, окно сглаж. = 3", "Коэф.прореж.= 10, окно сглаж. = 5", "Коэф.прореж.= 10, окно сглаж. = 7",
+            "Коэф.прореж.= 10, окно сглаж. = 9","Коэф.прореж.= 10, окно сглаж. = 11", "Коэф.прореж.= 10, окно сглаж. = 13"};
+            string[,] valueColumns = new string[countColumns, countLines];
+
+            int j = 0;
+
+            valueColumns[0, 0] = "0-10";
+            valueColumns[1, 0] = "11-20";
+            valueColumns[2, 0] = "21-40";
+            valueColumns[3, 0] = "41-60";
+            valueColumns[4, 0] = "61-80";
+            valueColumns[5, 0] = "81-100";
+            valueColumns[6, 0] = "101 и больше";
+
+            if (window == 0)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 1;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 2;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 3)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 3;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 9;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 5)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 4;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 10;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 7)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 5;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 11;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 9)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 6;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 12;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 11)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 7;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 13;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 13)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 8;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 14;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+
+            string nameFile = @"J:\Documents\8 семестр\Диплом\CountZero.xlsx";
+            string nameSheet = "Дифференцирование первого порядка точности";
+            WriteExcel(nameColumns, valueColumns, countColumns, countLines, nameFile, nameSheet);
+        }
+
+        private void EndWatch_Click(object sender, EventArgs e)
+        {
+            IsEndWatch = false;
+        }
+
+        private void WriteCharacteristics_Click_1(object sender, EventArgs e)
+        {
+
+            if (PeriodClick != CountPeriods + 1)
             {
                 MessageBox.Show(
                                  "Нарисуйте график ФПГ и отметьте характерные точки на 10 периодах",
@@ -1612,7 +1995,7 @@ namespace PPGReader
             {
                 const int countColumns = 8;
                 string[] nameСolumns = new string[countColumns] { "Период", "Начало", "Конец", "A", "B", "C", "D", "E" };
-                int[,] valueColumns = new int[countColumns,CountPeriods];
+                int[,] valueColumns = new int[countColumns, CountPeriods];
                 for (int i = 0; i < countColumns; i++)
                 {
                     for (int j = 0; j < CountPeriods; j++)
@@ -1620,7 +2003,7 @@ namespace PPGReader
                         switch (i)
                         {
                             case 0:
-                                valueColumns[i, j] = j+1;
+                                valueColumns[i, j] = j + 1;
                                 break;
                             case 1:
                                 valueColumns[i, j] = Periods[j].Begin;
@@ -1650,11 +2033,6 @@ namespace PPGReader
                 string nameSheet = "Characteristics";
                 WriteExcel(nameСolumns, valueColumns, countColumns, CountPeriods, nameFile, nameSheet);
             }
-        }
-
-        private void EndWatch_Click(object sender, EventArgs e)
-        {
-            IsEndWatch = false;
         }
     }
 }
