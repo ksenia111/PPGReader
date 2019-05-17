@@ -75,7 +75,7 @@ namespace PPGReader
 
         private int[] Read()
         {
-            string filePath = @"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //  @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz";//
+            string filePath = @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz";//@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //  //
             int w = int.Parse(textBoxW.Text);
             PeriodClick = 0;
             FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -216,9 +216,6 @@ namespace PPGReader
             }
 
             Draw(x, forDrawing);
-
-            //добавить на график отмеченные точки, пока:
-            WriteLabelForChart();
 
             //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
             if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
@@ -1411,11 +1408,10 @@ namespace PPGReader
             return -1;
         }
 
-        public double[] differentiation1orderAccuracy(int[] points)
+        public double[] differentiation1orderAccuracy(int[] points, int h)
         {
             int n = points.Length;
             double[] derivativePoints = new double[n];
-            int h = 1;
 
             derivativePoints[0] = (points[1] - points[0]) / h;
             derivativePoints[n - 1] = (points[n - 1] - points[n - 2]) / h;
@@ -1427,11 +1423,10 @@ namespace PPGReader
             return derivativePoints;
         }
 
-        public double[] differentiation2orderAccuracy(int[] points)
+        public double[] differentiation2orderAccuracy(int[] points, int h)
         {
             int n = points.Length;
             double[] derivativePoints = new double[n];
-            int h = 1;
 
             for (int i = n - 2; i > 0; i--)
             {
@@ -1445,11 +1440,10 @@ namespace PPGReader
             return derivativePoints;
         }
 
-        public double[] differentiation4points(int[] points)
+        public double[] differentiation4points(int[] points, int h)
         {
             int n = points.Length;
             double[] derivativePoints = new double[n];
-            int h = 1;
 
             for (int i = 2; i < n - 2; i++)
             {
@@ -1475,23 +1469,24 @@ namespace PPGReader
             }
             else
             {
+                int rate = int.Parse(textBoxSinglingRate.Text); //частота прореживания
                 richTextBox1.Text = "";
                 int n = duplicatePoints.Length;
                 PointDPPG[] pointDPPG = new PointDPPG[n];
                 
 
                 if (selectedState == null || selectedState == "Дифференцирование первого порядка точности")
-                derivativePoints = differentiation1orderAccuracy(duplicatePoints);
+                derivativePoints = differentiation1orderAccuracy(duplicatePoints, rate);
 
 
                 if (selectedState == "Дифференцирование второго порядка точности") 
                 {
-                    derivativePoints = differentiation2orderAccuracy(duplicatePoints);
+                    derivativePoints = differentiation2orderAccuracy(duplicatePoints, rate);
                 }
 
                 if (selectedState == "Дифференцирование по 4 узловым точкам")
                 {
-                    derivativePoints = differentiation4points(duplicatePoints);
+                    derivativePoints = differentiation4points(duplicatePoints, rate);
                 }
 
                 for (int i = 0; i < n; i++)
@@ -1501,8 +1496,8 @@ namespace PPGReader
                 dppg = new DPPG(pointDPPG, n);
                 IsFoundDerivative = true;
                 Draw(dppg);
-                if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick); 
-                if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+                if (increaseScaleClick != 0) chart2.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick); 
+                if (decreaseScaleClick != 0) chart2.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
             }
         }
 
@@ -2033,6 +2028,6 @@ string nameFile, string nameSheet)
                 string nameSheet = "Characteristics";
                 WriteExcel(nameСolumns, valueColumns, countColumns, CountPeriods, nameFile, nameSheet);
             }
-        }
+        }        
     }
 }
