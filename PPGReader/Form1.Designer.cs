@@ -68,14 +68,16 @@
             this.button7 = new System.Windows.Forms.Button();
             this.WriteCharacteristics = new System.Windows.Forms.Button();
             this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.button8 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.SuspendLayout();
             // 
             // buttonCalc
             // 
-            this.buttonCalc.Location = new System.Drawing.Point(1119, 102);
-            this.buttonCalc.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.buttonCalc.Location = new System.Drawing.Point(1118, 102);
+            this.buttonCalc.Margin = new System.Windows.Forms.Padding(5);
             this.buttonCalc.Name = "buttonCalc";
             this.buttonCalc.Size = new System.Drawing.Size(200, 28);
             this.buttonCalc.TabIndex = 0;
@@ -91,7 +93,7 @@
             legend1.Name = "Legend1";
             this.chart1.Legends.Add(legend1);
             this.chart1.Location = new System.Drawing.Point(17, 7);
-            this.chart1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.chart1.Margin = new System.Windows.Forms.Padding(5);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -130,7 +132,7 @@
             // richTextBox1
             // 
             this.richTextBox1.Location = new System.Drawing.Point(1118, 302);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(5);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(401, 436);
             this.richTextBox1.TabIndex = 2;
@@ -159,7 +161,7 @@
             // textBoxPath
             // 
             this.textBoxPath.Location = new System.Drawing.Point(1191, 16);
-            this.textBoxPath.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBoxPath.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxPath.Name = "textBoxPath";
             this.textBoxPath.Size = new System.Drawing.Size(371, 22);
             this.textBoxPath.TabIndex = 5;
@@ -167,7 +169,7 @@
             // textBoxW
             // 
             this.textBoxW.Location = new System.Drawing.Point(1599, 19);
-            this.textBoxW.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBoxW.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxW.Name = "textBoxW";
             this.textBoxW.Size = new System.Drawing.Size(25, 22);
             this.textBoxW.TabIndex = 6;
@@ -210,7 +212,7 @@
             // textBoxSinglingRate
             // 
             this.textBoxSinglingRate.Location = new System.Drawing.Point(1293, 53);
-            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxSinglingRate.Name = "textBoxSinglingRate";
             this.textBoxSinglingRate.Size = new System.Drawing.Size(33, 22);
             this.textBoxSinglingRate.TabIndex = 10;
@@ -230,7 +232,7 @@
             // 
             this.button1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(1291, 174);
+            this.button1.Location = new System.Drawing.Point(1291, 178);
             this.button1.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(43, 18);
@@ -273,8 +275,8 @@
             // 
             // FullSearchCharacteristics
             // 
-            this.FullSearchCharacteristics.Location = new System.Drawing.Point(1119, 232);
-            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.FullSearchCharacteristics.Location = new System.Drawing.Point(1118, 265);
+            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(4);
             this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
             this.FullSearchCharacteristics.Size = new System.Drawing.Size(447, 28);
             this.FullSearchCharacteristics.TabIndex = 17;
@@ -285,7 +287,7 @@
             // button4
             // 
             this.button4.Location = new System.Drawing.Point(1118, 139);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(253, 29);
             this.button4.TabIndex = 18;
@@ -296,7 +298,7 @@
             // textBox2
             // 
             this.textBox2.Location = new System.Drawing.Point(1379, 142);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBox2.Margin = new System.Windows.Forms.Padding(4);
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(193, 22);
             this.textBox2.TabIndex = 19;
@@ -313,8 +315,8 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(1118, 268);
-            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button5.Location = new System.Drawing.Point(1118, 232);
+            this.button5.Margin = new System.Windows.Forms.Padding(4);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(200, 25);
             this.button5.TabIndex = 21;
@@ -325,7 +327,7 @@
             // button6
             // 
             this.button6.Location = new System.Drawing.Point(1481, 178);
-            this.button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button6.Margin = new System.Windows.Forms.Padding(4);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(256, 34);
             this.button6.TabIndex = 22;
@@ -336,7 +338,7 @@
             // button7
             // 
             this.button7.Location = new System.Drawing.Point(1745, 178);
-            this.button7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.button7.Margin = new System.Windows.Forms.Padding(4);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(128, 34);
             this.button7.TabIndex = 23;
@@ -361,8 +363,8 @@
             this.chart2.ContextMenuStrip = this.contextMenuStrip1;
             legend2.Name = "Legend1";
             this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(17, 498);
-            this.chart2.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.chart2.Location = new System.Drawing.Point(27, 498);
+            this.chart2.Margin = new System.Windows.Forms.Padding(5);
             this.chart2.Name = "chart2";
             series5.ChartArea = "ChartArea1";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -384,15 +386,42 @@
             this.chart2.Series.Add(series6);
             this.chart2.Series.Add(series7);
             this.chart2.Series.Add(series8);
-            this.chart2.Size = new System.Drawing.Size(1092, 313);
+            this.chart2.Size = new System.Drawing.Size(1082, 313);
             this.chart2.TabIndex = 24;
             this.chart2.Text = "chart2";
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Items.AddRange(new object[] {
+            "Дифференцирование первого порядка точности",
+            "Дифференцирование второго порядка точности",
+            "Дифференцирование по 4 узловым точкам"});
+            this.comboBox1.Location = new System.Drawing.Point(1325, 232);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(385, 24);
+            this.comboBox1.TabIndex = 25;
+            this.comboBox1.Text = "Дифференцирование первого порядка точности";
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(1527, 302);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(106, 78);
+            this.button8.TabIndex = 26;
+            this.button8.Text = "Посчитать количество нулей на периодах";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1924, 1055);
+            this.Controls.Add(this.button8);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.chart2);
             this.Controls.Add(this.button7);
             this.Controls.Add(this.button6);
@@ -417,9 +446,9 @@
             this.Controls.Add(this.richTextBox1);
             this.Controls.Add(this.chart1);
             this.Controls.Add(this.buttonCalc);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = " ";
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.ResumeLayout(false);
@@ -455,6 +484,8 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
         private System.Windows.Forms.Button WriteCharacteristics;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Button button8;
     }
 }
 

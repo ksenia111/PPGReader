@@ -129,7 +129,7 @@ namespace PPGReader
         }
 
         /// <summary>
-        /// Сглаживание
+        /// Скользящее среднее
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -741,7 +741,7 @@ namespace PPGReader
 
         private void FullSearchCharacteristics_Click(object sender, EventArgs e)
         {
-            DialogResult mesageResult = CheckData();
+            DialogResult mesageResult = DialogResult.OK;//CheckData();
             if (mesageResult == DialogResult.OK)
             {
                 ReadStartCharacteristics();
@@ -1120,6 +1120,7 @@ namespace PPGReader
             return derivativePoints;
         }
 
+        double[] derivativePoints;
         private void button5_Click(object sender, EventArgs e)
         {
             if (drowChartClick == false)
@@ -1134,10 +1135,21 @@ namespace PPGReader
                 richTextBox1.Text = "";
                 int n = duplicatePoints.Length;
                 PointDPPG[] pointDPPG = new PointDPPG[n];
-                double[] derivativePoints = new double[n];
-                //derivativePoints = differentiation1orderAccuracy(duplicatePoints);
-                //derivativePoints = differentiation2orderAccuracy(duplicatePoints);
-                derivativePoints = differentiation4points(duplicatePoints);
+                
+
+                if (selectedState == null || selectedState == "Дифференцирование первого порядка точности")
+                derivativePoints = differentiation1orderAccuracy(duplicatePoints);
+
+
+                if (selectedState == "Дифференцирование второго порядка точности") 
+                {
+                    derivativePoints = differentiation2orderAccuracy(duplicatePoints);
+                }
+
+                if (selectedState == "Дифференцирование по 4 узловым точкам")
+                {
+                    derivativePoints = differentiation4points(duplicatePoints);
+                }
 
                 for (int i = 0; i < n; i++)
                 {
@@ -1184,9 +1196,49 @@ namespace PPGReader
 
         }
 
+        private void WriteExcel(string[] nameСolumns, string[,] valueColumns, int countColumns, int countValues,
+                                string nameFile, string nameSheet)
+        {
+            //Create a new ExcelPackage
+            using (ExcelPackage excelPackage = new ExcelPackage())
+            {
+                //Set some properties of the Excel document
+                excelPackage.Workbook.Properties.Author = "PPGReader";
+                excelPackage.Workbook.Properties.Title = "Characteristics";
+                excelPackage.Workbook.Properties.Created = DateTime.Now;
+
+                //Create the WorkSheet
+                ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(nameSheet);
+
+                for (int j = 1; j <= countColumns; j++)
+                {
+                    worksheet.Cells[1, j].Value = nameСolumns[j - 1];
+                }
+
+                for (int j = 2; j <= countColumns+1; j++)
+                    for (int i = 1; i <= countValues; i++) 
+                    {
+                        worksheet.Cells[j, i].Value = valueColumns[j - 2, i - 1];
+                    }
+
+                //for (int j = 1; j <= countColumns; j++)
+                //{
+                //    for (int i = 2; i <= countValues + 1; i++)
+                //    {
+                //        worksheet.Cells[i, j].Value = valueColumns[j - 1, i - 2];
+                //    }
+                //}
+
+                //Save your file
+                FileInfo file = new FileInfo(nameFile);//"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx"
+                excelPackage.SaveAs(file);
+            }
+
+        }
+
         private void ReadStartCharacteristics()
         {
-            string namefile = @"D:\ВУЗ\4 курс\Диплом\DATA\StartCharacteristics.xlsx";
+            string namefile = @"J:\Documents\8 семестр\Диплом\StartCharacteristics.xlsx";
             string[,] excelData = ReadExcelSheet(namefile);
             int rows = excelData.GetUpperBound(0) + 1;
             int columns = excelData.Length / rows;
@@ -1307,10 +1359,292 @@ namespace PPGReader
                         }
                     }
                 }
-                string nameFile = @"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx";
+                string nameFile = @"J:\Documents\8 семестр\Диплом\Characteristics.xlsx";
                 string nameSheet = "Characteristics";
                 WriteExcel(nameСolumns, valueColumns, countColumns, CountPeriods, nameFile, nameSheet);
             }
+        }
+
+        string selectedState;
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedState = comboBox1.SelectedItem.ToString();
+        }
+
+        private int[] CountZero()
+        {
+            int n = derivativePoints.Length;
+            int T1, T2;
+            int[] countZero = new int[100];
+            int u = 0;
+            
+            for (int i = 0; i < n; i++)
+            {
+                if (chart1.Series[0].Points[i].Label == "T")
+                {
+                    T1 = i;
+                    for (int j = T1 + 1; j < n; j++)
+                    {
+                        if (chart1.Series[0].Points[j].Label == "T")
+                        {
+                            T2 = j;
+                            for (int k = T1; k <= T2; k++)
+                            {
+                                if (derivativePoints[k] == 0) countZero[u]++;
+                            }
+                            u++;
+                            if (u == 101) i = n;
+                            else i = T2 - 1;
+                            j = n;
+                        }
+                    }
+                }
+            }
+
+            return countZero;
+        }
+
+        //private string[,] fillingExcel(int[] countZeroInInterval, int countColumns, int countLines, int column)
+        //{
+        //    string[,] valueColumns = new string[countColumns, countLines];
+        //    for (int i = 0; i < countLines; i++)
+        //    {
+        //        valueColumns[i, column] = Convert.ToString(countZeroInInterval[i]);
+                    
+        //    }
+        //    return valueColumns;
+        //}
+
+        private int[] CountZeroInInterval(int[] countZero)
+        {
+            int countInterval = 7;
+            int[] countZeroInInterval = new int[countInterval];
+
+            for (int i = 0; i < 100; i++)
+            {
+                if (countZero[i] < 11) countZeroInInterval[0]++;
+                else
+                {
+                    if (countZero[i] < 21 && countZero[i] > 10) countZeroInInterval[1]++;
+                    else
+                    {
+                        if (countZero[i] < 41 && countZero[i] > 20) countZeroInInterval[2]++;
+                        else
+                        {
+                            if (countZero[i] < 61 && countZero[i] > 40) countZeroInInterval[3]++;
+                            else
+                            {
+                                if (countZero[i] < 81 && countZero[i] > 60) countZeroInInterval[4]++;
+                                else
+                                {
+                                    if (countZero[i] < 101 && countZero[i] > 80) countZeroInInterval[5]++;
+                                    else
+                                    {
+                                        if (countZero[i] > 100) countZeroInInterval[6]++;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return countZeroInInterval;
+        }
+
+        private void button8_Click(object sender, EventArgs e)
+        {
+            int[] countZero = CountZero();
+
+            int thinning = int.Parse(textBoxSinglingRate.Text);
+            int window;
+            if (fixSmoothing == true) window = int.Parse(label6.Text);
+            else window = 0;
+
+            const int countColumns = 15;
+            const int countLines = 7;
+            string[] nameColumns = new string[countColumns] {"Интервалы | Параметры", "Коэф.прореж.= 5", "Коэф. прореж. = 10", "Коэф.прореж.= 5, окно сглаж. = 3",
+            "Коэф.прореж.= 5, окно сглаж. = 5", "Коэф.прореж.= 5, окно сглаж. = 7", "Коэф.прореж.= 5, окно сглаж. = 9", "Коэф.прореж.= 5, окно сглаж. = 11",
+            "Коэф.прореж.= 5, окно сглаж. = 13", "Коэф.прореж.= 10, окно сглаж. = 3", "Коэф.прореж.= 10, окно сглаж. = 5", "Коэф.прореж.= 10, окно сглаж. = 7",
+            "Коэф.прореж.= 10, окно сглаж. = 9","Коэф.прореж.= 10, окно сглаж. = 11", "Коэф.прореж.= 10, окно сглаж. = 13"};
+            string[,] valueColumns = new string[countColumns, countLines];
+
+            int j = 0;
+
+            valueColumns[0, 0] = "0-10";
+            valueColumns[1, 0] = "11-20";
+            valueColumns[2, 0] = "21-40";
+            valueColumns[3, 0] = "41-60";
+            valueColumns[4, 0] = "61-80";
+            valueColumns[5, 0] = "81-100";
+            valueColumns[6, 0] = "101 и больше";
+
+            if (window == 0)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 1;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 2;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 3)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 3;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 9;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 5)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 4;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 10;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 7)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 5;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 11;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 9)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 6;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 12;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 11)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 7;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 13;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+            if (window == 13)
+            {
+                if (thinning == 5)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 8;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+                if (thinning == 10)
+                {
+                    int[] countZeroInInterval = CountZeroInInterval(countZero);
+                    j = 14;
+                    for (int i = 0; i < countLines; i++)
+                    {
+                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+                    }
+                }
+            }
+
+            string nameFile = @"J:\Documents\8 семестр\Диплом\CountZero.xlsx";
+            string nameSheet = "Дифференцирование первого порядка точности";
+            WriteExcel(nameColumns, valueColumns, countColumns, countLines, nameFile, nameSheet);
+
         }
     }
 }
