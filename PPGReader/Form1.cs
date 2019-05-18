@@ -1489,6 +1489,126 @@ namespace PPGReader
                     derivativePoints = differentiation4points(duplicatePoints, rate);
                 }
 
+                double k1, k2;
+                int buf;
+                double del1, del2, len;
+                for (int i = 0; i < n; i++)
+                {
+                    if (derivativePoints[i] < 0 && derivativePoints[i + 1] == 0)
+                    {
+                        buf = i;
+                        for (int j = i + 1; j < n; j++)
+                        {
+                            if (derivativePoints[j] > 0)
+                            {
+                                len = j - buf - 1;
+                                k1 = Math.Round(len / 2.0);
+                                k2 = len - k1 - 1;
+                                del1 = (-derivativePoints[buf]) / (k1 + 1);
+                                del2 = derivativePoints[j] / (k2 + 1);
+                                for (int l = buf + 1; l < buf + k1 + 1; l++) 
+                                {
+                                    //if (l == buf + 1)
+                                    //derivativePoints[l] = derivativePoints[l - 1];
+                                    //else 
+                                    derivativePoints[l] = derivativePoints[l - 1] + del1;
+                                }
+                                for (int l = j - 1; l > buf + k1 + 1; l--) 
+                                {
+                                    //if (l == j - 1)
+                                    // derivativePoints[l] = derivativePoints[l + 1];
+                                    //else 
+                                    derivativePoints[l] = derivativePoints[l + 1] - del2;
+                                }
+                                i = j - 1;
+                                break;
+                            }
+
+                            else if (derivativePoints[j] != 0)
+                            {
+                                i = j - 1;
+                                break;
+                            }
+                            
+                        }
+                    }
+                }
+
+                for (int i = 0; i < n; i++)
+                {
+                    if (derivativePoints[i] > 0 && derivativePoints[i + 1] == 0)
+                    {
+                        buf = i;
+                        for (int j = i + 1; j < n; j++)
+                        {
+                            if (derivativePoints[j] < 0)
+                            {
+                                len = j - buf - 1;
+                                k1 = Math.Round(len / 2.0);
+                                k2 = len - k1 - 1;
+                                del1 = derivativePoints[buf] / (k1 + 1);
+                                del2 = (-derivativePoints[j]) / (k2 + 1);
+                                for (int l = buf + 1; l < buf + k1 + 1; l++)
+                                {
+                                    //if (l == buf + 1)
+                                    //derivativePoints[l] = derivativePoints[l - 1];
+                                    //else 
+                                    derivativePoints[l] = derivativePoints[l - 1] - del1;
+                                }
+                                for (int l = j - 1; l > buf + k1 + 1; l--)
+                                {
+                                    //if (l == j - 1)
+                                    // derivativePoints[l] = derivativePoints[l + 1];
+                                    //else 
+                                    derivativePoints[l] = derivativePoints[l + 1] + del2;
+                                }
+                                i = j - 1;
+                                break;
+                            }
+
+                            else if (derivativePoints[j] != 0)
+                            {
+                                i = j - 1;
+                                break;
+                            }
+                            
+                        }
+                    }
+                }
+
+
+                for (int i = 0; i < n - 2; i++)
+                {
+                    if (derivativePoints[i] != 0)
+                    {
+                        if (derivativePoints[i] == derivativePoints[i + 2]) derivativePoints[i + 1] = derivativePoints[i];
+                        for (int number = -3; number < 4; number++)
+                        {
+                            if (number == 0) break;
+                            if (derivativePoints[i] == number && number < 0)
+                            {
+                                for (int j = i + 1; j < n; j++)
+                                {
+                                    if (derivativePoints[j] > (number + 1) || derivativePoints[j] < number) break;
+                                    if (derivativePoints[j] == number)
+                                        for (int k = i + 1; k < j + 1; k++)
+                                            derivativePoints[k] = derivativePoints[i];
+                                }
+                            }
+                            if (derivativePoints[i] == number && number > 0)
+                            {
+                                for (int j = i + 1; j < n; j++)
+                                {
+                                    if (derivativePoints[j] < (number - 1) || derivativePoints[j] > number) break;
+                                    if (derivativePoints[j] == number)
+                                        for (int k = i + 1; k < j + 1; k++)
+                                            derivativePoints[k] = derivativePoints[i];
+                                }
+                            }
+                        }
+                    }
+                }
+
                 for (int i = 0; i < n; i++)
                 {
                     pointDPPG[i] = new PointDPPG(i, derivativePoints[i]);
