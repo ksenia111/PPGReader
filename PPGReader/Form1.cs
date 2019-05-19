@@ -19,6 +19,7 @@ namespace PPGReader
         PPG ppg;
         // добавила хранение для производной
         DPPG dppg;
+        DDPPG ddppg;
         // внесла их для запоминания координат, при клике правой кнопкой мыши (тогда появляется контестное меню, мышь двигается и все координаты сбиваются)
         double x;
         double y;
@@ -318,6 +319,7 @@ namespace PPGReader
             ppg = new PPG(pointPPGs, n);
             Draw(ppg);
             chart2.Series[0].Points.Clear();
+            chart3.Series[0].Points.Clear();
             chart2.ChartAreas[0].AxisX.ScaleView.Size = 400;
         }
 
@@ -373,6 +375,32 @@ namespace PPGReader
             chart2.Series[0].BorderWidth = 2;
             chart2.Series[0].Color = Color.Green;
             chart2.Series[0].MarkerSize = 1;
+
+        }
+
+        private void Draw(DDPPG ddppg)
+        {
+
+            chart3.ChartAreas[0].AxisX.Minimum = 0;
+            chart3.ChartAreas[0].InnerPlotPosition.X = 5;
+            chart3.ChartAreas[0].AxisX.Crossing = 0;
+            chart3.ChartAreas[0].AxisX.LineWidth = 2;
+            chart3.ChartAreas[0].AxisX.LineColor = Color.Gray;
+            chart3.ChartAreas[0].AxisY.LineWidth = 2;
+            chart3.ChartAreas[0].AxisY.LineColor = Color.Gray;
+            chart3.ChartAreas[0].AxisY.Crossing = 0;
+            chart3.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
+            chart3.ChartAreas[0].Position.Height = 85;
+            chart3.ChartAreas[0].Position.Width = 80;
+
+            chart3.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            chart3.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            chart3.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chart3.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chart3.Series[0].Points.DataBindXY(ddppg.GetX(), ddppg.GetY());
+            chart3.Series[0].BorderWidth = 2;
+            chart3.Series[0].Color = Color.Green;
+            chart3.Series[0].MarkerSize = 1;
 
         }
 
@@ -463,6 +491,7 @@ namespace PPGReader
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
             chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
+            chart3.ChartAreas[0].AxisX.ScaleView.Size = chart3.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
         }
 
 
@@ -470,6 +499,7 @@ namespace PPGReader
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
             chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
+            chart3.ChartAreas[0].AxisX.ScaleView.Size = chart3.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
         }
 
         //подписи к первым 10 отмеченным периодам
@@ -1539,7 +1569,7 @@ namespace PPGReader
             return derivativePoints;
         }
 
-        private double[] Differentiation(double[] derivativePoints)
+        private double[] SmoothingDerivative(double[] derivativePoints)
         {
             int n = derivativePoints.Length;
             double k1, k2;
@@ -1697,7 +1727,7 @@ namespace PPGReader
                     derivativePoints = differentiation4points(duplicatePoints, rate);
                 }
 
-                derivativePoints = Differentiation(derivativePoints);
+                derivativePoints = SmoothingDerivative(derivativePoints);
 
                 for (int i = 0; i < n; i++)
                 {
@@ -1707,6 +1737,49 @@ namespace PPGReader
                 IsFoundDerivative = true;
                 Draw(dppg);
                 chart2.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+            }
+        }
+
+        private double[] SecondDerivation(int[] points, int h)
+        {
+            int n = points.Length;
+            double[] secondDerivativePoints = new double[n];
+
+            for (int i = 1; i < n - 2; i++) 
+            {
+                secondDerivativePoints[i - 1] = (2 * points[i - 1] - 5 * points[i] + 4 * points[i + 1] - points[i + 2]) / (h * h);
+            }
+
+            return secondDerivativePoints;
+        }
+        
+        private void button9_Click(object sender, EventArgs e)
+        {
+            if (IsFoundDerivative == false)
+            {
+                MessageBox.Show("Для нахождения второй производной, сначала нужно найти первую производную",
+                                "Ошибка",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
+            }
+            else
+            {
+                int n = derivativePoints.Length;
+                double[] secondDerivativePoints = new double[n];
+                int rate = int.Parse(textBoxSinglingRate.Text);
+
+                secondDerivativePoints = SecondDerivation(duplicatePoints, rate);
+
+                secondDerivativePoints = SmoothingDerivative(secondDerivativePoints);
+
+                PointDDPPG[] pointDDPPG = new PointDDPPG[n];
+                for (int i = 0; i < n; i++)
+                {
+                    pointDDPPG[i] = new PointDDPPG(i, secondDerivativePoints[i]);
+                }
+                ddppg = new DDPPG(pointDDPPG, n);
+                Draw(ddppg);
+                chart3.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
             }
         }
 
@@ -2042,7 +2115,7 @@ string nameFile, string nameSheet)
             nameFile = @"J:\Documents\8 семестр\Диплом\CountZero1.xlsx";
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics1.xlsx";
             derivativePointsCoefThin1 = differentiation1orderAccuracy(duplicatePoints1, 1);
-            derivativePointsCoefThin1 = Differentiation(derivativePointsCoefThin1);
+            derivativePointsCoefThin1 = SmoothingDerivative(derivativePointsCoefThin1);
             PeriodPPG[] periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints1, derivativePointsCoefThin1);
             countZero1 = CountZero(periodPPG, derivativePointsCoefThin1);
             countZero1InInterval = CountZeroInInterval(countZero1);
@@ -2054,7 +2127,7 @@ string nameFile, string nameSheet)
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
             derivativePointsCoefThin2 = differentiation1orderAccuracy(duplicatePoints2, 2);
-            derivativePointsCoefThin2 = Differentiation(derivativePointsCoefThin2);
+            derivativePointsCoefThin2 = SmoothingDerivative(derivativePointsCoefThin2);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints2, derivativePointsCoefThin2);
             countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
             countZero2InInterval = CountZeroInInterval(countZero2);
@@ -2066,7 +2139,7 @@ string nameFile, string nameSheet)
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics3.xlsx";
             derivativePointsCoefThin3 = differentiation1orderAccuracy(duplicatePoints3, 3);
-            derivativePointsCoefThin3 = Differentiation(derivativePointsCoefThin3);
+            derivativePointsCoefThin3 = SmoothingDerivative(derivativePointsCoefThin3);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints3, derivativePointsCoefThin3);
             countZero3 = CountZero(periodPPG, derivativePointsCoefThin3);
             countZero3InInterval = CountZeroInInterval(countZero3);
@@ -2084,7 +2157,7 @@ string nameFile, string nameSheet)
             nameFile = @"J:\Documents\8 семестр\Диплом\CountZero2.xlsx";
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics1.xlsx";
             derivativePointsCoefThin1 = differentiation2orderAccuracy(duplicatePoints1, 1);
-            derivativePointsCoefThin1 = Differentiation(derivativePointsCoefThin1);
+            derivativePointsCoefThin1 = SmoothingDerivative(derivativePointsCoefThin1);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints1, derivativePointsCoefThin1);
             countZero1 = CountZero(periodPPG, derivativePointsCoefThin1);
             countZero1InInterval = CountZeroInInterval(countZero1);
@@ -2096,7 +2169,7 @@ string nameFile, string nameSheet)
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
             derivativePointsCoefThin2 = differentiation2orderAccuracy(duplicatePoints2, 2);
-            derivativePointsCoefThin2 = Differentiation(derivativePointsCoefThin2);
+            derivativePointsCoefThin2 = SmoothingDerivative(derivativePointsCoefThin2);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints2, derivativePointsCoefThin2);
             countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
             countZero2InInterval = CountZeroInInterval(countZero2);
@@ -2108,7 +2181,7 @@ string nameFile, string nameSheet)
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics3.xlsx";
             derivativePointsCoefThin3 = differentiation2orderAccuracy(duplicatePoints3, 3);
-            derivativePointsCoefThin3 = Differentiation(derivativePointsCoefThin3);
+            derivativePointsCoefThin3 = SmoothingDerivative(derivativePointsCoefThin3);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints3, derivativePointsCoefThin3);            
             countZero3 = CountZero(periodPPG, derivativePointsCoefThin3);
             countZero3InInterval = CountZeroInInterval(countZero3);
@@ -2120,7 +2193,7 @@ string nameFile, string nameSheet)
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics4.xlsx";
             derivativePointsCoefThin4 = differentiation2orderAccuracy(duplicatePoints4, 4);
-            derivativePointsCoefThin4 = Differentiation(derivativePointsCoefThin4);
+            derivativePointsCoefThin4 = SmoothingDerivative(derivativePointsCoefThin4);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints4, derivativePointsCoefThin4);
             countZero4 = CountZero(periodPPG, derivativePointsCoefThin4);
             countZero4InInterval = CountZeroInInterval(countZero4);
@@ -2138,7 +2211,7 @@ string nameFile, string nameSheet)
             nameFile = @"J:\Documents\8 семестр\Диплом\CountZero3.xlsx";
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics1.xlsx";
             derivativePointsCoefThin1 = differentiation4points(duplicatePoints1, 1);
-            derivativePointsCoefThin1 = Differentiation(derivativePointsCoefThin1);
+            derivativePointsCoefThin1 = SmoothingDerivative(derivativePointsCoefThin1);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints1, derivativePointsCoefThin1);            
             countZero1 = CountZero(periodPPG, derivativePointsCoefThin1);
             countZero1InInterval = CountZeroInInterval(countZero1);
@@ -2150,7 +2223,7 @@ string nameFile, string nameSheet)
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
             derivativePointsCoefThin2 = differentiation4points(duplicatePoints2, 2);
-            derivativePointsCoefThin2 = Differentiation(derivativePointsCoefThin2);
+            derivativePointsCoefThin2 = SmoothingDerivative(derivativePointsCoefThin2);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints2, derivativePointsCoefThin2);            
             countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
             countZero2InInterval = CountZeroInInterval(countZero2);
@@ -2162,7 +2235,7 @@ string nameFile, string nameSheet)
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics3.xlsx";
             derivativePointsCoefThin3 = differentiation4points(duplicatePoints3, 3);
-            derivativePointsCoefThin3 = Differentiation(derivativePointsCoefThin3);
+            derivativePointsCoefThin3 = SmoothingDerivative(derivativePointsCoefThin3);
             periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints3, derivativePointsCoefThin3);
             countZero3 = CountZero(periodPPG, derivativePointsCoefThin3);
             countZero3InInterval = CountZeroInInterval(countZero3);
@@ -2242,6 +2315,6 @@ string nameFile, string nameSheet)
                 string nameSheet = "Characteristics";
                 WriteExcel(nameСolumns, valueColumns, countColumns, CountPeriods, nameFile, nameSheet);
             }
-        }        
+        }
     }
 }
