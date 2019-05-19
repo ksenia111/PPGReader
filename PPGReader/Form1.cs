@@ -75,7 +75,7 @@ namespace PPGReader
 
         private int[] Read()
         {
-            string filePath = @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz";//@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //  //
+            string filePath = @"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz";//@"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //  //
             int w = int.Parse(textBoxW.Text);
             PeriodClick = 0;
             FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -759,10 +759,11 @@ namespace PPGReader
         {
             Statistics statistics = new Statistics();
             int countPeriods;
+            string namefile = @"D:\ВУЗ\4 курс\Диплом\DATA\StartCharacteristics.xlsx";
             for (int i = statistics.CountStatPeriodsBegin; i <=statistics.CountStatPeriodsEnd; i++)
             {
                 countPeriods = i;
-                PeriodPPG[] periods = ReadStartCharacteristics(countPeriods);
+                PeriodPPG[] periods = ReadStartCharacteristics(countPeriods, namefile);
                 contextMenuStrip1.Enabled = false;
                 int averageLengthPeriod = 0;
                 int A_RelativePosition = 0;
@@ -805,7 +806,7 @@ namespace PPGReader
                     int d_percentD = 5;
                     /*currentPeriod = CalcCurrentPeriod(averageLengthPeriod, D_RelativePosition, C_RelativePosition, end_percent,
                       end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);*/
-                    currentPeriod = CalcCurrentPeriodGrad(averageLengthPeriod, B_RelativePosition, D_RelativePosition, C_RelativePosition, end_percent,
+                    currentPeriod = CalcCurrentPeriod(averageLengthPeriod, D_RelativePosition, C_RelativePosition, end_percent,
                    end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);
                     WriteLabelForChart(currentPeriod);
                     periodPPGs.Add(currentPeriod);
@@ -889,7 +890,8 @@ namespace PPGReader
 
         private PeriodPPG[] FindPeriods(int countPeriods)
         {
-            PeriodPPG[] periods = ReadStartCharacteristics(countPeriods);
+            string namefile = @"J:\Documents\8 семестр\Диплом\StartCharacteristics.xlsx";
+            PeriodPPG[] periods = ReadStartCharacteristics(countPeriods, namefile);
             contextMenuStrip1.Enabled = false;
             int averageLengthPeriod = 0;
             int previousIdxP = countPeriods - 1;
@@ -1568,7 +1570,7 @@ string nameFile, string nameSheet)
                 //} 
 
                 //Save your file 
-                FileInfo file = new FileInfo(nameFile);//"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx" 
+                FileInfo file = new FileInfo(nameFile); 
                 excelPackage.SaveAs(file);
             }
 
@@ -1602,15 +1604,15 @@ string nameFile, string nameSheet)
                 }
 
                 //Save your file
-                FileInfo file = new FileInfo(nameFile);//"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx"
+                FileInfo file = new FileInfo(nameFile);
                 excelPackage.SaveAs(file);
             }
 
         }
       
-        private PeriodPPG[] ReadStartCharacteristics(int countPeriods)
+        private PeriodPPG[] ReadStartCharacteristics(int countPeriods,string namefile)
         {
-            string namefile = @"J:\Documents\8 семестр\Диплом\StartCharacteristics.xlsx";
+            
             string[,] excelData = ReadExcelSheet(namefile);
             int rows = excelData.GetUpperBound(0) + 1;
             int columns = excelData.Length / rows;
