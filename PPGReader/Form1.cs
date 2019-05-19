@@ -325,32 +325,54 @@ namespace PPGReader
         //Рисование ФПГ
         private void Draw(PPG ppg)
         { 
-            
             chart1.ChartAreas[0].AxisX.Minimum = 0;
             chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            chart1.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
             chart1.Series[0].ChartType = SeriesChartType.Line;
             chart1.ChartAreas[0].AxisX.ScaleView.Size = 400;
-            chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
             chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
-            chart1.Series[0].Points.DataBindXY(ppg.GetX(), ppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
+            chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
+            chart1.ChartAreas[0].Position.Height = 85;
+            chart1.ChartAreas[0].Position.Width = 80;
+            chart1.ChartAreas[0].InnerPlotPosition.X = 5;
+            chart1.ChartAreas[0].AxisX.LineWidth = 2;
+            chart1.ChartAreas[0].AxisX.LineColor = Color.Gray;
+            chart1.ChartAreas[0].AxisY.LineWidth = 2;
+            chart1.ChartAreas[0].AxisY.LineColor = Color.Gray;
+
+            chart1.ChartAreas[0].AxisX.Crossing = 0;
+            chart1.ChartAreas[0].AxisY.Crossing = 50;
+            chart1.Series[0].Points.DataBindXY(ppg.GetX(), ppg.GetY()); 
             chart1.Series[0].Color = Color.Blue;
             chart1.Series[0].MarkerSize = 1;
             IsDrawn = true;
+            
         }
 
         //Рисование ДФПГ
         private void Draw(DPPG dppg)
         {
-            chart2.ChartAreas[0].AxisX.MaximumAutoSize = 20;//chart1.ChartAreas[0].AxisX.Interval;
             
             chart2.ChartAreas[0].AxisX.Minimum = 0;
+            chart2.ChartAreas[0].InnerPlotPosition.X = 5;
+            chart2.ChartAreas[0].AxisX.Crossing = 0;
+            chart2.ChartAreas[0].AxisX.LineWidth = 2;
+            chart2.ChartAreas[0].AxisX.LineColor = Color.Gray;
+            chart2.ChartAreas[0].AxisY.LineWidth = 2;
+            chart2.ChartAreas[0].AxisY.LineColor = Color.Gray;
+            chart2.ChartAreas[0].AxisY.Crossing = 0;
+            chart2.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
+            chart2.ChartAreas[0].Position.Height = 85;
+            chart2.ChartAreas[0].Position.Width = 80;
+            
             chart2.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
-            //chart1.Series[2].ChartType = SeriesChartType.Line;
             chart2.ChartAreas[0].AxisX.ScaleView.Size = 400;
-            chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
+            chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY"; 
             chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY";
-            chart2.Series[0].Points.DataBindXY(dppg.GetX(), dppg.GetY()); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
-            chart2.Series[0].Color = Color.ForestGreen;
+            chart2.Series[0].Points.DataBindXY(dppg.GetX(), dppg.GetY());
+            chart2.Series[0].BorderWidth = 2;
+            chart2.Series[0].Color = Color.Green;
             chart2.Series[0].MarkerSize = 1;
 
         }
@@ -425,7 +447,7 @@ namespace PPGReader
             var result = chart1.HitTest(e.X, e.Y);
             Cursor = result.ChartElementType == ChartElementType.DataPoint ? Cursors.Hand : Cursors.Default;
             //chart1.Series[0].Color = result.ChartElementType == ChartElementType.DataPoint ? Color.Coral : Color.Blue; //у всего графика меняется цвет, как у одной точки заменить, пока не придумала
-            chart1.Series[0].Color = result.Series == chart1.Series[0] ? Color.Coral : Color.Blue;
+            chart1.Series[0].Color = result.Series == chart1.Series[0] ? Color.Green : Color.Blue;
 
             chart2.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
             chart2.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
@@ -768,10 +790,11 @@ namespace PPGReader
         {
             Statistics statistics = new Statistics();
             int countPeriods;
+            string namefile = @"D:\ВУЗ\4 курс\Диплом\DATA\StartCharacteristics.xlsx";
             for (int i = statistics.CountStatPeriodsBegin; i <=statistics.CountStatPeriodsEnd; i++)
             {
                 countPeriods = i;
-                PeriodPPG[] periods = ReadStartCharacteristics(countPeriods);
+                PeriodPPG[] periods = ReadStartCharacteristics(countPeriods, namefile);
                 contextMenuStrip1.Enabled = false;
                 int averageLengthPeriod = 0;
                 int A_RelativePosition = 0;
@@ -812,10 +835,10 @@ namespace PPGReader
                     int c_percentC = 60;
                     int d_percent = 10;
                     int d_percentD = 5;
-                    /*currentPeriod = CalcCurrentPeriod(averageLengthPeriod, D_RelativePosition, C_RelativePosition, end_percent,
-                      end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);*/
                     currentPeriod = CalcCurrentPeriodGrad(averageLengthPeriod, B_RelativePosition, D_RelativePosition, C_RelativePosition, end_percent,
-                   end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);
+                      end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);
+                    /*currentPeriod = CalcCurrentPeriod(averageLengthPeriod, D_RelativePosition, C_RelativePosition, end_percent,
+                   end_percentD, c_percent, c_percentD, c_percentC, d_percent, d_percentD, periodPPGs);*/
                     WriteLabelForChart(currentPeriod);
                     periodPPGs.Add(currentPeriod);
 
@@ -1024,7 +1047,7 @@ namespace PPGReader
             currentPeriod.Begin = periodPPGs.Last().End;
             currentPeriod.End = CalcEndPeriodGrad(currentPeriod, currentPeriod.Begin, averageLengthPeriod, end_percent, end_percentD);
             currentPeriod.B = CalcBGrad(B_RelativePosition, currentPeriod, currentPeriod.Begin, currentPeriod.End);
-            currentPeriod.A = CalcA(currentPeriod, currentPeriod.Begin, currentPeriod.B);
+            //currentPeriod.A = CalcA(currentPeriod, currentPeriod.Begin, currentPeriod.B);
             /*currentPeriod.C = CalcС(С_RelativePosition, currentPeriod.Length(), c_percent, c_percentD, c_percentC, currentPeriod.Begin, currentPeriod.B, currentPeriod.End);
             if (currentPeriod.C == -1)
             {
@@ -1758,7 +1781,7 @@ string nameFile, string nameSheet)
                 //} 
 
                 //Save your file 
-                FileInfo file = new FileInfo(nameFile);//"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx" 
+                FileInfo file = new FileInfo(nameFile); 
                 excelPackage.SaveAs(file);
             }
 
@@ -1792,15 +1815,15 @@ string nameFile, string nameSheet)
                 }
 
                 //Save your file
-                FileInfo file = new FileInfo(nameFile);//"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx"
+                FileInfo file = new FileInfo(nameFile);
                 excelPackage.SaveAs(file);
             }
 
         }
       
-        private PeriodPPG[] ReadStartCharacteristics(int countPeriods)
+        private PeriodPPG[] ReadStartCharacteristics(int countPeriods,string namefile)
         {
-            string namefile = @"J:\Documents\8 семестр\Диплом\Characteristics.xlsx";
+            
             string[,] excelData = ReadExcelSheet(namefile);
             int rows = excelData.GetUpperBound(0) + 1;
             int columns = excelData.Length / rows;
@@ -1940,33 +1963,7 @@ string nameFile, string nameSheet)
                     if (derivativePoints[j] == 0) countZero[i]++;
                 }
             }
-            //int n = derivativePoints.Length;
-            //int T1, T2;
-            //int[] countZero = new int[100];
-            //int u = 0;
-
-            //for (int i = 0; i < n; i++)
-            //{
-            //    if (chart1.Series[0].Points[i].Label == "T")
-            //    {
-            //        T1 = i;
-            //        for (int j = T1 + 1; j < n; j++)
-            //        {
-            //            if (chart1.Series[0].Points[j].Label == "T")
-            //            {
-            //                T2 = j;
-            //                for (int k = T1; k <= T2; k++)
-            //                {
-            //                    if (derivativePoints[k] == 0) countZero[u]++;
-            //                }
-            //                u++;
-            //                if (u == 101) i = n;
-            //                else i = T2 - 1;
-            //                j = n;
-            //            }
-            //        }
-            //    }
-            //}
+            
 
             return countZero;
         }
@@ -2014,10 +2011,6 @@ string nameFile, string nameSheet)
         private void button8_Click(object sender, EventArgs e)
         {
 
-            //int thinning = int.Parse(textBoxSinglingRate.Text);
-            //int window;
-            //if (fixSmoothing == true) window = int.Parse(label6.Text);
-            //else window = 0;
 
             const int countColumns = 5;
             const int countLines = 5;
@@ -2192,167 +2185,7 @@ string nameFile, string nameSheet)
 
 
 
-            //if (window == 0)
-            //{
-            //    if (thinning == 5)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 1;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //    if (thinning == 10)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 2;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //}
-            //if (window == 3)
-            //{
-            //    if (thinning == 5)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 3;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //    if (thinning == 10)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 9;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //}
-            //if (window == 5)
-            //{
-            //    if (thinning == 5)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 4;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //    if (thinning == 10)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 10;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //}
-            //if (window == 7)
-            //{
-            //    if (thinning == 5)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 5;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //    if (thinning == 10)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 11;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //}
-            //if (window == 9)
-            //{
-            //    if (thinning == 5)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 6;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //    if (thinning == 10)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 12;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //}
-            //if (window == 11)
-            //{
-            //    if (thinning == 5)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 7;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //    if (thinning == 10)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 13;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //}
-            //if (window == 13)
-            //{
-            //    if (thinning == 5)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 8;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //    if (thinning == 10)
-            //    {
-            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
-            //        j = 14;
-            //        for (int i = 0; i < countLines; i++)
-            //        {
-            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-            //        }
-            //    }
-            //}
+           
         }
 
         private void EndWatch_Click(object sender, EventArgs e)

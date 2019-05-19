@@ -80,7 +80,7 @@
             this.buttonCalc.Location = new System.Drawing.Point(1116, 97);
             this.buttonCalc.Margin = new System.Windows.Forms.Padding(5);
             this.buttonCalc.Name = "buttonCalc";
-            this.buttonCalc.Size = new System.Drawing.Size(200, 28);
+            this.buttonCalc.Size = new System.Drawing.Size(150, 23);
             this.buttonCalc.TabIndex = 0;
             this.buttonCalc.Text = "Нарисовать график";
             this.buttonCalc.UseVisualStyleBackColor = true;
@@ -91,32 +91,32 @@
             chartArea3.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea3);
             this.chart1.ContextMenuStrip = this.contextMenuStrip1;
-            legend3.Name = "Legend1";
-            this.chart1.Legends.Add(legend3);
-            this.chart1.Location = new System.Drawing.Point(17, 7);
-            this.chart1.Margin = new System.Windows.Forms.Padding(5);
+            legend1.Name = "Legend1";
+            this.chart1.Legends.Add(legend1);
+            this.chart1.Location = new System.Drawing.Point(13, 6);
+            this.chart1.Margin = new System.Windows.Forms.Padding(4);
             this.chart1.Name = "chart1";
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series9.Legend = "Legend1";
-            series9.Name = "Series1";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.Legend = "Legend1";
-            series10.Name = "Series2";
-            series11.ChartArea = "ChartArea1";
-            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series11.Legend = "Legend1";
-            series11.Name = "Series3";
-            series12.ChartArea = "ChartArea1";
-            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series12.Legend = "Legend1";
-            series12.Name = "Series4";
-            this.chart1.Series.Add(series9);
-            this.chart1.Series.Add(series10);
-            this.chart1.Series.Add(series11);
-            this.chart1.Series.Add(series12);
-            this.chart1.Size = new System.Drawing.Size(1092, 481);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Series2";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Legend = "Legend1";
+            series3.Name = "Series3";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Legend = "Legend1";
+            series4.Name = "Series4";
+            this.chart1.Series.Add(series1);
+            this.chart1.Series.Add(series2);
+            this.chart1.Series.Add(series3);
+            this.chart1.Series.Add(series4);
+            this.chart1.Size = new System.Drawing.Size(819, 391);
             this.chart1.TabIndex = 1;
             this.chart1.Text = "chart1";
             this.chart1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseClick);
@@ -135,17 +135,17 @@
             this.richTextBox1.Location = new System.Drawing.Point(1116, 302);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(5);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(401, 436);
+            this.richTextBox1.Size = new System.Drawing.Size(302, 355);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(1120, 16);
-            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label1.Location = new System.Drawing.Point(840, 13);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(45, 17);
+            this.label1.Size = new System.Drawing.Size(36, 13);
             this.label1.TabIndex = 3;
             this.label1.Text = "Файл";
             // 
@@ -155,7 +155,7 @@
             this.label2.Location = new System.Drawing.Point(1560, 15);
             this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(17, 17);
+            this.label2.Size = new System.Drawing.Size(15, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "w";
             // 
@@ -164,7 +164,7 @@
             this.textBoxPath.Location = new System.Drawing.Point(1179, 12);
             this.textBoxPath.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxPath.Name = "textBoxPath";
-            this.textBoxPath.Size = new System.Drawing.Size(371, 22);
+            this.textBoxPath.Size = new System.Drawing.Size(279, 20);
             this.textBoxPath.TabIndex = 5;
             // 
             // textBoxW
@@ -172,7 +172,7 @@
             this.textBoxW.Location = new System.Drawing.Point(1587, 12);
             this.textBoxW.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxW.Name = "textBoxW";
-            this.textBoxW.Size = new System.Drawing.Size(25, 22);
+            this.textBoxW.Size = new System.Drawing.Size(20, 20);
             this.textBoxW.TabIndex = 6;
             this.textBoxW.Text = "5";
             // 
@@ -276,10 +276,9 @@
             // 
             // FullSearchCharacteristics
             // 
-            this.FullSearchCharacteristics.Location = new System.Drawing.Point(1119, 267);
-            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(4);
+            this.FullSearchCharacteristics.Location = new System.Drawing.Point(839, 217);
             this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
-            this.FullSearchCharacteristics.Size = new System.Drawing.Size(447, 28);
+            this.FullSearchCharacteristics.Size = new System.Drawing.Size(335, 23);
             this.FullSearchCharacteristics.TabIndex = 17;
             this.FullSearchCharacteristics.Text = "Найти характеристики с помощью полного перебора";
             this.FullSearchCharacteristics.UseVisualStyleBackColor = true;
@@ -349,35 +348,35 @@
             // 
             // chart2
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea1);
+            chartArea2.Name = "ChartArea1";
+            this.chart2.ChartAreas.Add(chartArea2);
             this.chart2.ContextMenuStrip = this.contextMenuStrip1;
-            legend1.Name = "Legend1";
-            this.chart2.Legends.Add(legend1);
-            this.chart2.Location = new System.Drawing.Point(26, 498);
-            this.chart2.Margin = new System.Windows.Forms.Padding(5);
+            legend2.Name = "Legend1";
+            this.chart2.Legends.Add(legend2);
+            this.chart2.Location = new System.Drawing.Point(13, 405);
+            this.chart2.Margin = new System.Windows.Forms.Padding(4);
             this.chart2.Name = "chart2";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Series2";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "Series3";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Legend = "Legend1";
-            series4.Name = "Series4";
-            this.chart2.Series.Add(series1);
-            this.chart2.Series.Add(series2);
-            this.chart2.Series.Add(series3);
-            this.chart2.Series.Add(series4);
-            this.chart2.Size = new System.Drawing.Size(1083, 313);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Legend = "Legend1";
+            series6.Name = "Series2";
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series7.Legend = "Legend1";
+            series7.Name = "Series3";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series8.Legend = "Legend1";
+            series8.Name = "Series4";
+            this.chart2.Series.Add(series5);
+            this.chart2.Series.Add(series6);
+            this.chart2.Series.Add(series7);
+            this.chart2.Series.Add(series8);
+            this.chart2.Size = new System.Drawing.Size(819, 278);
             this.chart2.TabIndex = 24;
             this.chart2.Text = "chart2";
             // 
@@ -420,10 +419,9 @@
             // 
             // WriteCharacteristics
             // 
-            this.WriteCharacteristics.Location = new System.Drawing.Point(1573, 267);
-            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(4);
+            this.WriteCharacteristics.Location = new System.Drawing.Point(1180, 217);
             this.WriteCharacteristics.Name = "WriteCharacteristics";
-            this.WriteCharacteristics.Size = new System.Drawing.Size(237, 28);
+            this.WriteCharacteristics.Size = new System.Drawing.Size(178, 23);
             this.WriteCharacteristics.TabIndex = 27;
             this.WriteCharacteristics.Text = "Записать характеристики";
             this.WriteCharacteristics.UseVisualStyleBackColor = true;
@@ -431,7 +429,7 @@
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1813, 750);
             this.Controls.Add(this.WriteCharacteristics);
@@ -464,6 +462,7 @@
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "PPGReader";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
             this.ResumeLayout(false);
