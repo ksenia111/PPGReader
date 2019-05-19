@@ -28,8 +28,6 @@ namespace PPGReader
         bool IsFoundDerivative = false;
         bool IsEndWatch = true;
         int[] duplicatePoints;
-        int increaseScaleClick = 0;
-        int decreaseScaleClick = 0;
         int increaseClick = 0;
         int decreaseClick = 0;
         int PeriodClick = 0;
@@ -215,11 +213,11 @@ namespace PPGReader
                 x[i] = i;
             }
 
+            double size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+
             Draw(x, forDrawing);
 
-            //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = size;
         }
 
         /// <summary>
@@ -247,11 +245,11 @@ namespace PPGReader
                 x[i] = i;
             }
 
+            double size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+
             Draw(x, forDrawing);
 
-
-            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = size;
         }
 
         /// <summary>
@@ -276,13 +274,12 @@ namespace PPGReader
                 pointPPGs[i] = new PointPPG(i, duplicatePoints[i]);
             }
 
+            double size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+
             ppg = new PPG(pointPPGs, n);
             Draw(ppg);
 
-
-            //если до сглаживания был изменен масштаб, то пытаемся такой же  масштаб сделать после сглаживания
-            if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
-            if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+            chart1.ChartAreas[0].AxisX.ScaleView.Size = size;
         }
 
         int[] duplicatePoints1;
@@ -320,6 +317,8 @@ namespace PPGReader
 
             ppg = new PPG(pointPPGs, n);
             Draw(ppg);
+            chart2.Series[0].Points.Clear();
+            chart2.ChartAreas[0].AxisX.ScaleView.Size = 400;
         }
 
         //Рисование ФПГ
@@ -464,7 +463,6 @@ namespace PPGReader
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
             chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
-            increaseScaleClick++;
         }
 
 
@@ -472,7 +470,6 @@ namespace PPGReader
         {
             chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
             chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
-            decreaseScaleClick++;
         }
 
         //подписи к первым 10 отмеченным периодам
@@ -1709,8 +1706,7 @@ namespace PPGReader
                 dppg = new DPPG(pointDPPG, n);
                 IsFoundDerivative = true;
                 Draw(dppg);
-                if (increaseScaleClick != 0) chart2.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick); 
-                if (decreaseScaleClick != 0) chart2.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
+                chart2.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
             }
         }
 
