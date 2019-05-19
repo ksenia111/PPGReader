@@ -284,7 +284,11 @@ namespace PPGReader
             if (increaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / (1.5 * increaseScaleClick);
             if (decreaseScaleClick != 0) chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * (1.5 * decreaseScaleClick);
         }
-        
+
+        int[] duplicatePoints1;
+        int[] duplicatePoints2;
+        int[] duplicatePoints3;
+        int[] duplicatePoints4;
         private void button1_Click(object sender, EventArgs e)
         {
             drowChartClick = true;
@@ -296,6 +300,11 @@ namespace PPGReader
             int[] singlingPoints = Singling(points);
 
             duplicatePoints = singlingPoints;  // дубликат прореженных точек (я использую в сглаживании)
+
+            if (int.Parse(textBoxSinglingRate.Text) == 1) duplicatePoints1 = CopyPoints(singlingPoints);
+            else if (int.Parse(textBoxSinglingRate.Text) == 2) duplicatePoints2 = CopyPoints(singlingPoints);
+            else if (int.Parse(textBoxSinglingRate.Text) == 3) duplicatePoints3 = CopyPoints(singlingPoints);
+            else if (int.Parse(textBoxSinglingRate.Text) == 4) duplicatePoints4 = CopyPoints(singlingPoints);
 
             forDrawing = CopyPoints(duplicatePoints);
 
@@ -333,7 +342,7 @@ namespace PPGReader
         private void Draw(DPPG dppg)
         {
             chart2.ChartAreas[0].AxisX.MaximumAutoSize = 20;//chart1.ChartAreas[0].AxisX.Interval;
-
+            
             chart2.ChartAreas[0].AxisX.Minimum = 0;
             chart2.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
             //chart1.Series[2].ChartType = SeriesChartType.Line;
@@ -887,9 +896,9 @@ namespace PPGReader
             }
         }
 
-        private PeriodPPG[] FindPeriods(int countPeriods)
+        private PeriodPPG[] FindPeriods(int countPeriods, string nameFile, int[] duplicatePoints, double[] derivativePoints)
         {
-            PeriodPPG[] periods = ReadStartCharacteristics(countPeriods);
+            PeriodPPG[] periods = ReadPeriods(countPeriods, nameFile);
             contextMenuStrip1.Enabled = false;
             int averageLengthPeriod = 0;
             int previousIdxP = countPeriods - 1;
@@ -901,7 +910,7 @@ namespace PPGReader
             int updateFrequency = 10;
             averageLengthPeriod = CalcAverageLengthPeriod(countPeriods, periods);
 
-            while (periodPPGs.Last().End + averageLengthPeriod < ppg.points.Length)
+            while (periodPPGs.Last().End + averageLengthPeriod < duplicatePoints.Length)
             {
                 PeriodPPG currentPeriod = new PeriodPPG();
                 updateData = currentIdxP % updateFrequency;
@@ -913,7 +922,7 @@ namespace PPGReader
                 int end_percent = 50;
                 int end_percentD = 5;
                 currentPeriod.Begin = periodPPGs.Last().End;
-                currentPeriod.End = CalcEndPeriod(currentPeriod, currentPeriod.Begin, averageLengthPeriod, end_percent, end_percentD);
+                currentPeriod.End = CalcEndPeriod(currentPeriod, currentPeriod.Begin, averageLengthPeriod, end_percent, end_percentD, duplicatePoints, derivativePoints);
 
                 periodPPGs.Add(currentPeriod);
 
@@ -921,7 +930,7 @@ namespace PPGReader
                 currentIdxP++;
             }
 
-            WriteLabelForChart(periodPPGs.ToArray());
+            //WriteLabelForChart(periodPPGs.ToArray());
             return periodPPGs.ToArray();
         }
 
@@ -1236,6 +1245,32 @@ namespace PPGReader
 
         }
 
+        private int CalcEndPeriod(PeriodPPG periodPPG, int begin, int averageLength, int percent, int percentD, int[] duplicatePoints, double[] derivativePoints)
+        {
+            int searchInterval = percent * averageLength / 100;
+            int min = int.MaxValue;
+            int idxEnd = -1;
+            int idxSearchEnd = begin + averageLength + searchInterval;
+            if (idxSearchEnd > duplicatePoints.Length)
+            {
+                idxSearchEnd = duplicatePoints.Length;
+            }
+            for (int i = begin + searchInterval; i < idxSearchEnd; i++)
+            {
+                if (duplicatePoints[i] < min)
+                {
+                    min = duplicatePoints[i];
+                    idxEnd = i;
+                }
+                periodPPG.IterationEnd++;
+            }
+
+            idxEnd = CheckDerivativeMax(periodPPG, averageLength, percentD, idxEnd, derivativePoints);
+
+            return idxEnd;
+
+        }
+
         private int CalcEndPeriodGrad(PeriodPPG periodPPG, int begin, int averageLength, int percent, int percentD)
         {
             int predictionEnd = begin + averageLength;
@@ -1306,6 +1341,33 @@ namespace PPGReader
             for (int i = idx - searchInterval; i < idxSearchEnd; i++)
             {
                 if (IsMax(dppg.points[idx].y, dppg.points[idx - 1].y, dppg.points[idx + 1].y))
+                {
+                    idx = i;
+                }
+                periodPPG.IterationEnd++;
+            }
+
+            return idx;
+        }
+
+        private int CheckDerivativeMax(PeriodPPG periodPPG, int lengthPeriod, int percentD, int idx, double[] derivativePoints)
+        {
+            if (IsMax(derivativePoints[idx], derivativePoints[idx - 1], derivativePoints[idx + 1]))
+            {
+                return idx;
+            }
+
+            int searchInterval = percentD * lengthPeriod / 100;
+            int idxSearchEnd = idx + searchInterval;
+
+            if (idxSearchEnd > derivativePoints.Length)
+            {
+                idxSearchEnd = derivativePoints.Length;
+            }
+
+            for (int i = idx - searchInterval; i < idxSearchEnd; i++)
+            {
+                if (IsMax(derivativePoints[idx], derivativePoints[idx - 1], derivativePoints[idx + 1]))
                 {
                     idx = i;
                 }
@@ -1457,12 +1519,138 @@ namespace PPGReader
             return derivativePoints;
         }
 
+        private double[] Differentiation(double[] derivativePoints)
+        {
+            int n = derivativePoints.Length;
+            double k1, k2;
+            int buf;
+            double del1, del2, len;
+            for (int i = 0; i < n; i++)
+            {
+                if (derivativePoints[i] < 0 && derivativePoints[i + 1] == 0)
+                {
+                    buf = i;
+                    for (int j = i + 1; j < n; j++)
+                    {
+                        if (derivativePoints[j] > 0)
+                        {
+                            len = j - buf - 1;
+                            k1 = Math.Round(len / 2.0);
+                            k2 = len - k1 - 1;
+                            del1 = (-derivativePoints[buf]) / (k1 + 1);
+                            del2 = derivativePoints[j] / (k2 + 1);
+                            for (int l = buf + 1; l < buf + k1 + 1; l++)
+                            {
+                                //if (l == buf + 1)
+                                //derivativePoints[l] = derivativePoints[l - 1];
+                                //else 
+                                derivativePoints[l] = derivativePoints[l - 1] + del1;
+                            }
+                            for (int l = j - 1; l > buf + k1 + 1; l--)
+                            {
+                                //if (l == j - 1)
+                                // derivativePoints[l] = derivativePoints[l + 1];
+                                //else 
+                                derivativePoints[l] = derivativePoints[l + 1] - del2;
+                            }
+                            i = j - 1;
+                            break;
+                        }
+
+                        else if (derivativePoints[j] != 0)
+                        {
+                            i = j - 1;
+                            break;
+                        }
+
+                    }
+                }
+            }
+
+            for (int i = 0; i < n; i++)
+            {
+                if (derivativePoints[i] > 0 && derivativePoints[i + 1] == 0)
+                {
+                    buf = i;
+                    for (int j = i + 1; j < n; j++)
+                    {
+                        if (derivativePoints[j] < 0)
+                        {
+                            len = j - buf - 1;
+                            k1 = Math.Round(len / 2.0);
+                            k2 = len - k1 - 1;
+                            del1 = derivativePoints[buf] / (k1 + 1);
+                            del2 = (-derivativePoints[j]) / (k2 + 1);
+                            for (int l = buf + 1; l < buf + k1 + 1; l++)
+                            {
+                                //if (l == buf + 1)
+                                //derivativePoints[l] = derivativePoints[l - 1];
+                                //else 
+                                derivativePoints[l] = derivativePoints[l - 1] - del1;
+                            }
+                            for (int l = j - 1; l > buf + k1 + 1; l--)
+                            {
+                                //if (l == j - 1)
+                                // derivativePoints[l] = derivativePoints[l + 1];
+                                //else 
+                                derivativePoints[l] = derivativePoints[l + 1] + del2;
+                            }
+                            i = j - 1;
+                            break;
+                        }
+
+                        else if (derivativePoints[j] != 0)
+                        {
+                            i = j - 1;
+                            break;
+                        }
+
+                    }
+                }
+            }
+
+
+            for (int i = 0; i < n - 2; i++)
+            {
+                if (derivativePoints[i] != 0)
+                {
+                    if (derivativePoints[i] == derivativePoints[i + 2]) derivativePoints[i + 1] = derivativePoints[i];
+                    for (int number = -3; number < 4; number++)
+                    {
+                        if (number == 0) break;
+                        if (derivativePoints[i] == number && number < 0)
+                        {
+                            for (int j = i + 1; j < n; j++)
+                            {
+                                if (derivativePoints[j] > (number + 1) || derivativePoints[j] < number) break;
+                                if (derivativePoints[j] == number)
+                                    for (int k = i + 1; k < j + 1; k++)
+                                        derivativePoints[k] = derivativePoints[i];
+                            }
+                        }
+                        if (derivativePoints[i] == number && number > 0)
+                        {
+                            for (int j = i + 1; j < n; j++)
+                            {
+                                if (derivativePoints[j] < (number - 1) || derivativePoints[j] > number) break;
+                                if (derivativePoints[j] == number)
+                                    for (int k = i + 1; k < j + 1; k++)
+                                        derivativePoints[k] = derivativePoints[i];
+                            }
+                        }
+                    }
+                }
+            }
+
+            return derivativePoints;
+        }
+
         double[] derivativePoints;
         private void button5_Click(object sender, EventArgs e)
         {
             if (drowChartClick == false)
             {
-                MessageBox.Show("Для нахождения производной сначала нужно нарисовать график ФПГ. Нажмите \" Нарисовать гравик\"",
+                MessageBox.Show("Для нахождения производной сначала нужно нарисовать график ФПГ. Нажмите \" Нарисовать график\"",
                                 "Ошибка",
                                 MessageBoxButtons.OK,
                                 MessageBoxIcon.Error);
@@ -1489,125 +1677,7 @@ namespace PPGReader
                     derivativePoints = differentiation4points(duplicatePoints, rate);
                 }
 
-                double k1, k2;
-                int buf;
-                double del1, del2, len;
-                for (int i = 0; i < n; i++)
-                {
-                    if (derivativePoints[i] < 0 && derivativePoints[i + 1] == 0)
-                    {
-                        buf = i;
-                        for (int j = i + 1; j < n; j++)
-                        {
-                            if (derivativePoints[j] > 0)
-                            {
-                                len = j - buf - 1;
-                                k1 = Math.Round(len / 2.0);
-                                k2 = len - k1 - 1;
-                                del1 = (-derivativePoints[buf]) / (k1 + 1);
-                                del2 = derivativePoints[j] / (k2 + 1);
-                                for (int l = buf + 1; l < buf + k1 + 1; l++) 
-                                {
-                                    //if (l == buf + 1)
-                                    //derivativePoints[l] = derivativePoints[l - 1];
-                                    //else 
-                                    derivativePoints[l] = derivativePoints[l - 1] + del1;
-                                }
-                                for (int l = j - 1; l > buf + k1 + 1; l--) 
-                                {
-                                    //if (l == j - 1)
-                                    // derivativePoints[l] = derivativePoints[l + 1];
-                                    //else 
-                                    derivativePoints[l] = derivativePoints[l + 1] - del2;
-                                }
-                                i = j - 1;
-                                break;
-                            }
-
-                            else if (derivativePoints[j] != 0)
-                            {
-                                i = j - 1;
-                                break;
-                            }
-                            
-                        }
-                    }
-                }
-
-                for (int i = 0; i < n; i++)
-                {
-                    if (derivativePoints[i] > 0 && derivativePoints[i + 1] == 0)
-                    {
-                        buf = i;
-                        for (int j = i + 1; j < n; j++)
-                        {
-                            if (derivativePoints[j] < 0)
-                            {
-                                len = j - buf - 1;
-                                k1 = Math.Round(len / 2.0);
-                                k2 = len - k1 - 1;
-                                del1 = derivativePoints[buf] / (k1 + 1);
-                                del2 = (-derivativePoints[j]) / (k2 + 1);
-                                for (int l = buf + 1; l < buf + k1 + 1; l++)
-                                {
-                                    //if (l == buf + 1)
-                                    //derivativePoints[l] = derivativePoints[l - 1];
-                                    //else 
-                                    derivativePoints[l] = derivativePoints[l - 1] - del1;
-                                }
-                                for (int l = j - 1; l > buf + k1 + 1; l--)
-                                {
-                                    //if (l == j - 1)
-                                    // derivativePoints[l] = derivativePoints[l + 1];
-                                    //else 
-                                    derivativePoints[l] = derivativePoints[l + 1] + del2;
-                                }
-                                i = j - 1;
-                                break;
-                            }
-
-                            else if (derivativePoints[j] != 0)
-                            {
-                                i = j - 1;
-                                break;
-                            }
-                            
-                        }
-                    }
-                }
-
-
-                for (int i = 0; i < n - 2; i++)
-                {
-                    if (derivativePoints[i] != 0)
-                    {
-                        if (derivativePoints[i] == derivativePoints[i + 2]) derivativePoints[i + 1] = derivativePoints[i];
-                        for (int number = -3; number < 4; number++)
-                        {
-                            if (number == 0) break;
-                            if (derivativePoints[i] == number && number < 0)
-                            {
-                                for (int j = i + 1; j < n; j++)
-                                {
-                                    if (derivativePoints[j] > (number + 1) || derivativePoints[j] < number) break;
-                                    if (derivativePoints[j] == number)
-                                        for (int k = i + 1; k < j + 1; k++)
-                                            derivativePoints[k] = derivativePoints[i];
-                                }
-                            }
-                            if (derivativePoints[i] == number && number > 0)
-                            {
-                                for (int j = i + 1; j < n; j++)
-                                {
-                                    if (derivativePoints[j] < (number - 1) || derivativePoints[j] > number) break;
-                                    if (derivativePoints[j] == number)
-                                        for (int k = i + 1; k < j + 1; k++)
-                                            derivativePoints[k] = derivativePoints[i];
-                                }
-                            }
-                        }
-                    }
-                }
+                derivativePoints = Differentiation(derivativePoints);
 
                 for (int i = 0; i < n; i++)
                 {
@@ -1730,7 +1800,7 @@ string nameFile, string nameSheet)
       
         private PeriodPPG[] ReadStartCharacteristics(int countPeriods)
         {
-            string namefile = @"J:\Documents\8 семестр\Диплом\StartCharacteristics.xlsx";
+            string namefile = @"J:\Documents\8 семестр\Диплом\Characteristics.xlsx";
             string[,] excelData = ReadExcelSheet(namefile);
             int rows = excelData.GetUpperBound(0) + 1;
             int columns = excelData.Length / rows;
@@ -1774,14 +1844,57 @@ string nameFile, string nameSheet)
             return periods;
         }
 
-       
+        private PeriodPPG[] ReadPeriods(int countPeriods, string nameFile)
+        {
+            //string namefile = @"J:\Documents\8 семестр\Диплом\Characteristics.xlsx";
+            string[,] excelData = ReadExcelSheet(nameFile);
+            int rows = excelData.GetUpperBound(0) + 1;
+            int columns = excelData.Length / rows;
+            PeriodPPG[] periods = new PeriodPPG[countPeriods];
+            for (int i = 0; i < countPeriods; i++)
+            {
+                periods[i] = new PeriodPPG();
+            }
+            for (int j = 1; j < countPeriods + 1; j++)
+            {
+                for (int i = 1; i < rows; i++)
+                {
+                    switch (i)
+                    {
+                        case 1:
+                            periods[j - 1].Begin = Convert.ToInt32(excelData[i, j]);
+                            break;
+                        case 2:
+                            periods[j - 1].End = Convert.ToInt32(excelData[i, j]); ;
+                            break;
+                        case 3:
+                            periods[j - 1].A = Convert.ToInt32(excelData[i, j]); ;
+                            break;
+                        case 4:
+                            periods[j - 1].B = Convert.ToInt32(excelData[i, j]); ;
+                            break;
+                        case 5:
+                            periods[j - 1].C = Convert.ToInt32(excelData[i, j]);
+                            break;
+                        case 6:
+                            periods[j - 1].D = Convert.ToInt32(excelData[i, j]); ;
+                            break;
+                        case 7:
+                            periods[j - 1].E = Convert.ToInt32(excelData[i, j]); ;
+                            break;
+                    }
+                }
+            }
 
-        private string [,] ReadExcelSheet(string namefile)
+            return periods;
+        }
+
+        private string[,] ReadExcelSheet(string namefile)
         {
             //read the Excel file as byte array
             byte[] bin = File.ReadAllBytes(namefile);
-            string[,] excelData=null;
-            
+            string[,] excelData = null;
+
             //create a new Excel package in a memorystream
             using (MemoryStream stream = new MemoryStream(bin))
             using (ExcelPackage excelPackage = new ExcelPackage(stream))
@@ -1799,12 +1912,12 @@ string nameFile, string nameSheet)
                             //add the cell data to the List
                             if (worksheet.Cells[i, j].Value != null)
                             {
-                                excelData[j-1,i-1]= worksheet.Cells[i, j].Value.ToString();
+                                excelData[j - 1, i - 1] = worksheet.Cells[i, j].Value.ToString();
                             }
                         }
                     }
                 }
-                
+
             }
             return excelData;
         }
@@ -1815,35 +1928,45 @@ string nameFile, string nameSheet)
             selectedState = comboBox1.SelectedItem.ToString();
         }
 
-        private int[] CountZero()
+        private int[] CountZero(PeriodPPG[] periodPPG, double[] derivativePoints)
         {
-            int n = derivativePoints.Length;
-            int T1, T2;
-            int[] countZero = new int[100];
-            int u = 0;
-            
+            int n = periodPPG.Length;
+            int[] countZero = new int[n];
+
             for (int i = 0; i < n; i++)
             {
-                if (chart1.Series[0].Points[i].Label == "T")
+                for (int j = periodPPG[i].Begin; j < periodPPG[i].End; j++)
                 {
-                    T1 = i;
-                    for (int j = T1 + 1; j < n; j++)
-                    {
-                        if (chart1.Series[0].Points[j].Label == "T")
-                        {
-                            T2 = j;
-                            for (int k = T1; k <= T2; k++)
-                            {
-                                if (derivativePoints[k] == 0) countZero[u]++;
-                            }
-                            u++;
-                            if (u == 101) i = n;
-                            else i = T2 - 1;
-                            j = n;
-                        }
-                    }
+                    if (derivativePoints[j] == 0) countZero[i]++;
                 }
             }
+            //int n = derivativePoints.Length;
+            //int T1, T2;
+            //int[] countZero = new int[100];
+            //int u = 0;
+
+            //for (int i = 0; i < n; i++)
+            //{
+            //    if (chart1.Series[0].Points[i].Label == "T")
+            //    {
+            //        T1 = i;
+            //        for (int j = T1 + 1; j < n; j++)
+            //        {
+            //            if (chart1.Series[0].Points[j].Label == "T")
+            //            {
+            //                T2 = j;
+            //                for (int k = T1; k <= T2; k++)
+            //                {
+            //                    if (derivativePoints[k] == 0) countZero[u]++;
+            //                }
+            //                u++;
+            //                if (u == 101) i = n;
+            //                else i = T2 - 1;
+            //                j = n;
+            //            }
+            //        }
+            //    }
+            //}
 
             return countZero;
         }
@@ -1861,32 +1984,24 @@ string nameFile, string nameSheet)
 
         private int[] CountZeroInInterval(int[] countZero)
         {
-            int countInterval = 7;
+            int countInterval = 5;
             int[] countZeroInInterval = new int[countInterval];
 
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < countZero.Length; i++)
             {
-                if (countZero[i] < 11) countZeroInInterval[0]++;
+                if (countZero[i] < 5) countZeroInInterval[0]++;
                 else
                 {
-                    if (countZero[i] < 21 && countZero[i] > 10) countZeroInInterval[1]++;
+                    if (countZero[i] < 11 && countZero[i] > 5) countZeroInInterval[1]++;
                     else
                     {
-                        if (countZero[i] < 41 && countZero[i] > 20) countZeroInInterval[2]++;
+                        if (countZero[i] < 16 && countZero[i] > 10) countZeroInInterval[2]++;
                         else
                         {
-                            if (countZero[i] < 61 && countZero[i] > 40) countZeroInInterval[3]++;
+                            if (countZero[i] < 21 && countZero[i] > 15) countZeroInInterval[3]++;
                             else
                             {
-                                if (countZero[i] < 81 && countZero[i] > 60) countZeroInInterval[4]++;
-                                else
-                                {
-                                    if (countZero[i] < 101 && countZero[i] > 80) countZeroInInterval[5]++;
-                                    else
-                                    {
-                                        if (countZero[i] > 100) countZeroInInterval[6]++;
-                                    }
-                                }
+                                if (countZero[i] > 20) countZeroInInterval[4]++;
                             }
                         }
                     }
@@ -1898,196 +2013,346 @@ string nameFile, string nameSheet)
 
         private void button8_Click(object sender, EventArgs e)
         {
-            int[] countZero = CountZero();
 
-            int thinning = int.Parse(textBoxSinglingRate.Text);
-            int window;
-            if (fixSmoothing == true) window = int.Parse(label6.Text);
-            else window = 0;
+            //int thinning = int.Parse(textBoxSinglingRate.Text);
+            //int window;
+            //if (fixSmoothing == true) window = int.Parse(label6.Text);
+            //else window = 0;
 
-            const int countColumns = 15;
-            const int countLines = 7;
-            string[] nameColumns = new string[countColumns] {"Интервалы | Параметры", "Коэф.прореж.= 5", "Коэф. прореж. = 10", "Коэф.прореж.= 5, окно сглаж. = 3",
-            "Коэф.прореж.= 5, окно сглаж. = 5", "Коэф.прореж.= 5, окно сглаж. = 7", "Коэф.прореж.= 5, окно сглаж. = 9", "Коэф.прореж.= 5, окно сглаж. = 11",
-            "Коэф.прореж.= 5, окно сглаж. = 13", "Коэф.прореж.= 10, окно сглаж. = 3", "Коэф.прореж.= 10, окно сглаж. = 5", "Коэф.прореж.= 10, окно сглаж. = 7",
-            "Коэф.прореж.= 10, окно сглаж. = 9","Коэф.прореж.= 10, окно сглаж. = 11", "Коэф.прореж.= 10, окно сглаж. = 13"};
+            const int countColumns = 5;
+            const int countLines = 5;
+            string[] nameColumns = new string[countColumns] { "Интервалы | Коэффициент прореживания", "1", "2", "3", "4" };
             string[,] valueColumns = new string[countColumns, countLines];
+
+            string nameFile;
+            string namefile;
 
             int j = 0;
 
-            valueColumns[0, 0] = "0-10";
-            valueColumns[1, 0] = "11-20";
-            valueColumns[2, 0] = "21-40";
-            valueColumns[3, 0] = "41-60";
-            valueColumns[4, 0] = "61-80";
-            valueColumns[5, 0] = "81-100";
-            valueColumns[6, 0] = "101 и больше";
+            valueColumns[0, 0] = "0-5";
+            valueColumns[1, 0] = "6-10";
+            valueColumns[2, 0] = "11-15";
+            valueColumns[3, 0] = "15-20";
+            valueColumns[4, 0] = "21и больше";
 
-            if (window == 0)
+            double[] derivativePointsCoefThin1;
+            double[] derivativePointsCoefThin2;
+            double[] derivativePointsCoefThin3;
+            double[] derivativePointsCoefThin4;
+
+            int[] countZero1;
+            int[] countZero2;
+            int[] countZero3;
+            int[] countZero4;
+            int[] countZero1InInterval;
+            int[] countZero2InInterval;
+            int[] countZero3InInterval;
+            int[] countZero4InInterval;
+
+            //производная 1 пор-ка точности
+            nameFile = @"J:\Documents\8 семестр\Диплом\CountZero1.xlsx";
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics1.xlsx";
+            derivativePointsCoefThin1 = differentiation1orderAccuracy(duplicatePoints1, 1);
+            derivativePointsCoefThin1 = Differentiation(derivativePointsCoefThin1);
+            PeriodPPG[] periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints1, derivativePointsCoefThin1);
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin1);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 1;
+            for (int i = 0; i < countLines; i++)
             {
-                if (thinning == 5)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 1;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-                if (thinning == 10)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 2;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-            }
-            if (window == 3)
-            {
-                if (thinning == 5)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 3;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-                if (thinning == 10)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 9;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-            }
-            if (window == 5)
-            {
-                if (thinning == 5)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 4;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-                if (thinning == 10)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 10;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-            }
-            if (window == 7)
-            {
-                if (thinning == 5)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 5;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-                if (thinning == 10)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 11;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-            }
-            if (window == 9)
-            {
-                if (thinning == 5)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 6;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-                if (thinning == 10)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 12;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-            }
-            if (window == 11)
-            {
-                if (thinning == 5)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 7;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-                if (thinning == 10)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 13;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-            }
-            if (window == 13)
-            {
-                if (thinning == 5)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 8;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
-                if (thinning == 10)
-                {
-                    int[] countZeroInInterval = CountZeroInInterval(countZero);
-                    j = 14;
-                    for (int i = 0; i < countLines; i++)
-                    {
-                        valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
-
-                    }
-                }
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
             }
 
-            string nameFile = @"J:\Documents\8 семестр\Диплом\CountZero.xlsx";
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
+            derivativePointsCoefThin2 = differentiation1orderAccuracy(duplicatePoints2, 2);
+            derivativePointsCoefThin2 = Differentiation(derivativePointsCoefThin2);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints2, derivativePointsCoefThin2);
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 2;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics3.xlsx";
+            derivativePointsCoefThin3 = differentiation1orderAccuracy(duplicatePoints3, 3);
+            derivativePointsCoefThin3 = Differentiation(derivativePointsCoefThin3);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints3, derivativePointsCoefThin3);
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin3);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 3;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
             string nameSheet = "Дифференцирование первого порядка точности";
             WriteExcel(nameColumns, valueColumns, countColumns, countLines, nameFile, nameSheet);
+
+
+            //производная 2ого пор-ка точности
+            nameFile = @"J:\Documents\8 семестр\Диплом\CountZero2.xlsx";
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics1.xlsx";
+            derivativePointsCoefThin1 = differentiation2orderAccuracy(duplicatePoints1, 1);
+            derivativePointsCoefThin1 = Differentiation(derivativePointsCoefThin1);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints1, derivativePointsCoefThin1);
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin1);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 1;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
+            }
+
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
+            derivativePointsCoefThin2 = differentiation2orderAccuracy(duplicatePoints2, 2);
+            derivativePointsCoefThin2 = Differentiation(derivativePointsCoefThin2);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints2, derivativePointsCoefThin2);
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 2;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics3.xlsx";
+            derivativePointsCoefThin3 = differentiation2orderAccuracy(duplicatePoints3, 3);
+            derivativePointsCoefThin3 = Differentiation(derivativePointsCoefThin3);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints3, derivativePointsCoefThin3);            
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin3);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 3;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics4.xlsx";
+            derivativePointsCoefThin4 = differentiation2orderAccuracy(duplicatePoints4, 4);
+            derivativePointsCoefThin4 = Differentiation(derivativePointsCoefThin4);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints4, derivativePointsCoefThin4);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin4);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 4;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
+            }
+
+            nameSheet = "Дифференцирование второго порядка точности";
+            WriteExcel(nameColumns, valueColumns, countColumns, countLines, nameFile, nameSheet);
+
+
+            //производная по 4 узл точкам
+            nameFile = @"J:\Documents\8 семестр\Диплом\CountZero3.xlsx";
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics1.xlsx";
+            derivativePointsCoefThin1 = differentiation4points(duplicatePoints1, 1);
+            derivativePointsCoefThin1 = Differentiation(derivativePointsCoefThin1);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints1, derivativePointsCoefThin1);            
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin1);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 1;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
+            }
+
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
+            derivativePointsCoefThin2 = differentiation4points(duplicatePoints2, 2);
+            derivativePointsCoefThin2 = Differentiation(derivativePointsCoefThin2);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints2, derivativePointsCoefThin2);            
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 2;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics3.xlsx";
+            derivativePointsCoefThin3 = differentiation4points(duplicatePoints3, 3);
+            derivativePointsCoefThin3 = Differentiation(derivativePointsCoefThin3);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints3, derivativePointsCoefThin3);
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin3);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 3;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            nameSheet = "Дифференцирование по четырем узловым точкам";
+            WriteExcel(nameColumns, valueColumns, countColumns, countLines, nameFile, nameSheet);
+
+
+
+
+
+
+
+            //if (window == 0)
+            //{
+            //    if (thinning == 5)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 1;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //    if (thinning == 10)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 2;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //}
+            //if (window == 3)
+            //{
+            //    if (thinning == 5)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 3;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //    if (thinning == 10)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 9;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //}
+            //if (window == 5)
+            //{
+            //    if (thinning == 5)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 4;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //    if (thinning == 10)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 10;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //}
+            //if (window == 7)
+            //{
+            //    if (thinning == 5)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 5;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //    if (thinning == 10)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 11;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //}
+            //if (window == 9)
+            //{
+            //    if (thinning == 5)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 6;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //    if (thinning == 10)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 12;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //}
+            //if (window == 11)
+            //{
+            //    if (thinning == 5)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 7;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //    if (thinning == 10)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 13;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //}
+            //if (window == 13)
+            //{
+            //    if (thinning == 5)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 8;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //    if (thinning == 10)
+            //    {
+            //        int[] countZeroInInterval = CountZeroInInterval(countZero);
+            //        j = 14;
+            //        for (int i = 0; i < countLines; i++)
+            //        {
+            //            valueColumns[i, j] = Convert.ToString(countZeroInInterval[i]);
+
+            //        }
+            //    }
+            //}
         }
 
         private void EndWatch_Click(object sender, EventArgs e)
@@ -2144,7 +2409,7 @@ string nameFile, string nameSheet)
                         }
                     }
                 }
-                string nameFile = @"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx";
+                string nameFile = @"J:\Documents\8 семестр\Диплом\Characteristics.xlsx";//@"D:\ВУЗ\4 курс\Диплом\DATA\Characteristics.xlsx";
                 string nameSheet = "Characteristics";
                 WriteExcel(nameСolumns, valueColumns, countColumns, CountPeriods, nameFile, nameSheet);
             }
