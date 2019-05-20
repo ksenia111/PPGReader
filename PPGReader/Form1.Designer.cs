@@ -493,7 +493,7 @@
             this.comboBox2.Size = new System.Drawing.Size(356, 24);
             this.comboBox2.TabIndex = 30;
             this.comboBox2.Text = "Сглаживание методом скользящего среднего";
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBoxFindCharacteristic_SelectedIndexChanged);
             // 
             // comboBoxFindCharacteristic
             // 
