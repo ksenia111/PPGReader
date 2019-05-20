@@ -71,6 +71,7 @@
             this.button8 = new System.Windows.Forms.Button();
             this.EndWatch = new System.Windows.Forms.Button();
             this.WriteCharacteristics = new System.Windows.Forms.Button();
+            this.comboBox2 = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
             this.SuspendLayout();
@@ -132,7 +133,7 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(837, 245);
+            this.richTextBox1.Location = new System.Drawing.Point(843, 379);
             this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(302, 355);
@@ -274,11 +275,11 @@
             // 
             // FullSearchCharacteristics
             // 
-            this.FullSearchCharacteristics.Location = new System.Drawing.Point(839, 217);
+            this.FullSearchCharacteristics.Location = new System.Drawing.Point(839, 291);
             this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
-            this.FullSearchCharacteristics.Size = new System.Drawing.Size(335, 23);
+            this.FullSearchCharacteristics.Size = new System.Drawing.Size(148, 23);
             this.FullSearchCharacteristics.TabIndex = 17;
-            this.FullSearchCharacteristics.Text = "Найти характеристики с помощью полного перебора";
+            this.FullSearchCharacteristics.Text = "Найти характеристики";
             this.FullSearchCharacteristics.UseVisualStyleBackColor = true;
             this.FullSearchCharacteristics.Click += new System.EventHandler(this.FullSearchCharacteristics_Click);
             // 
@@ -390,7 +391,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(1156, 256);
+            this.button8.Location = new System.Drawing.Point(1167, 379);
             this.button8.Margin = new System.Windows.Forms.Padding(2);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(80, 63);
@@ -401,17 +402,17 @@
             // 
             // EndWatch
             // 
-            this.EndWatch.Location = new System.Drawing.Point(987, 373);
+            this.EndWatch.Location = new System.Drawing.Point(839, 349);
             this.EndWatch.Name = "EndWatch";
-            this.EndWatch.Size = new System.Drawing.Size(188, 23);
-            this.EndWatch.TabIndex = 25;
+            this.EndWatch.Size = new System.Drawing.Size(176, 23);
+            this.EndWatch.TabIndex = 29;
             this.EndWatch.Text = "Просмотр периодов закончен";
             this.EndWatch.UseVisualStyleBackColor = true;
             this.EndWatch.Click += new System.EventHandler(this.EndWatch_Click);
             // 
             // WriteCharacteristics
             // 
-            this.WriteCharacteristics.Location = new System.Drawing.Point(1180, 217);
+            this.WriteCharacteristics.Location = new System.Drawing.Point(839, 320);
             this.WriteCharacteristics.Name = "WriteCharacteristics";
             this.WriteCharacteristics.Size = new System.Drawing.Size(178, 23);
             this.WriteCharacteristics.TabIndex = 27;
@@ -419,11 +420,29 @@
             this.WriteCharacteristics.UseVisualStyleBackColor = true;
             this.WriteCharacteristics.Click += new System.EventHandler(this.WriteCharacteristics_Click_1);
             // 
+            // comboBox2
+            // 
+            this.comboBox2.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.comboBox2.FormattingEnabled = true;
+            this.comboBox2.Items.AddRange(new object[] {
+            "Полный перебор значений",
+            "Градиентный метод",
+            "Метод Ньютона"});
+            this.comboBox2.Location = new System.Drawing.Point(993, 291);
+            this.comboBox2.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBox2.Name = "comboBox2";
+            this.comboBox2.Size = new System.Drawing.Size(290, 21);
+            this.comboBox2.TabIndex = 28;
+            this.comboBox2.Text = "Полный перебор значений";
+            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBox2_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1194, 747);
+            this.ClientSize = new System.Drawing.Size(1328, 747);
+            this.Controls.Add(this.EndWatch);
+            this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.WriteCharacteristics);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.comboBox1);
@@ -492,6 +511,7 @@
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button EndWatch;
         private System.Windows.Forms.Button WriteCharacteristics;
+        private System.Windows.Forms.ComboBox comboBox2;
     }
 }
 
