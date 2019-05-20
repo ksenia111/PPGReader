@@ -42,6 +42,8 @@ namespace PPGReader
         bool smoothingClick = false;
         bool tagSmoothingPeriod = false;
         int[] forDrawing;
+        string selectedState;
+        string selectedSmoothingMethod;
 
         public Form1()
         {
@@ -182,6 +184,27 @@ namespace PPGReader
             return SmoothedData;
         }
 
+        private int[] NonlinearSmoothing(int beginPeriod, int endPeriod, int[] points)
+        {
+            int n = points.Length;
+            int[] SmoothedData = new int[n];
+
+            SmoothedData[0] = (39 * points[0] + 8 * points[1] - 4 * (points[2] + points[3] - points[4]) + points[5] - 2 * points[6]) / 42;
+            SmoothedData[1] = (8 * points[0] + 19 * points[1] + 16 * points[2] + 6 * points[3] - 4 * points[4] - 7 * points[5] + 4 * points[6]) / 42;
+            SmoothedData[2] = (-4 * points[0] + 16 * points[1] + 19 * points[2] + 12 * points[3] + 2 * points[4] - 4 * points[5] + points[6]) / 42;
+
+            for (int i = 3; i < n - 3; i++)
+            {
+                SmoothedData[i] = (7 * points[i] + 6 * (points[i + 1] + points[i - 1]) + 3 * (points[i + 2] + points[i - 2]) - 2 * (points[i + 3] + points[i - 3])) / 21;
+            }
+
+            SmoothedData[n - 3] = (points[n - 7] - 4 * points[n - 6] + 2 * points[n - 5] + 12 * points[n - 4] + 19 * points[n - 3] + 16 * points[n - 2] - 4 * points[n - 1]) / 42;
+            SmoothedData[n - 2] = (4 * points[n - 7] - 7 * points[n - 6] - 4 * points[n - 5] + 6 * points[n - 4] + 16 * points[n - 3] + 19 * points[n - 2] + 8 * points[n - 1]) / 42;
+            SmoothedData[n - 1] = (-2 * points[n - 7] + 4 * points[n - 6] + points[n - 5] - 4 * points[n - 4] - 4 * points[n - 3] + 8 * points[n - 2] + 39 * points[n - 1]) / 42;
+
+            return SmoothedData;
+        }
+
         /// Сглаживание
         private void Smoothing(int beginPeriod, int endPeriod, int window)
         {
@@ -196,7 +219,9 @@ namespace PPGReader
             }
 
             int[] smoothedData = new int[Period];
-            smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
+            if (selectedSmoothingMethod == null || selectedSmoothingMethod == "Сглаживание методом скользящего среднего")
+                smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
+            if (selectedSmoothingMethod == "Сглаживание полиномами 2 порядка по 7 точкам") smoothedData = NonlinearSmoothing(beginPeriod, endPeriod, pointsForSmoothing);
 
             int j = 0;
             for (int i = beginPeriod; i < endPeriod; i++)
@@ -2014,7 +2039,6 @@ string nameFile, string nameSheet)
             return excelData;
         }
 
-        string selectedState;
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectedState = comboBox1.SelectedItem.ToString();
@@ -2315,6 +2339,11 @@ string nameFile, string nameSheet)
                 string nameSheet = "Characteristics";
                 WriteExcel(nameСolumns, valueColumns, countColumns, CountPeriods, nameFile, nameSheet);
             }
+        }
+
+        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedSmoothingMethod = comboBox2.SelectedItem.ToString();
         }
     }
 }
