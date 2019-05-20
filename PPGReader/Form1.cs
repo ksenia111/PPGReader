@@ -1364,7 +1364,7 @@ namespace PPGReader
 
         }
 
-        private int CalcEndPeriodGrad(PeriodPPG periodPPG, int begin, int averageLength, int percent, int percentD)
+        private int CalcEndPeriodGrad(PeriodPPG periodPPG, int begin, int previousLengthPeriod, int percent, int percentD)
         {
             int searchInterval = percent * previousLengthPeriod / 100;
             int check = percentD * previousLengthPeriod / 100;
@@ -2393,7 +2393,6 @@ string nameFile, string nameSheet)
         private void EndWatch_Click(object sender, EventArgs e)
         {
             IsEndWatch = false;
-        }
         }
 
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
