@@ -29,83 +29,345 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            this.buttonCalc = new System.Windows.Forms.Button();
-            this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.buttonDrawPPG = new System.Windows.Forms.Button();
+            this.chartPPG = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.textBoxPath = new System.Windows.Forms.TextBox();
             this.textBoxW = new System.Windows.Forms.TextBox();
-            this.buttonIncrease = new System.Windows.Forms.Button();
-            this.buttonDecrease = new System.Windows.Forms.Button();
+            this.buttonIncreaseScale = new System.Windows.Forms.Button();
+            this.buttonDecreaseScale = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.textBoxSinglingRate = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.labelSmoothingWindow = new System.Windows.Forms.Label();
+            this.buttonIncreaseWindow = new System.Windows.Forms.Button();
+            this.buttonDecreaseWindow = new System.Windows.Forms.Button();
+            this.buttonSmoothingPeriod = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.FullSearchCharacteristics = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.chart2 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.button8 = new System.Windows.Forms.Button();
+            this.buttonTagSmoothingPeriod = new System.Windows.Forms.Button();
+            this.textBoxSmoothingPeriod = new System.Windows.Forms.TextBox();
+            this.labelValueSmoothingPeriod = new System.Windows.Forms.Label();
+            this.buttonFindDerivate = new System.Windows.Forms.Button();
+            this.buttonCancelSmoothingPeriod = new System.Windows.Forms.Button();
+            this.buttonApplySmoothing = new System.Windows.Forms.Button();
+            this.chartDPPG = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.comboBoxDifferentiationMethod = new System.Windows.Forms.ComboBox();
+            this.buttonFindCountOfZeros = new System.Windows.Forms.Button();
             this.EndWatch = new System.Windows.Forms.Button();
             this.WriteCharacteristics = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.chart3 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.buttonFindSecondDerivate = new System.Windows.Forms.Button();
+            this.chartDDPPG = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.comboBoxSmoothingMethod = new System.Windows.Forms.ComboBox();
             this.comboBoxFindCharacteristic = new System.Windows.Forms.ComboBox();
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPPG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartDPPG)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartDDPPG)).BeginInit();
             this.SuspendLayout();
             // 
-            // buttonCalc
+            // buttonDrawPPG
             // 
-            this.buttonCalc.Location = new System.Drawing.Point(751, 84);
-            this.buttonCalc.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.buttonCalc.Name = "buttonCalc";
-            this.buttonCalc.Size = new System.Drawing.Size(150, 23);
-            this.buttonCalc.TabIndex = 0;
-            this.buttonCalc.Text = "Нарисовать график";
-            this.buttonCalc.UseVisualStyleBackColor = true;
-            this.buttonCalc.Click += new System.EventHandler(this.button1_Click);
+            this.buttonDrawPPG.Location = new System.Drawing.Point(1001, 103);
+            this.buttonDrawPPG.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.buttonDrawPPG.Name = "buttonDrawPPG";
+            this.buttonDrawPPG.Size = new System.Drawing.Size(200, 28);
+            this.buttonDrawPPG.TabIndex = 0;
+            this.buttonDrawPPG.Text = "Нарисовать график";
+            this.buttonDrawPPG.UseVisualStyleBackColor = true;
+            this.buttonDrawPPG.Click += new System.EventHandler(this.buttonDrawPPG_Click);
             // 
-            // chart1
+            // chartPPG
+            // 
+            chartArea4.Name = "ChartArea1";
+            this.chartPPG.ChartAreas.Add(chartArea4);
+            this.chartPPG.ContextMenuStrip = this.contextMenuStrip1;
+            legend4.Name = "Legend1";
+            this.chartPPG.Legends.Add(legend4);
+            this.chartPPG.Location = new System.Drawing.Point(13, 6);
+            this.chartPPG.Margin = new System.Windows.Forms.Padding(4);
+            this.chartPPG.Name = "chartPPG";
+            series13.ChartArea = "ChartArea1";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series13.Legend = "Legend1";
+            series13.Name = "Series1";
+            series14.ChartArea = "ChartArea1";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series14.Legend = "Legend1";
+            series14.Name = "Series2";
+            series15.ChartArea = "ChartArea1";
+            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series15.Legend = "Legend1";
+            series15.Name = "Series3";
+            series16.ChartArea = "ChartArea1";
+            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series16.Legend = "Legend1";
+            series16.Name = "Series4";
+            this.chartPPG.Series.Add(series13);
+            this.chartPPG.Series.Add(series14);
+            this.chartPPG.Series.Add(series15);
+            this.chartPPG.Series.Add(series16);
+            this.chartPPG.Size = new System.Drawing.Size(963, 391);
+            this.chartPPG.TabIndex = 1;
+            this.chartPPG.Text = "chartPPG";
+            this.chartPPG.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseClick);
+            this.chartPPG.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseDown);
+            this.chartPPG.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseMove);
+            // 
+            // contextMenuStrip1
+            // 
+            this.contextMenuStrip1.Enabled = false;
+            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.contextMenuStrip1.Name = "contextMenuStrip1";
+            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(1001, 532);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(616, 150);
+            this.richTextBox1.TabIndex = 2;
+            this.richTextBox1.Text = "";
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(1003, 32);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(45, 17);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Файл";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(1468, 38);
+            this.label2.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(17, 17);
+            this.label2.TabIndex = 4;
+            this.label2.Text = "w";
+            // 
+            // textBoxPath
+            // 
+            this.textBoxPath.Location = new System.Drawing.Point(1063, 30);
+            this.textBoxPath.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.textBoxPath.Name = "textBoxPath";
+            this.textBoxPath.Size = new System.Drawing.Size(371, 22);
+            this.textBoxPath.TabIndex = 5;
+            // 
+            // textBoxW
+            // 
+            this.textBoxW.Location = new System.Drawing.Point(1501, 34);
+            this.textBoxW.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.textBoxW.Name = "textBoxW";
+            this.textBoxW.Size = new System.Drawing.Size(25, 22);
+            this.textBoxW.TabIndex = 6;
+            this.textBoxW.Text = "5";
+            // 
+            // buttonIncreaseScale
+            // 
+            this.buttonIncreaseScale.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonIncreaseScale.Image = ((System.Drawing.Image)(resources.GetObject("buttonIncreaseScale.Image")));
+            this.buttonIncreaseScale.Location = new System.Drawing.Point(1311, 90);
+            this.buttonIncreaseScale.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
+            this.buttonIncreaseScale.Name = "buttonIncreaseScale";
+            this.buttonIncreaseScale.Size = new System.Drawing.Size(57, 22);
+            this.buttonIncreaseScale.TabIndex = 7;
+            this.buttonIncreaseScale.UseVisualStyleBackColor = false;
+            this.buttonIncreaseScale.Click += new System.EventHandler(this.buttonIncreaseScale_Click);
+            // 
+            // buttonDecreaseScale
+            // 
+            this.buttonDecreaseScale.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonDecreaseScale.Image = ((System.Drawing.Image)(resources.GetObject("buttonDecreaseScale.Image")));
+            this.buttonDecreaseScale.Location = new System.Drawing.Point(1311, 117);
+            this.buttonDecreaseScale.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
+            this.buttonDecreaseScale.Name = "buttonDecreaseScale";
+            this.buttonDecreaseScale.Size = new System.Drawing.Size(57, 22);
+            this.buttonDecreaseScale.TabIndex = 8;
+            this.buttonDecreaseScale.UseVisualStyleBackColor = false;
+            this.buttonDecreaseScale.Click += new System.EventHandler(this.buttonDecreaseScale_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(1003, 70);
+            this.label3.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(163, 17);
+            this.label3.TabIndex = 9;
+            this.label3.Text = "Частота прореживания";
+            // 
+            // textBoxSinglingRate
+            // 
+            this.textBoxSinglingRate.Location = new System.Drawing.Point(1184, 66);
+            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.textBoxSinglingRate.Name = "textBoxSinglingRate";
+            this.textBoxSinglingRate.Size = new System.Drawing.Size(23, 22);
+            this.textBoxSinglingRate.TabIndex = 10;
+            this.textBoxSinglingRate.Text = "5";
+            // 
+            // labelSmoothingWindow
+            // 
+            this.labelSmoothingWindow.AutoSize = true;
+            this.labelSmoothingWindow.Location = new System.Drawing.Point(1391, 196);
+            this.labelSmoothingWindow.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.labelSmoothingWindow.Name = "labelSmoothingWindow";
+            this.labelSmoothingWindow.Size = new System.Drawing.Size(130, 17);
+            this.labelSmoothingWindow.TabIndex = 11;
+            this.labelSmoothingWindow.Text = "Окно сглаживания";
+            // 
+            // buttonIncreaseWindow
+            // 
+            this.buttonIncreaseWindow.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonIncreaseWindow.Image = ((System.Drawing.Image)(resources.GetObject("buttonIncreaseWindow.Image")));
+            this.buttonIncreaseWindow.Location = new System.Drawing.Point(1579, 180);
+            this.buttonIncreaseWindow.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
+            this.buttonIncreaseWindow.Name = "buttonIncreaseWindow";
+            this.buttonIncreaseWindow.Size = new System.Drawing.Size(57, 22);
+            this.buttonIncreaseWindow.TabIndex = 13;
+            this.buttonIncreaseWindow.UseVisualStyleBackColor = false;
+            this.buttonIncreaseWindow.Click += new System.EventHandler(this.buttonIncreaseWindow_Click_1);
+            // 
+            // buttonDecreaseWindow
+            // 
+            this.buttonDecreaseWindow.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.buttonDecreaseWindow.Image = ((System.Drawing.Image)(resources.GetObject("buttonDecreaseWindow.Image")));
+            this.buttonDecreaseWindow.Location = new System.Drawing.Point(1579, 206);
+            this.buttonDecreaseWindow.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
+            this.buttonDecreaseWindow.Name = "buttonDecreaseWindow";
+            this.buttonDecreaseWindow.Size = new System.Drawing.Size(57, 22);
+            this.buttonDecreaseWindow.TabIndex = 14;
+            this.buttonDecreaseWindow.UseVisualStyleBackColor = false;
+            this.buttonDecreaseWindow.Click += new System.EventHandler(this.buttonDecreaseWindow_Click_1);
+            // 
+            // buttonSmoothingPeriod
+            // 
+            this.buttonSmoothingPeriod.Location = new System.Drawing.Point(1001, 223);
+            this.buttonSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
+            this.buttonSmoothingPeriod.Name = "buttonSmoothingPeriod";
+            this.buttonSmoothingPeriod.Size = new System.Drawing.Size(169, 59);
+            this.buttonSmoothingPeriod.TabIndex = 15;
+            this.buttonSmoothingPeriod.Text = "Сгладить период";
+            this.buttonSmoothingPeriod.UseVisualStyleBackColor = true;
+            this.buttonSmoothingPeriod.Click += new System.EventHandler(this.buttonSmoothingPeriod_Click_1);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(1217, 110);
+            this.label5.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(68, 17);
+            this.label5.TabIndex = 16;
+            this.label5.Text = "Масштаб";
+            // 
+            // FullSearchCharacteristics
+            // 
+            this.FullSearchCharacteristics.Location = new System.Drawing.Point(999, 405);
+            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
+            this.FullSearchCharacteristics.Size = new System.Drawing.Size(267, 23);
+            this.FullSearchCharacteristics.TabIndex = 17;
+            this.FullSearchCharacteristics.Text = "Найти характеристики";
+            this.FullSearchCharacteristics.UseVisualStyleBackColor = true;
+            this.FullSearchCharacteristics.Click += new System.EventHandler(this.FullSearchCharacteristics_Click);
+            // 
+            // buttonTagSmoothingPeriod
+            // 
+            this.buttonTagSmoothingPeriod.Location = new System.Drawing.Point(1001, 142);
+            this.buttonTagSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5);
+            this.buttonTagSmoothingPeriod.Name = "buttonTagSmoothingPeriod";
+            this.buttonTagSmoothingPeriod.Size = new System.Drawing.Size(287, 30);
+            this.buttonTagSmoothingPeriod.TabIndex = 18;
+            this.buttonTagSmoothingPeriod.Text = "Отметить период сглаживания";
+            this.buttonTagSmoothingPeriod.UseVisualStyleBackColor = true;
+            this.buttonTagSmoothingPeriod.Click += new System.EventHandler(this.buttonTagSmoothingPeriod_Click);
+            // 
+            // textBoxSmoothingPeriod
+            // 
+            this.textBoxSmoothingPeriod.Location = new System.Drawing.Point(1311, 146);
+            this.textBoxSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxSmoothingPeriod.Name = "textBoxSmoothingPeriod";
+            this.textBoxSmoothingPeriod.Size = new System.Drawing.Size(256, 22);
+            this.textBoxSmoothingPeriod.TabIndex = 19;
+            // 
+            // labelValueSmoothingPeriod
+            // 
+            this.labelValueSmoothingPeriod.AutoSize = true;
+            this.labelValueSmoothingPeriod.Location = new System.Drawing.Point(1551, 196);
+            this.labelValueSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.labelValueSmoothingPeriod.Name = "labelValueSmoothingPeriod";
+            this.labelValueSmoothingPeriod.Size = new System.Drawing.Size(16, 17);
+            this.labelValueSmoothingPeriod.TabIndex = 20;
+            this.labelValueSmoothingPeriod.Text = "3";
+            // 
+            // buttonFindDerivate
+            // 
+            this.buttonFindDerivate.Location = new System.Drawing.Point(999, 295);
+            this.buttonFindDerivate.Margin = new System.Windows.Forms.Padding(5);
+            this.buttonFindDerivate.Name = "buttonFindDerivate";
+            this.buttonFindDerivate.Size = new System.Drawing.Size(267, 31);
+            this.buttonFindDerivate.TabIndex = 21;
+            this.buttonFindDerivate.Text = "Найти производную";
+            this.buttonFindDerivate.UseVisualStyleBackColor = true;
+            this.buttonFindDerivate.Click += new System.EventHandler(this.buttonFindDerivate_Click);
+            // 
+            // buttonCancelSmoothingPeriod
+            // 
+            this.buttonCancelSmoothingPeriod.Location = new System.Drawing.Point(1180, 223);
+            this.buttonCancelSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5);
+            this.buttonCancelSmoothingPeriod.Name = "buttonCancelSmoothingPeriod";
+            this.buttonCancelSmoothingPeriod.Size = new System.Drawing.Size(212, 59);
+            this.buttonCancelSmoothingPeriod.TabIndex = 22;
+            this.buttonCancelSmoothingPeriod.Text = "Отменить сглаживание периода";
+            this.buttonCancelSmoothingPeriod.UseVisualStyleBackColor = true;
+            this.buttonCancelSmoothingPeriod.Click += new System.EventHandler(this.buttonCancelSmoothingPeriod_Click);
+            // 
+            // buttonApplySmoothing
+            // 
+            this.buttonApplySmoothing.Location = new System.Drawing.Point(1402, 223);
+            this.buttonApplySmoothing.Margin = new System.Windows.Forms.Padding(5);
+            this.buttonApplySmoothing.Name = "buttonApplySmoothing";
+            this.buttonApplySmoothing.Size = new System.Drawing.Size(164, 59);
+            this.buttonApplySmoothing.TabIndex = 23;
+            this.buttonApplySmoothing.Text = "Применить";
+            this.buttonApplySmoothing.UseVisualStyleBackColor = true;
+            this.buttonApplySmoothing.Click += new System.EventHandler(this.buttonApplySmoothing_Click);
+            // 
+            // chartDPPG
             // 
             chartArea1.Name = "ChartArea1";
-            this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.ContextMenuStrip = this.contextMenuStrip1;
+            this.chartDPPG.ChartAreas.Add(chartArea1);
+            this.chartDPPG.ContextMenuStrip = this.contextMenuStrip1;
             legend1.Name = "Legend1";
-            this.chart1.Legends.Add(legend1);
-            this.chart1.Location = new System.Drawing.Point(10, 5);
-            this.chart1.Name = "chart1";
+            this.chartDPPG.Legends.Add(legend1);
+            this.chartDPPG.Location = new System.Drawing.Point(13, 405);
+            this.chartDPPG.Margin = new System.Windows.Forms.Padding(4);
+            this.chartDPPG.Name = "chartDPPG";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series1.Legend = "Legend1";
@@ -122,249 +384,84 @@
             series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series4.Legend = "Legend1";
             series4.Name = "Series4";
-            this.chart1.Series.Add(series1);
-            this.chart1.Series.Add(series2);
-            this.chart1.Series.Add(series3);
-            this.chart1.Series.Add(series4);
-            this.chart1.Size = new System.Drawing.Size(722, 318);
-            this.chart1.TabIndex = 1;
-            this.chart1.Text = "chart1";
-            this.chart1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseClick);
-            this.chart1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseDown);
-            this.chart1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chart1_MouseMove);
+            this.chartDPPG.Series.Add(series1);
+            this.chartDPPG.Series.Add(series2);
+            this.chartDPPG.Series.Add(series3);
+            this.chartDPPG.Series.Add(series4);
+            this.chartDPPG.Size = new System.Drawing.Size(963, 278);
+            this.chartDPPG.TabIndex = 24;
+            this.chartDPPG.Text = "chart2";
             // 
-            // contextMenuStrip1
+            // comboBoxDifferentiationMethod
             // 
-            this.contextMenuStrip1.Enabled = false;
-            this.contextMenuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.comboBoxDifferentiationMethod.BackColor = System.Drawing.SystemColors.HighlightText;
+            this.comboBoxDifferentiationMethod.FormattingEnabled = true;
+            this.comboBoxDifferentiationMethod.Items.AddRange(new object[] {
+            "Дифференцирование первого порядка точности",
+            "Дифференцирование второго порядка точности",
+            "Дифференцирование по 4 узловым точкам"});
+            this.comboBoxDifferentiationMethod.Location = new System.Drawing.Point(1275, 302);
+            this.comboBoxDifferentiationMethod.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.comboBoxDifferentiationMethod.Name = "comboBoxDifferentiationMethod";
+            this.comboBoxDifferentiationMethod.Size = new System.Drawing.Size(360, 24);
+            this.comboBoxDifferentiationMethod.TabIndex = 25;
+            this.comboBoxDifferentiationMethod.Text = "Дифференцирование первого порядка точности";
+            this.comboBoxDifferentiationMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxDifferentiationMethod_SelectedIndexChanged);
             // 
-            // richTextBox1
+            // buttonFindCountOfZeros
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(751, 432);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(463, 123);
-            this.richTextBox1.TabIndex = 2;
-            this.richTextBox1.Text = "";
+            this.buttonFindCountOfZeros.Location = new System.Drawing.Point(1278, 330);
+            this.buttonFindCountOfZeros.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonFindCountOfZeros.Name = "buttonFindCountOfZeros";
+            this.buttonFindCountOfZeros.Size = new System.Drawing.Size(175, 63);
+            this.buttonFindCountOfZeros.TabIndex = 26;
+            this.buttonFindCountOfZeros.Text = "Посчитать количество нулей на периодах";
+            this.buttonFindCountOfZeros.UseVisualStyleBackColor = true;
+            this.buttonFindCountOfZeros.Click += new System.EventHandler(this.buttonFindCountOfZeros_Click);
             // 
-            // label1
+            // EndWatch
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(752, 26);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 13);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Файл";
+            this.EndWatch.Location = new System.Drawing.Point(1001, 471);
+            this.EndWatch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.EndWatch.Name = "EndWatch";
+            this.EndWatch.Size = new System.Drawing.Size(267, 30);
+            this.EndWatch.TabIndex = 29;
+            this.EndWatch.Text = "Просмотр периодов закончен";
+            this.EndWatch.UseVisualStyleBackColor = true;
+            this.EndWatch.Click += new System.EventHandler(this.EndWatch_Click);
             // 
-            // label2
+            // WriteCharacteristics
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(1101, 31);
-            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(15, 13);
-            this.label2.TabIndex = 4;
-            this.label2.Text = "w";
+            this.WriteCharacteristics.Location = new System.Drawing.Point(999, 438);
+            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.WriteCharacteristics.Name = "WriteCharacteristics";
+            this.WriteCharacteristics.Size = new System.Drawing.Size(267, 28);
+            this.WriteCharacteristics.TabIndex = 27;
+            this.WriteCharacteristics.Text = "Записать характеристики";
+            this.WriteCharacteristics.UseVisualStyleBackColor = true;
+            this.WriteCharacteristics.Click += new System.EventHandler(this.WriteCharacteristics_Click_1);
             // 
-            // textBoxPath
+            // buttonFindSecondDerivate
             // 
-            this.textBoxPath.Location = new System.Drawing.Point(797, 24);
-            this.textBoxPath.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.textBoxPath.Name = "textBoxPath";
-            this.textBoxPath.Size = new System.Drawing.Size(279, 20);
-            this.textBoxPath.TabIndex = 5;
+            this.buttonFindSecondDerivate.Location = new System.Drawing.Point(1001, 342);
+            this.buttonFindSecondDerivate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonFindSecondDerivate.Name = "buttonFindSecondDerivate";
+            this.buttonFindSecondDerivate.Size = new System.Drawing.Size(267, 31);
+            this.buttonFindSecondDerivate.TabIndex = 28;
+            this.buttonFindSecondDerivate.Text = "Найти вторую производную";
+            this.buttonFindSecondDerivate.UseVisualStyleBackColor = true;
+            this.buttonFindSecondDerivate.Click += new System.EventHandler(this.buttonFindSecondDerivate_Click);
             // 
-            // textBoxW
-            // 
-            this.textBoxW.Location = new System.Drawing.Point(1126, 28);
-            this.textBoxW.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.textBoxW.Name = "textBoxW";
-            this.textBoxW.Size = new System.Drawing.Size(20, 20);
-            this.textBoxW.TabIndex = 6;
-            this.textBoxW.Text = "5";
-            // 
-            // buttonIncrease
-            // 
-            this.buttonIncrease.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonIncrease.Image = ((System.Drawing.Image)(resources.GetObject("buttonIncrease.Image")));
-            this.buttonIncrease.Location = new System.Drawing.Point(983, 73);
-            this.buttonIncrease.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.buttonIncrease.Name = "buttonIncrease";
-            this.buttonIncrease.Size = new System.Drawing.Size(43, 18);
-            this.buttonIncrease.TabIndex = 7;
-            this.buttonIncrease.UseVisualStyleBackColor = false;
-            this.buttonIncrease.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // buttonDecrease
-            // 
-            this.buttonDecrease.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.buttonDecrease.Image = ((System.Drawing.Image)(resources.GetObject("buttonDecrease.Image")));
-            this.buttonDecrease.Location = new System.Drawing.Point(983, 95);
-            this.buttonDecrease.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.buttonDecrease.Name = "buttonDecrease";
-            this.buttonDecrease.Size = new System.Drawing.Size(43, 18);
-            this.buttonDecrease.TabIndex = 8;
-            this.buttonDecrease.UseVisualStyleBackColor = false;
-            this.buttonDecrease.Click += new System.EventHandler(this.button3_Click);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(752, 57);
-            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(126, 13);
-            this.label3.TabIndex = 9;
-            this.label3.Text = "Частота прореживания";
-            // 
-            // textBoxSinglingRate
-            // 
-            this.textBoxSinglingRate.Location = new System.Drawing.Point(888, 54);
-            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.textBoxSinglingRate.Name = "textBoxSinglingRate";
-            this.textBoxSinglingRate.Size = new System.Drawing.Size(18, 20);
-            this.textBoxSinglingRate.TabIndex = 10;
-            this.textBoxSinglingRate.Text = "5";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(1043, 159);
-            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(103, 13);
-            this.label4.TabIndex = 11;
-            this.label4.Text = "Окно сглаживания";
-            // 
-            // button1
-            // 
-            this.button1.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button1.Image = ((System.Drawing.Image)(resources.GetObject("button1.Image")));
-            this.button1.Location = new System.Drawing.Point(1184, 141);
-            this.button1.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(43, 18);
-            this.button1.TabIndex = 13;
-            this.button1.UseVisualStyleBackColor = false;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // button2
-            // 
-            this.button2.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.button2.Image = ((System.Drawing.Image)(resources.GetObject("button2.Image")));
-            this.button2.Location = new System.Drawing.Point(1184, 167);
-            this.button2.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(43, 18);
-            this.button2.TabIndex = 14;
-            this.button2.UseVisualStyleBackColor = false;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(751, 181);
-            this.button3.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(127, 48);
-            this.button3.TabIndex = 15;
-            this.button3.Text = "Сгладить период";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click_1);
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(913, 89);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 13);
-            this.label5.TabIndex = 16;
-            this.label5.Text = "Масштаб";
-            // 
-            // FullSearchCharacteristics
-            // 
-            this.FullSearchCharacteristics.Location = new System.Drawing.Point(749, 329);
-            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
-            this.FullSearchCharacteristics.Size = new System.Drawing.Size(200, 19);
-            this.FullSearchCharacteristics.TabIndex = 17;
-            this.FullSearchCharacteristics.Text = "Найти характеристики";
-            this.FullSearchCharacteristics.UseVisualStyleBackColor = true;
-            this.FullSearchCharacteristics.Click += new System.EventHandler(this.FullSearchCharacteristics_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(751, 115);
-            this.button4.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(215, 24);
-            this.button4.TabIndex = 18;
-            this.button4.Text = "Отметить период сглаживания";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(983, 119);
-            this.textBox2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(193, 20);
-            this.textBox2.TabIndex = 19;
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(1163, 159);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(13, 13);
-            this.label6.TabIndex = 20;
-            this.label6.Text = "3";
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(749, 240);
-            this.button5.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(200, 25);
-            this.button5.TabIndex = 21;
-            this.button5.Text = "Найти производную";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(937, 190);
-            this.button6.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(159, 48);
-            this.button6.TabIndex = 22;
-            this.button6.Text = "Отменить сглаживание периода";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(1104, 190);
-            this.button7.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(123, 48);
-            this.button7.TabIndex = 23;
-            this.button7.Text = "Применить";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
-            // 
-            // chart2
+            // chartDDPPG
             // 
             chartArea2.Name = "ChartArea1";
-            this.chart2.ChartAreas.Add(chartArea2);
-            this.chart2.ContextMenuStrip = this.contextMenuStrip1;
+            this.chartDDPPG.ChartAreas.Add(chartArea2);
+            this.chartDDPPG.ContextMenuStrip = this.contextMenuStrip1;
             legend2.Name = "Legend1";
-            this.chart2.Legends.Add(legend2);
-            this.chart2.Location = new System.Drawing.Point(10, 329);
-            this.chart2.Name = "chart2";
+            this.chartDDPPG.Legends.Add(legend2);
+            this.chartDDPPG.Location = new System.Drawing.Point(13, 690);
+            this.chartDDPPG.Margin = new System.Windows.Forms.Padding(4);
+            this.chartDDPPG.Name = "chartDDPPG";
             series5.ChartArea = "ChartArea1";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series5.Legend = "Legend1";
@@ -381,120 +478,27 @@
             series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
             series8.Legend = "Legend1";
             series8.Name = "Series4";
-            this.chart2.Series.Add(series5);
-            this.chart2.Series.Add(series6);
-            this.chart2.Series.Add(series7);
-            this.chart2.Series.Add(series8);
-            this.chart2.Size = new System.Drawing.Size(722, 226);
-            this.chart2.TabIndex = 24;
-            this.chart2.Text = "chart2";
+            this.chartDDPPG.Series.Add(series5);
+            this.chartDDPPG.Series.Add(series6);
+            this.chartDDPPG.Series.Add(series7);
+            this.chartDDPPG.Series.Add(series8);
+            this.chartDDPPG.Size = new System.Drawing.Size(963, 226);
+            this.chartDDPPG.TabIndex = 29;
+            this.chartDDPPG.Text = "chart3";
             // 
-            // comboBox1
+            // comboBoxSmoothingMethod
             // 
-            this.comboBox1.BackColor = System.Drawing.SystemColors.HighlightText;
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Items.AddRange(new object[] {
-            "Дифференцирование первого порядка точности",
-            "Дифференцирование второго порядка точности",
-            "Дифференцирование по 4 узловым точкам"});
-            this.comboBox1.Location = new System.Drawing.Point(956, 240);
-            this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(271, 21);
-            this.comboBox1.TabIndex = 25;
-            this.comboBox1.Text = "Дифференцирование первого порядка точности";
-            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(956, 272);
-            this.button8.Margin = new System.Windows.Forms.Padding(2);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(131, 51);
-            this.button8.TabIndex = 26;
-            this.button8.Text = "Посчитать количество нулей на периодах";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
-            // 
-            // EndWatch
-            // 
-            this.EndWatch.Location = new System.Drawing.Point(751, 383);
-            this.EndWatch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.EndWatch.Name = "EndWatch";
-            this.EndWatch.Size = new System.Drawing.Size(200, 24);
-            this.EndWatch.TabIndex = 29;
-            this.EndWatch.Text = "Просмотр периодов закончен";
-            this.EndWatch.UseVisualStyleBackColor = true;
-            this.EndWatch.Click += new System.EventHandler(this.EndWatch_Click);
-            // 
-            // WriteCharacteristics
-            // 
-            this.WriteCharacteristics.Location = new System.Drawing.Point(749, 356);
-            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.WriteCharacteristics.Name = "WriteCharacteristics";
-            this.WriteCharacteristics.Size = new System.Drawing.Size(200, 23);
-            this.WriteCharacteristics.TabIndex = 27;
-            this.WriteCharacteristics.Text = "Записать характеристики";
-            this.WriteCharacteristics.UseVisualStyleBackColor = true;
-            this.WriteCharacteristics.Click += new System.EventHandler(this.WriteCharacteristics_Click_1);
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(751, 278);
-            this.button9.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(200, 25);
-            this.button9.TabIndex = 28;
-            this.button9.Text = "Найти вторую производную";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.button9_Click);
-            // 
-            // chart3
-            // 
-            chartArea3.Name = "ChartArea1";
-            this.chart3.ChartAreas.Add(chartArea3);
-            this.chart3.ContextMenuStrip = this.contextMenuStrip1;
-            legend3.Name = "Legend1";
-            this.chart3.Legends.Add(legend3);
-            this.chart3.Location = new System.Drawing.Point(10, 561);
-            this.chart3.Name = "chart3";
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series9.Legend = "Legend1";
-            series9.Name = "Series1";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.Legend = "Legend1";
-            series10.Name = "Series2";
-            series11.ChartArea = "ChartArea1";
-            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series11.Legend = "Legend1";
-            series11.Name = "Series3";
-            series12.ChartArea = "ChartArea1";
-            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series12.Legend = "Legend1";
-            series12.Name = "Series4";
-            this.chart3.Series.Add(series9);
-            this.chart3.Series.Add(series10);
-            this.chart3.Series.Add(series11);
-            this.chart3.Series.Add(series12);
-            this.chart3.Size = new System.Drawing.Size(722, 184);
-            this.chart3.TabIndex = 29;
-            this.chart3.Text = "chart3";
-            // 
-            // comboBox2
-            // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Items.AddRange(new object[] {
+            this.comboBoxSmoothingMethod.FormattingEnabled = true;
+            this.comboBoxSmoothingMethod.Items.AddRange(new object[] {
             "Сглаживание методом скользящего среднего",
             "Сглаживание полиномами 2 порядка по 7 точкам"});
-            this.comboBox2.Location = new System.Drawing.Point(751, 156);
-            this.comboBox2.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(268, 21);
-            this.comboBox2.TabIndex = 30;
-            this.comboBox2.Text = "Сглаживание методом скользящего среднего";
-            this.comboBox2.SelectedIndexChanged += new System.EventHandler(this.comboBoxFindCharacteristic_SelectedIndexChanged);
+            this.comboBoxSmoothingMethod.Location = new System.Drawing.Point(1001, 192);
+            this.comboBoxSmoothingMethod.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.comboBoxSmoothingMethod.Name = "comboBoxSmoothingMethod";
+            this.comboBoxSmoothingMethod.Size = new System.Drawing.Size(356, 24);
+            this.comboBoxSmoothingMethod.TabIndex = 30;
+            this.comboBoxSmoothingMethod.Text = "Сглаживание методом скользящего среднего";
+            this.comboBoxSmoothingMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxSmoothingMethod_SelectedIndexChanged);
             // 
             // comboBoxFindCharacteristic
             // 
@@ -504,58 +508,58 @@
             "Полный перебор значений",
             "Градиентный метод",
             "Метод Ньютона"});
-            this.comboBoxFindCharacteristic.Location = new System.Drawing.Point(958, 327);
-            this.comboBoxFindCharacteristic.Margin = new System.Windows.Forms.Padding(2);
+            this.comboBoxFindCharacteristic.Location = new System.Drawing.Point(1278, 405);
+            this.comboBoxFindCharacteristic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxFindCharacteristic.Name = "comboBoxFindCharacteristic";
-            this.comboBoxFindCharacteristic.Size = new System.Drawing.Size(218, 21);
+            this.comboBoxFindCharacteristic.Size = new System.Drawing.Size(289, 24);
             this.comboBoxFindCharacteristic.TabIndex = 28;
             this.comboBoxFindCharacteristic.Text = "Полный перебор значений";
             this.comboBoxFindCharacteristic.SelectedIndexChanged += new System.EventHandler(this.comboBoxFindCharacteristic_SelectedIndexChanged);
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1264, 609);
+            this.ClientSize = new System.Drawing.Size(1685, 750);
             this.Controls.Add(this.EndWatch);
             this.Controls.Add(this.comboBoxFindCharacteristic);
-            this.Controls.Add(this.comboBox2);
-            this.Controls.Add(this.chart3);
-            this.Controls.Add(this.button9);
+            this.Controls.Add(this.comboBoxSmoothingMethod);
+            this.Controls.Add(this.chartDDPPG);
+            this.Controls.Add(this.buttonFindSecondDerivate);
             this.Controls.Add(this.WriteCharacteristics);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.comboBox1);
-            this.Controls.Add(this.chart2);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.buttonFindCountOfZeros);
+            this.Controls.Add(this.comboBoxDifferentiationMethod);
+            this.Controls.Add(this.chartDPPG);
+            this.Controls.Add(this.buttonApplySmoothing);
+            this.Controls.Add(this.buttonCancelSmoothingPeriod);
+            this.Controls.Add(this.buttonFindDerivate);
+            this.Controls.Add(this.labelValueSmoothingPeriod);
+            this.Controls.Add(this.textBoxSmoothingPeriod);
+            this.Controls.Add(this.buttonTagSmoothingPeriod);
             this.Controls.Add(this.FullSearchCharacteristics);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.label4);
+            this.Controls.Add(this.buttonSmoothingPeriod);
+            this.Controls.Add(this.buttonDecreaseWindow);
+            this.Controls.Add(this.buttonIncreaseWindow);
+            this.Controls.Add(this.labelSmoothingWindow);
             this.Controls.Add(this.textBoxSinglingRate);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.buttonDecrease);
-            this.Controls.Add(this.buttonIncrease);
+            this.Controls.Add(this.buttonDecreaseScale);
+            this.Controls.Add(this.buttonIncreaseScale);
             this.Controls.Add(this.textBoxW);
             this.Controls.Add(this.textBoxPath);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.richTextBox1);
-            this.Controls.Add(this.chart1);
-            this.Controls.Add(this.buttonCalc);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Controls.Add(this.chartPPG);
+            this.Controls.Add(this.buttonDrawPPG);
+            this.Margin = new System.Windows.Forms.Padding(5);
             this.Name = "Form1";
             this.Text = "PPGReader";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
-            ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.chart3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartPPG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartDPPG)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.chartDDPPG)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -563,38 +567,38 @@
 
         #endregion
 
-        private System.Windows.Forms.Button buttonCalc;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
+        private System.Windows.Forms.Button buttonDrawPPG;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartPPG;
         private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBoxPath;
         private System.Windows.Forms.TextBox textBoxW;
-        private System.Windows.Forms.Button buttonIncrease;
-        private System.Windows.Forms.Button buttonDecrease;
+        private System.Windows.Forms.Button buttonIncreaseScale;
+        private System.Windows.Forms.Button buttonDecreaseScale;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox textBoxSinglingRate;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Label labelSmoothingWindow;
+        private System.Windows.Forms.Button buttonIncreaseWindow;
+        private System.Windows.Forms.Button buttonDecreaseWindow;
+        private System.Windows.Forms.Button buttonSmoothingPeriod;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Button FullSearchCharacteristics;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart2;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button buttonTagSmoothingPeriod;
+        private System.Windows.Forms.TextBox textBoxSmoothingPeriod;
+        private System.Windows.Forms.Label labelValueSmoothingPeriod;
+        private System.Windows.Forms.Button buttonFindDerivate;
+        private System.Windows.Forms.Button buttonCancelSmoothingPeriod;
+        private System.Windows.Forms.Button buttonApplySmoothing;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartDPPG;
+        private System.Windows.Forms.ComboBox comboBoxDifferentiationMethod;
+        private System.Windows.Forms.Button buttonFindCountOfZeros;
         private System.Windows.Forms.Button EndWatch;
         private System.Windows.Forms.Button WriteCharacteristics;
-        private System.Windows.Forms.ComboBox comboBox2;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.DataVisualization.Charting.Chart chart3;
+        private System.Windows.Forms.ComboBox comboBoxSmoothingMethod;
+        private System.Windows.Forms.Button buttonFindSecondDerivate;
+        private System.Windows.Forms.DataVisualization.Charting.Chart chartDDPPG;
         private System.Windows.Forms.ComboBox comboBoxFindCharacteristic;
     }
 }

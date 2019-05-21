@@ -38,7 +38,7 @@ namespace PPGReader
         double beginSmoothingPeriod = 0;
         double endSmoothingPeriod = 0;
         int clickTagSmoothingPeriod = 0;
-        bool drowChartClick = false;
+        bool drawChartClick = false;
         bool fixSmoothing = false;
         bool smoothingClick = false;
         bool tagSmoothingPeriod = false;
@@ -60,7 +60,7 @@ namespace PPGReader
             contextMenuStrip1.Items.AddRange(new[] { PeriobMenuItem, aMenuItem,
                                                      bMenuItem, cMenuItem, dMenuItem, eMenuItem});
             // ассоциируем контекстное меню с чартом
-            chart1.ContextMenuStrip = contextMenuStrip1;
+            chartPPG.ContextMenuStrip = contextMenuStrip1;
             // устанавливаем обработчики событий для меню
             PeriobMenuItem.Click += PeriobMenuItem_Click;
             aMenuItem.Click += aMenuItem_Click;
@@ -141,7 +141,7 @@ namespace PPGReader
             if (p % 2 == 0)
             {
                 p++; //если окно четное, увеличиваем на 1 для симметрии
-                label6.Text = Convert.ToString(p);
+                labelValueSmoothingPeriod.Text = Convert.ToString(p);
             }
             int m = (p - 1) / 2; //размах окна влево и вправо от текущей позиции
             int n = points.Length;// - m * 2;
@@ -206,9 +206,11 @@ namespace PPGReader
             return SmoothedData;
         }
 
+        
         /// Сглаживание
-        private void Smoothing(int beginPeriod, int endPeriod, int window)
+        private void Smoothing(int beginPeriod, int endPeriod)
         {
+            
             int Period = endPeriod - beginPeriod;
             int[] pointsForSmoothing = new int[Period];
             fixSmoothing = false;
@@ -221,8 +223,15 @@ namespace PPGReader
 
             int[] smoothedData = new int[Period];
             if (selectedSmoothingMethod == null || selectedSmoothingMethod == "Сглаживание методом скользящего среднего")
+            {
+                int window = Convert.ToInt32(labelValueSmoothingPeriod.Text);
                 smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
-            if (selectedSmoothingMethod == "Сглаживание полиномами 2 порядка по 7 точкам") smoothedData = NonlinearSmoothing(beginPeriod, endPeriod, pointsForSmoothing);
+
+            }
+            if (selectedSmoothingMethod == "Сглаживание полиномами 2 порядка по 7 точкам")
+            {
+                smoothedData = NonlinearSmoothing(beginPeriod, endPeriod, pointsForSmoothing);
+            }
 
             int j = 0;
             for (int i = beginPeriod; i < endPeriod; i++)
@@ -240,11 +249,11 @@ namespace PPGReader
                 x[i] = i;
             }
 
-            double size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+            double size = chartPPG.ChartAreas[0].AxisX.ScaleView.Size;
 
             Draw(x, forDrawing);
 
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = size;
+            chartPPG.ChartAreas[0].AxisX.ScaleView.Size = size;
         }
 
         /// <summary>
@@ -272,11 +281,11 @@ namespace PPGReader
                 x[i] = i;
             }
 
-            double size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+            double size = chartPPG.ChartAreas[0].AxisX.ScaleView.Size;
 
             Draw(x, forDrawing);
 
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = size;
+            chartPPG.ChartAreas[0].AxisX.ScaleView.Size = size;
         }
 
         /// <summary>
@@ -301,21 +310,21 @@ namespace PPGReader
                 pointPPGs[i] = new PointPPG(i, duplicatePoints[i]);
             }
 
-            double size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+            double size = chartPPG.ChartAreas[0].AxisX.ScaleView.Size;
 
             ppg = new PPG(pointPPGs, n);
             Draw(ppg);
 
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = size;
+            chartPPG.ChartAreas[0].AxisX.ScaleView.Size = size;
         }
 
         int[] duplicatePoints1;
         int[] duplicatePoints2;
         int[] duplicatePoints3;
         int[] duplicatePoints4;
-        private void button1_Click(object sender, EventArgs e)
+        private void buttonDrawPPG_Click(object sender, EventArgs e)
         {
-            drowChartClick = true;
+            drawChartClick = true;
 
             //чтение
             int[] points = Read();
@@ -344,35 +353,35 @@ namespace PPGReader
 
             ppg = new PPG(pointPPGs, n);
             Draw(ppg);
-            chart2.Series[0].Points.Clear();
-            chart3.Series[0].Points.Clear();
-            chart2.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            chartDPPG.Series[0].Points.Clear();
+            chartDDPPG.Series[0].Points.Clear();
+            chartDPPG.ChartAreas[0].AxisX.ScaleView.Size = 400;
         }
 
         //Рисование ФПГ
         private void Draw(PPG ppg)
         { 
-            chart1.ChartAreas[0].AxisX.Minimum = 0;
-            chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
-            chart1.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
-            chart1.Series[0].ChartType = SeriesChartType.Line;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 400;
-            chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
-            chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
-            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
-            chart1.ChartAreas[0].Position.Height = 85;
-            chart1.ChartAreas[0].Position.Width = 80;
-            chart1.ChartAreas[0].InnerPlotPosition.X = 5;
-            chart1.ChartAreas[0].AxisX.LineWidth = 2;
-            chart1.ChartAreas[0].AxisX.LineColor = Color.Gray;
-            chart1.ChartAreas[0].AxisY.LineWidth = 2;
-            chart1.ChartAreas[0].AxisY.LineColor = Color.Gray;
+            chartPPG.ChartAreas[0].AxisX.Minimum = 0;
+            chartPPG.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            chartPPG.ChartAreas[0].AxisX.ScrollBar.IsPositionedInside = true;
+            chartPPG.Series[0].ChartType = SeriesChartType.Line;
+            chartPPG.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            chartPPG.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chartPPG.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chartPPG.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
+            chartPPG.ChartAreas[0].Position.Height = 85;
+            chartPPG.ChartAreas[0].Position.Width = 80;
+            chartPPG.ChartAreas[0].InnerPlotPosition.X = 5;
+            chartPPG.ChartAreas[0].AxisX.LineWidth = 2;
+            chartPPG.ChartAreas[0].AxisX.LineColor = Color.Gray;
+            chartPPG.ChartAreas[0].AxisY.LineWidth = 2;
+            chartPPG.ChartAreas[0].AxisY.LineColor = Color.Gray;
 
-            chart1.ChartAreas[0].AxisX.Crossing = 0;
-            chart1.ChartAreas[0].AxisY.Crossing = 50;
-            chart1.Series[0].Points.DataBindXY(ppg.GetX(), ppg.GetY()); 
-            chart1.Series[0].Color = Color.Blue;
-            chart1.Series[0].MarkerSize = 1;
+            chartPPG.ChartAreas[0].AxisX.Crossing = 0;
+            chartPPG.ChartAreas[0].AxisY.Crossing = 50;
+            chartPPG.Series[0].Points.DataBindXY(ppg.GetX(), ppg.GetY()); 
+            chartPPG.Series[0].Color = Color.Blue;
+            chartPPG.Series[0].MarkerSize = 1;
             IsDrawn = true;
             
         }
@@ -381,79 +390,79 @@ namespace PPGReader
         private void Draw(DPPG dppg)
         {
             
-            chart2.ChartAreas[0].AxisX.Minimum = 0;
-            chart2.ChartAreas[0].InnerPlotPosition.X = 5;
-            chart2.ChartAreas[0].AxisX.Crossing = 0;
-            chart2.ChartAreas[0].AxisX.LineWidth = 2;
-            chart2.ChartAreas[0].AxisX.LineColor = Color.Gray;
-            chart2.ChartAreas[0].AxisY.LineWidth = 2;
-            chart2.ChartAreas[0].AxisY.LineColor = Color.Gray;
-            chart2.ChartAreas[0].AxisY.Crossing = 0;
-            chart2.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
-            chart2.ChartAreas[0].Position.Height = 85;
-            chart2.ChartAreas[0].Position.Width = 80;
+            chartDPPG.ChartAreas[0].AxisX.Minimum = 0;
+            chartDPPG.ChartAreas[0].InnerPlotPosition.X = 5;
+            chartDPPG.ChartAreas[0].AxisX.Crossing = 0;
+            chartDPPG.ChartAreas[0].AxisX.LineWidth = 2;
+            chartDPPG.ChartAreas[0].AxisX.LineColor = Color.Gray;
+            chartDPPG.ChartAreas[0].AxisY.LineWidth = 2;
+            chartDPPG.ChartAreas[0].AxisY.LineColor = Color.Gray;
+            chartDPPG.ChartAreas[0].AxisY.Crossing = 0;
+            chartDPPG.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
+            chartDPPG.ChartAreas[0].Position.Height = 85;
+            chartDPPG.ChartAreas[0].Position.Width = 80;
             
-            chart2.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
-            chart2.ChartAreas[0].AxisX.ScaleView.Size = 400;
-            chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY"; 
-            chart2.Series[0].ToolTip = "X = #VALX, Y = #VALY";
-            chart2.Series[0].Points.DataBindXY(dppg.GetX(), dppg.GetY());
-            chart2.Series[0].BorderWidth = 2;
-            chart2.Series[0].Color = Color.Green;
-            chart2.Series[0].MarkerSize = 1;
+            chartDPPG.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            chartDPPG.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            chartDPPG.Series[0].ToolTip = "X = #VALX, Y = #VALY"; 
+            chartDPPG.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chartDPPG.Series[0].Points.DataBindXY(dppg.GetX(), dppg.GetY());
+            chartDPPG.Series[0].BorderWidth = 2;
+            chartDPPG.Series[0].Color = Color.Green;
+            chartDPPG.Series[0].MarkerSize = 1;
 
         }
 
         private void Draw(DDPPG ddppg)
         {
 
-            chart3.ChartAreas[0].AxisX.Minimum = 0;
-            chart3.ChartAreas[0].InnerPlotPosition.X = 5;
-            chart3.ChartAreas[0].AxisX.Crossing = 0;
-            chart3.ChartAreas[0].AxisX.LineWidth = 2;
-            chart3.ChartAreas[0].AxisX.LineColor = Color.Gray;
-            chart3.ChartAreas[0].AxisY.LineWidth = 2;
-            chart3.ChartAreas[0].AxisY.LineColor = Color.Gray;
-            chart3.ChartAreas[0].AxisY.Crossing = 0;
-            chart3.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
-            chart3.ChartAreas[0].Position.Height = 85;
-            chart3.ChartAreas[0].Position.Width = 80;
+            chartDDPPG.ChartAreas[0].AxisX.Minimum = 0;
+            chartDDPPG.ChartAreas[0].InnerPlotPosition.X = 5;
+            chartDDPPG.ChartAreas[0].AxisX.Crossing = 0;
+            chartDDPPG.ChartAreas[0].AxisX.LineWidth = 2;
+            chartDDPPG.ChartAreas[0].AxisX.LineColor = Color.Gray;
+            chartDDPPG.ChartAreas[0].AxisY.LineWidth = 2;
+            chartDDPPG.ChartAreas[0].AxisY.LineColor = Color.Gray;
+            chartDDPPG.ChartAreas[0].AxisY.Crossing = 0;
+            chartDDPPG.ChartAreas[0].AxisX.MajorGrid.Interval = 50;
+            chartDDPPG.ChartAreas[0].Position.Height = 85;
+            chartDDPPG.ChartAreas[0].Position.Width = 80;
 
-            chart3.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
-            chart3.ChartAreas[0].AxisX.ScaleView.Size = 400;
-            chart3.Series[0].ToolTip = "X = #VALX, Y = #VALY";
-            chart3.Series[0].ToolTip = "X = #VALX, Y = #VALY";
-            chart3.Series[0].Points.DataBindXY(ddppg.GetX(), ddppg.GetY());
-            chart3.Series[0].BorderWidth = 2;
-            chart3.Series[0].Color = Color.Green;
-            chart3.Series[0].MarkerSize = 1;
+            chartDDPPG.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            chartDDPPG.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            chartDDPPG.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chartDDPPG.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chartDDPPG.Series[0].Points.DataBindXY(ddppg.GetX(), ddppg.GetY());
+            chartDDPPG.Series[0].BorderWidth = 2;
+            chartDDPPG.Series[0].Color = Color.Green;
+            chartDDPPG.Series[0].MarkerSize = 1;
 
         }
 
         //Рисование массива х и у
         private void Draw(int[] x, int[] y)
         {
-            chart1.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
-            chart1.Series[0].ChartType = SeriesChartType.Line;
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = 400;
-            chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
-            chart1.Series[0].ToolTip = "X = #VALX, Y = #VALY";
-            chart1.Series[0].Points.DataBindXY(x, y); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
-            chart1.Series[0].Color = Color.Blue;
-            chart1.Series[0].MarkerSize = 1;
+            chartPPG.ChartAreas[0].AxisX.ScrollBar.Enabled = true;
+            chartPPG.Series[0].ChartType = SeriesChartType.Line;
+            chartPPG.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            chartPPG.Series[0].ToolTip = "X = #VALX, Y = #VALY"; // выдает подсказки в виде координат Х и У(ниже) при наведении мыши на точку
+            chartPPG.Series[0].ToolTip = "X = #VALX, Y = #VALY";
+            chartPPG.Series[0].Points.DataBindXY(x, y); //если отрисовывать просто точки, то график все равно выглядит как линия при не очень большом увеличении
+            chartPPG.Series[0].Color = Color.Blue;
+            chartPPG.Series[0].MarkerSize = 1;
         }
 
 
 
-        private void chart1_MouseClick(object sender, MouseEventArgs e)
+        private void chartPPG_MouseClick(object sender, MouseEventArgs e)
         {
-            var result = chart1.HitTest(e.X, e.Y);
+            var result = chartPPG.HitTest(e.X, e.Y);
 
-            chart1.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
-            chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+            chartPPG.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+            chartPPG.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
 
-            double pX = chart1.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
-            double pY = chart1.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
+            double pX = chartPPG.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
+            double pY = chartPPG.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
             richTextBox1.Text = Convert.ToString(pX) + "  " + Convert.ToString(pY); //вывод координат т-ки, на которую кликнули
 
             if (tagSmoothingPeriod == true)
@@ -474,14 +483,14 @@ namespace PPGReader
                 {
                     if (clickTagSmoothingPeriod == 1)
                     {
-                        beginSmoothingPeriod = chart1.ChartAreas[0].CursorX.Position;
-                        textBox2.Text = "Начало: " + Convert.ToString(beginSmoothingPeriod);
+                        beginSmoothingPeriod = chartPPG.ChartAreas[0].CursorX.Position;
+                        textBoxSmoothingPeriod.Text = "Начало: " + Convert.ToString(beginSmoothingPeriod);
                     }
 
                     if (clickTagSmoothingPeriod == 2)
                     {
-                        endSmoothingPeriod = chart1.ChartAreas[0].CursorX.Position;
-                        textBox2.Text += ". Конец: " + Convert.ToString(endSmoothingPeriod);
+                        endSmoothingPeriod = chartPPG.ChartAreas[0].CursorX.Position;
+                        textBoxSmoothingPeriod.Text += ". Конец: " + Convert.ToString(endSmoothingPeriod);
                         clickTagSmoothingPeriod = 0;
                         tagSmoothingPeriod = false;
                     }
@@ -489,43 +498,43 @@ namespace PPGReader
             }
         }
 
-        private void chart1_MouseMove(object sender, MouseEventArgs e)
+        private void chartPPG_MouseMove(object sender, MouseEventArgs e)
         {
-            chart1.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
-            chart1.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+            chartPPG.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+            chartPPG.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
 
-            double pX = chart1.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
-            double pY = chart1.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
+            double pX = chartPPG.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
+            double pY = chartPPG.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
 
-            var result = chart1.HitTest(e.X, e.Y);
+            var result = chartPPG.HitTest(e.X, e.Y);
             Cursor = result.ChartElementType == ChartElementType.DataPoint ? Cursors.Hand : Cursors.Default;
             //chart1.Series[0].Color = result.ChartElementType == ChartElementType.DataPoint ? Color.Coral : Color.Blue; //у всего графика меняется цвет, как у одной точки заменить, пока не придумала
-            chart1.Series[0].Color = result.Series == chart1.Series[0] ? Color.Green : Color.Blue;
+            chartPPG.Series[0].Color = result.Series == chartPPG.Series[0] ? Color.Green : Color.Blue;
 
-            chart2.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
-            chart2.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+            chartDPPG.ChartAreas[0].CursorX.SetCursorPixelPosition(new Point(e.X, e.Y), true);
+            chartDPPG.ChartAreas[0].CursorY.SetCursorPixelPosition(new Point(e.X, e.Y), true);
 
-            double dpX = chart2.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
-            double dpY = chart2.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
+            double dpX = chartDPPG.ChartAreas[0].CursorX.Position; //X Axis Coordinate of your mouse cursor
+            double dpY = chartDPPG.ChartAreas[0].CursorY.Position; //Y Axis Coordinate of your mouse cursor
 
-            var dresult = chart2.HitTest(e.X, e.Y);
+            var dresult = chartDPPG.HitTest(e.X, e.Y);
             Cursor = dresult.ChartElementType == ChartElementType.DataPoint ? Cursors.Hand : Cursors.Default;
         }
 
 
-        private void button2_Click(object sender, EventArgs e)
+        private void buttonIncreaseScale_Click(object sender, EventArgs e)
         {
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
-            chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
-            chart3.ChartAreas[0].AxisX.ScaleView.Size = chart3.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
+            chartPPG.ChartAreas[0].AxisX.ScaleView.Size = chartPPG.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
+            chartDPPG.ChartAreas[0].AxisX.ScaleView.Size = chartDPPG.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
+            chartDDPPG.ChartAreas[0].AxisX.ScaleView.Size = chartDDPPG.ChartAreas[0].AxisX.ScaleView.Size / 1.5;
         }
 
 
-        private void button3_Click(object sender, EventArgs e)
+        private void buttonDecreaseScale_Click(object sender, EventArgs e)
         {
-            chart1.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
-            chart2.ChartAreas[0].AxisX.ScaleView.Size = chart2.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
-            chart3.ChartAreas[0].AxisX.ScaleView.Size = chart3.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
+            chartPPG.ChartAreas[0].AxisX.ScaleView.Size = chartPPG.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
+            chartDPPG.ChartAreas[0].AxisX.ScaleView.Size = chartDPPG.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
+            chartDDPPG.ChartAreas[0].AxisX.ScaleView.Size = chartDDPPG.ChartAreas[0].AxisX.ScaleView.Size * 1.5;
         }
 
         //подписи к первым 10 отмеченным периодам
@@ -533,13 +542,13 @@ namespace PPGReader
         {
             for (int i = 0; i < CountPeriods; i++)
             {
-                if (Periods[i].Begin != 0) chart1.Series[0].Points[Periods[i].Begin].Label = "T";
-                if (Periods[i].End != 0) chart1.Series[0].Points[Periods[i].End].Label = "T";
-                if (Periods[i].A != 0) chart1.Series[0].Points[Periods[i].A].Label = "A";
-                if (Periods[i].B != 0) chart1.Series[0].Points[Periods[i].B].Label = "B";
-                if (Periods[i].C != 0) chart1.Series[0].Points[Periods[i].C].Label = "C";
-                if (Periods[i].D != 0) chart1.Series[0].Points[Periods[i].D].Label = "D";
-                if (Periods[i].E != 0) chart1.Series[0].Points[Periods[i].E].Label = "E";
+                if (Periods[i].Begin != 0) chartPPG.Series[0].Points[Periods[i].Begin].Label = "T";
+                if (Periods[i].End != 0) chartPPG.Series[0].Points[Periods[i].End].Label = "T";
+                if (Periods[i].A != 0) chartPPG.Series[0].Points[Periods[i].A].Label = "A";
+                if (Periods[i].B != 0) chartPPG.Series[0].Points[Periods[i].B].Label = "B";
+                if (Periods[i].C != 0) chartPPG.Series[0].Points[Periods[i].C].Label = "C";
+                if (Periods[i].D != 0) chartPPG.Series[0].Points[Periods[i].D].Label = "D";
+                if (Periods[i].E != 0) chartPPG.Series[0].Points[Periods[i].E].Label = "E";
             }
         }
 
@@ -547,13 +556,13 @@ namespace PPGReader
         //подписи к 1 периоду
         private void WriteLabelForChart(PeriodPPG periodPPG)
         {
-            if (periodPPG.Begin != 0) chart1.Series[0].Points[periodPPG.Begin].Label = "T";
-            if (periodPPG.End != 0) chart1.Series[0].Points[periodPPG.End].Label = "T";
-            if (periodPPG.A != 0) chart1.Series[0].Points[periodPPG.A].Label = "A";
-            if (periodPPG.B != 0) chart1.Series[0].Points[periodPPG.B].Label = "B";
-            if (periodPPG.C != 0) chart1.Series[0].Points[periodPPG.C].Label = "C";
-            if (periodPPG.D != 0) chart1.Series[0].Points[periodPPG.D].Label = "D";
-            if (periodPPG.E != 0) chart1.Series[0].Points[periodPPG.E].Label = "E";
+            if (periodPPG.Begin != 0) chartPPG.Series[0].Points[periodPPG.Begin].Label = "T";
+            if (periodPPG.End != 0) chartPPG.Series[0].Points[periodPPG.End].Label = "T";
+            if (periodPPG.A != 0) chartPPG.Series[0].Points[periodPPG.A].Label = "A";
+            if (periodPPG.B != 0) chartPPG.Series[0].Points[periodPPG.B].Label = "B";
+            if (periodPPG.C != 0) chartPPG.Series[0].Points[periodPPG.C].Label = "C";
+            if (periodPPG.D != 0) chartPPG.Series[0].Points[periodPPG.D].Label = "D";
+            if (periodPPG.E != 0) chartPPG.Series[0].Points[periodPPG.E].Label = "E";
         }
 
         //подписи ко всем периодам
@@ -590,7 +599,7 @@ namespace PPGReader
 
             if (CheckCursorOnChart())
             {
-                chart1.Series[0].Points[(int)x].Label = "T";
+                chartPPG.Series[0].Points[(int)x].Label = "T";
                 PeriodClick++;
             }
             if (PeriodClick == CountPeriods + 1)
@@ -624,7 +633,7 @@ namespace PPGReader
                 else
                 {
                     point = (int)x;
-                    chart1.Series[0].Points[(int)x].Label = label;
+                    chartPPG.Series[0].Points[(int)x].Label = label;
                     ResetValue();
 
                 }
@@ -716,36 +725,36 @@ namespace PPGReader
             }
         }
 
-        private void chart1_MouseDown(object sender, MouseEventArgs e)
+        private void chartPPG_MouseDown(object sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Right)
             {
-                var result = chart1.HitTest(e.X, e.Y);
+                var result = chartPPG.HitTest(e.X, e.Y);
                 СursorOnChart = result.ChartElementType == ChartElementType.DataPoint;
-                x = chart1.ChartAreas[0].CursorX.Position;
-                y = chart1.ChartAreas[0].CursorY.Position;
+                x = chartPPG.ChartAreas[0].CursorX.Position;
+                y = chartPPG.ChartAreas[0].CursorY.Position;
             }
         }
 
         //увеличение окна
-        private void button1_Click_1(object sender, EventArgs e)
+        private void buttonIncreaseWindow_Click_1(object sender, EventArgs e)
         {
-            int window = Convert.ToInt32(label6.Text);
+            int window = Convert.ToInt32(labelValueSmoothingPeriod.Text);
             increaseClick = window;
             increaseClick += 2;
-            label6.Text = Convert.ToString(increaseClick);
+            labelValueSmoothingPeriod.Text = Convert.ToString(increaseClick);
         }
 
         //уменьшение окна
-        private void button2_Click_1(object sender, EventArgs e)
+        private void buttonDecreaseWindow_Click_1(object sender, EventArgs e)
         {
-            int window = Convert.ToInt32(label6.Text);
+            int window = Convert.ToInt32(labelValueSmoothingPeriod.Text);
 
             if (window > 3)
             {
                 decreaseClick = window;
                 decreaseClick -= 2;
-                label6.Text = Convert.ToString(decreaseClick);
+                labelValueSmoothingPeriod.Text = Convert.ToString(decreaseClick);
             }
             if (window <= 3) MessageBox.Show("Невозможно уменьшить окно сглаживания",
                                              "Ошибка",
@@ -755,17 +764,17 @@ namespace PPGReader
         }
 
         //"отметить период сглаживания"
-        private void button4_Click(object sender, EventArgs e)
+        private void buttonTagSmoothingPeriod_Click(object sender, EventArgs e)
         {
             tagSmoothingPeriod = true;
-            textBox2.Text = "";
+            textBoxSmoothingPeriod.Text = "";
             beginSmoothingPeriod = 0;
             endSmoothingPeriod = 0;
         }
 
 
         //сглаживание
-        private void button3_Click_1(object sender, EventArgs e)
+        private void buttonSmoothingPeriod_Click_1(object sender, EventArgs e)
         {
             if (endSmoothingPeriod == 0) MessageBox.Show("Отметьте период сглаживания",
                                              "Ошибка",
@@ -778,14 +787,14 @@ namespace PPGReader
                 int Period = endPeriod - beginPeriod;
                 //int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
 
-                int window = Convert.ToInt32(label6.Text);
+                
 
-                Smoothing(beginPeriod, endPeriod, window);
+                Smoothing(beginPeriod, endPeriod);
             }
         }
 
         //отменить сглаживание
-        private void button6_Click(object sender, EventArgs e)
+        private void buttonCancelSmoothingPeriod_Click(object sender, EventArgs e)
         {
             if (fixSmoothing == true) MessageBox.Show("Невозможно отменить сглаживание, т.к. вы нажали кнопку \"Применить\"",
                                                "Ошибка",
@@ -811,7 +820,7 @@ namespace PPGReader
 
 
         //применить сглаживание
-        private void button7_Click(object sender, EventArgs e)
+        private void buttonApplySmoothing_Click(object sender, EventArgs e)
         {
             if (smoothingClick == false) MessageBox.Show("Невозможно применить сглаживание, т.к. оно не было выполнено. Выберите период сглаживания и нажмите \"сглдить период\". После этого можете применить сглаживание",
                                                "Ошибка",
@@ -1768,9 +1777,9 @@ namespace PPGReader
         }
 
         double[] derivativePoints;
-        private void button5_Click(object sender, EventArgs e)
+        private void buttonFindDerivate_Click(object sender, EventArgs e)
         {
-            if (drowChartClick == false)
+            if (drawChartClick == false)
             {
                 MessageBox.Show("Для нахождения производной сначала нужно нарисовать график ФПГ. Нажмите \" Нарисовать график\"",
                                 "Ошибка",
@@ -1808,7 +1817,7 @@ namespace PPGReader
                 dppg = new DPPG(pointDPPG, n);
                 IsFoundDerivative = true;
                 Draw(dppg);
-                chart2.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+                chartDPPG.ChartAreas[0].AxisX.ScaleView.Size = chartPPG.ChartAreas[0].AxisX.ScaleView.Size;
             }
         }
 
@@ -1825,7 +1834,7 @@ namespace PPGReader
             return secondDerivativePoints;
         }
         
-        private void button9_Click(object sender, EventArgs e)
+        private void buttonFindSecondDerivate_Click(object sender, EventArgs e)
         {
             if (IsFoundDerivative == false)
             {
@@ -1851,7 +1860,7 @@ namespace PPGReader
                 }
                 ddppg = new DDPPG(pointDDPPG, n);
                 Draw(ddppg);
-                chart3.ChartAreas[0].AxisX.ScaleView.Size = chart1.ChartAreas[0].AxisX.ScaleView.Size;
+                chartDDPPG.ChartAreas[0].AxisX.ScaleView.Size = chartPPG.ChartAreas[0].AxisX.ScaleView.Size;
             }
         }
 
@@ -2086,9 +2095,9 @@ string nameFile, string nameSheet)
             return excelData;
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxDifferentiationMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedState = comboBox1.SelectedItem.ToString();
+            selectedState = comboBoxDifferentiationMethod.SelectedItem.ToString();
         }
 
         private int[] CountZero(PeriodPPG[] periodPPG, double[] derivativePoints)
@@ -2098,9 +2107,9 @@ string nameFile, string nameSheet)
 
             for (int i = 0; i < n; i++)
             {
-                for (int j = periodPPG[i].Begin; j < periodPPG[i].End; j++)
+                for (int j = periodPPG[i].Begin + 1; j < periodPPG[i].End - 1; j++) 
                 {
-                    if (derivativePoints[j] == 0) countZero[i]++;
+                    if ((derivativePoints[j] == 0 && derivativePoints[j - 1] > 0 && derivativePoints[j + 1] < 0) || (derivativePoints[j] == 0 && derivativePoints[j - 1] < 0 && derivativePoints[j + 1] > 0)) countZero[i]++;
                 }
             }
             
@@ -2148,13 +2157,17 @@ string nameFile, string nameSheet)
             return countZeroInInterval;
         }
 
-        private void button8_Click(object sender, EventArgs e)
+        private void buttonFindCountOfZeros_Click(object sender, EventArgs e)
         {
 
 
-            const int countColumns = 5;
+            const int countColumns = 13;
             const int countLines = 5;
-            string[] nameColumns = new string[countColumns] { "Интервалы | Коэффициент прореживания", "1", "2", "3", "4" };
+            string[] nameColumns = new string[countColumns] { "Интервалы | Параметры", "Коэф. прореж. 1", "Коэф. прореж. 2", "Коэф. прореж. 3", "Коэф. прореж. 4",
+            "Коэф. прореж. 1, сглаж. скользящ.средн.", "Коэф. прореж. 1, сглаж. полиномами",
+            "Коэф. прореж. 2, сглаж. скользящ.средн.", "Коэф. прореж. 2, сглаж. полиномами",
+            "Коэф. прореж. 3, сглаж. скользящ.средн.", "Коэф. прореж. 3, сглаж. полиномами",
+            "Коэф. прореж. 4, сглаж. скользящ.средн.", "Коэф. прореж. 4, сглаж. полиномами"};
             string[,] valueColumns = new string[countColumns, countLines];
 
             string nameFile;
@@ -2165,13 +2178,30 @@ string nameFile, string nameSheet)
             valueColumns[0, 0] = "0-5";
             valueColumns[1, 0] = "6-10";
             valueColumns[2, 0] = "11-15";
-            valueColumns[3, 0] = "15-20";
+            valueColumns[3, 0] = "16-20";
             valueColumns[4, 0] = "21и больше";
 
+            int[] duplicatePoints11;
+            int[] duplicatePoints12;
+            int[] duplicatePoints21;
+            int[] duplicatePoints22;
+            int[] duplicatePoints31;
+            int[] duplicatePoints32;
+            int[] duplicatePoints41;
+            int[] duplicatePoints42;
+
             double[] derivativePointsCoefThin1;
+            double[] derivativePointsCoefThin11;
+            double[] derivativePointsCoefThin12;
             double[] derivativePointsCoefThin2;
+            double[] derivativePointsCoefThin21;
+            double[] derivativePointsCoefThin22;
             double[] derivativePointsCoefThin3;
+            double[] derivativePointsCoefThin31;
+            double[] derivativePointsCoefThin32;
             double[] derivativePointsCoefThin4;
+            double[] derivativePointsCoefThin41;
+            double[] derivativePointsCoefThin42;
 
             int[] countZero1;
             int[] countZero2;
@@ -2195,6 +2225,9 @@ string nameFile, string nameSheet)
             {
                 valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
             }
+            int zero = 0;
+            int end = duplicatePoints1.Length;
+            
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
             derivativePointsCoefThin2 = differentiation1orderAccuracy(duplicatePoints2, 2);
@@ -2387,7 +2420,7 @@ string nameFile, string nameSheet)
 
         private void comboBoxFindCharacteristic_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedStateFindCharacteristic = comboBox2.SelectedItem.ToString();
+            selectedStateFindCharacteristic = comboBoxFindCharacteristic.SelectedItem.ToString();
         }
 
         private void EndWatch_Click(object sender, EventArgs e)
@@ -2395,9 +2428,24 @@ string nameFile, string nameSheet)
             IsEndWatch = false;
         }
 
-        private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
+        private void comboBoxSmoothingMethod_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedSmoothingMethod = comboBox2.SelectedItem.ToString();
+            selectedSmoothingMethod = comboBoxSmoothingMethod.SelectedItem.ToString();
+            if (selectedSmoothingMethod== "Сглаживание методом скользящего среднего")
+            {
+                labelValueSmoothingPeriod.Visible = true;
+                buttonIncreaseWindow.Visible = true;
+                buttonDecreaseWindow.Visible = true;
+                labelSmoothingWindow.Visible = true;
+            }
+            if (selectedSmoothingMethod == "Сглаживание полиномами 2 порядка по 7 точкам")
+            {
+                labelValueSmoothingPeriod.Visible = false;
+                buttonIncreaseWindow.Visible = false;
+                buttonDecreaseWindow.Visible = false;
+                labelSmoothingWindow.Visible = false;
+            }
         }
+
     }
 }
