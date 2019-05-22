@@ -77,7 +77,7 @@ namespace PPGReader
 
         private int[] Read()
         {
-            string filePath = @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz";//@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //  //
+            string filePath = @"J:\Documents\8 семестр\Диплом\plz\набор1\ГУЗЕЛЬ.plz"; //@"D:\ВУЗ\4 курс\Диплом\ФПГ\plz\набор1\ГУЗЕЛЬ.plz"; //textBoxPath.Text; //  //
             int w = int.Parse(textBoxW.Text);
             PeriodClick = 0;
             FileStream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -2447,5 +2447,96 @@ string nameFile, string nameSheet)
             }
         }
 
+
+        private void Form1_Resize(object sender, EventArgs e)
+        {
+            int widthIndentation = 10;
+            int heightIndentation = 5;
+            int widthChartPPG = this.Width - (chartPPG.Left + chartPPG.Width) + widthIndentation;
+            int heightPPG = (int)Math.Round(this.Height * 0.4);
+            int heightDPPG = (int)Math.Round(this.Height * 0.3);
+            int heightDDPPG = (int)Math.Round(this.Height * 0.2);
+            int widthCharts = (int)Math.Round(this.Width * 0.6);
+            int widthGropBox = (int)Math.Round(this.Width * 0.36);
+            int heightGropBox = (int)Math.Round(this.Width * 0.70);
+            WidthChartChange(widthIndentation, widthChartPPG, widthCharts, widthGropBox);
+            HeightChartChange(heightIndentation, heightPPG, heightDPPG, heightDDPPG, heightGropBox);
+
+        }
+
+        private void WidthChartChange(int widthIndentation, int widthChartPPG, int widthCharts, int widthGropBox)
+        {
+            if (chartPPG.Location.X != widthIndentation)
+            {
+                chartPPG.Left = widthIndentation;
+                chartPPG.Width = widthCharts;
+            }
+            int widthChartDPPG = this.Width - (chartDPPG.Left + chartDPPG.Width) + widthIndentation;
+            if (chartDPPG.Location.X != widthIndentation)
+            {
+                chartDPPG.Left = widthIndentation;
+                chartDPPG.Width = widthCharts;
+            }
+            int widthChartDDPPG = this.Width - (chartDDPPG.Left + chartDDPPG.Width) + widthIndentation;
+            if (chartDDPPG.Location.X != widthIndentation)
+            {
+                chartDDPPG.Left = widthIndentation;
+                chartDDPPG.Width = widthCharts;
+            }
+            if (groupBox1.Location.X != chartPPG.Width+ 2*widthIndentation)
+            {
+                groupBox1.Left = chartPPG.Width + 2 * widthIndentation;
+                groupBox1.Width = widthGropBox;
+            }
+            label1.Width = (int)Math.Round(groupBox1.Width * 0.2);
+            textBoxPath.Width = (int)Math.Round(groupBox1.Width * 0.6);
+            textBoxPath.Left = label1.Left + label1.Width + widthIndentation;
+
+            buttonDrawPPG.Width = label5.Left - widthIndentation;
+            buttonTagSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.4);
+            textBoxSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.55);
+            textBoxSmoothingPeriod.Left = buttonTagSmoothingPeriod.Left + buttonTagSmoothingPeriod.Width + widthIndentation;
+
+            comboBoxSmoothingMethod.Width = (int)Math.Round(groupBox1.Width * 0.5);
+            labelSmoothingWindow.Width = (int)Math.Round(groupBox1.Width * 0.2);
+            labelSmoothingWindow.Left = comboBoxSmoothingMethod.Left + comboBoxSmoothingMethod.Width + widthIndentation;
+            labelValueSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.1);
+            labelValueSmoothingPeriod.Left = labelSmoothingWindow.Left + labelSmoothingWindow.Width + widthIndentation;
+            buttonIncreaseWindow.Width = (int)Math.Round(groupBox1.Width * 0.1);
+            buttonDecreaseWindow.Width = (int)Math.Round(groupBox1.Width * 0.1);
+            buttonIncreaseWindow.Left = labelValueSmoothingPeriod.Left + labelValueSmoothingPeriod.Width + widthIndentation;
+            buttonDecreaseWindow.Left = labelValueSmoothingPeriod.Left + labelValueSmoothingPeriod.Width + widthIndentation;
+
+            buttonSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.3);
+            buttonCancelSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.3);
+            buttonCancelSmoothingPeriod.Left = buttonSmoothingPeriod.Left + buttonSmoothingPeriod.Width + widthIndentation;
+            buttonApplySmoothing.Width = (int)Math.Round(groupBox1.Width * 0.3);
+            buttonApplySmoothing.Left = buttonCancelSmoothingPeriod.Left + buttonCancelSmoothingPeriod.Width + widthIndentation;
+            buttonFindDerivate.Width = (int)Math.Round(groupBox1.Width * 0.4);
+            comboBoxDifferentiationMethod.Width = (int)Math.Round(groupBox1.Width * 0.55);
+            comboBoxDifferentiationMethod.Left = buttonFindDerivate.Left + buttonFindDerivate.Width + widthIndentation;
+            buttonFindSecondDerivate.Width = (int)Math.Round(groupBox1.Width * 0.4);
+            FullSearchCharacteristics.Width = (int)Math.Round(groupBox1.Width * 0.4);
+            comboBoxFindCharacteristic.Width = (int)Math.Round(groupBox1.Width * 0.55);
+            comboBoxFindCharacteristic.Left = buttonFindDerivate.Left + buttonFindDerivate.Width + widthIndentation;
+            WriteCharacteristics.Width = (int)Math.Round(groupBox1.Width * 0.4);
+            EndWatch.Width = (int)Math.Round(groupBox1.Width * 0.4);
+            richTextBox1.Width = (int)Math.Round(groupBox1.Width * 0.9);
+
+        }
+
+        private void HeightChartChange( int heightIndentation, int heightPPG, int heightDPPG, int heightDDPPG, int heightGropBox)
+        {
+            if (chartDDPPG.Location.Y != chartDPPG.Top + heightDPPG + heightIndentation)
+            {
+                chartPPG.Top = heightIndentation;
+                chartPPG.Height = heightPPG;
+                chartDPPG.Top = chartPPG.Top + heightPPG + heightIndentation;
+                chartDPPG.Height = heightDPPG;
+                chartDDPPG.Top = chartDPPG.Top + heightDPPG + heightIndentation;
+                chartDDPPG.Height = heightDDPPG;
+            }
+            groupBox1.Height = heightGropBox;
+        }
     }
 }
