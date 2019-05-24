@@ -2870,12 +2870,12 @@ namespace PPGReader
             comboBoxSmoothingMethod.Width = (int)Math.Round(groupBox1.Width * 0.5);
             labelSmoothingWindow.Width = (int)Math.Round(groupBox1.Width * 0.2);
             labelSmoothingWindow.Left = comboBoxSmoothingMethod.Left + comboBoxSmoothingMethod.Width + widthIndentation;
-            labelValueSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.1);
-            labelValueSmoothingPeriod.Left = labelSmoothingWindow.Left + labelSmoothingWindow.Width + widthIndentation;
+            labelValueSmoothingWindow.Width = (int)Math.Round(groupBox1.Width * 0.1);
+            labelValueSmoothingWindow.Left = labelSmoothingWindow.Left + labelSmoothingWindow.Width + widthIndentation;
             buttonIncreaseWindow.Width = (int)Math.Round(groupBox1.Width * 0.1);
             buttonDecreaseWindow.Width = (int)Math.Round(groupBox1.Width * 0.1);
-            buttonIncreaseWindow.Left = labelValueSmoothingPeriod.Left + labelValueSmoothingPeriod.Width + widthIndentation;
-            buttonDecreaseWindow.Left = labelValueSmoothingPeriod.Left + labelValueSmoothingPeriod.Width + widthIndentation;
+            buttonIncreaseWindow.Left = labelValueSmoothingWindow.Left + labelValueSmoothingWindow.Width + widthIndentation;
+            buttonDecreaseWindow.Left = labelValueSmoothingWindow.Left + labelValueSmoothingWindow.Width + widthIndentation;
 
             buttonSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.3);
             buttonCancelSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.3);
