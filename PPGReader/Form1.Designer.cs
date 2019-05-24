@@ -29,25 +29,25 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.buttonDrawPPG = new System.Windows.Forms.Button();
             this.chartPPG = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -68,7 +68,7 @@
             this.FullSearchCharacteristics = new System.Windows.Forms.Button();
             this.buttonTagSmoothingPeriod = new System.Windows.Forms.Button();
             this.textBoxSmoothingPeriod = new System.Windows.Forms.TextBox();
-            this.labelValueSmoothingPeriod = new System.Windows.Forms.Label();
+            this.labelValueSmoothingWindow = new System.Windows.Forms.Label();
             this.buttonFindDerivate = new System.Windows.Forms.Button();
             this.buttonCancelSmoothingPeriod = new System.Windows.Forms.Button();
             this.buttonApplySmoothing = new System.Windows.Forms.Button();
@@ -99,34 +99,34 @@
             // 
             // chartPPG
             // 
-            chartArea4.Name = "ChartArea1";
-            this.chartPPG.ChartAreas.Add(chartArea4);
+            chartArea2.Name = "ChartArea1";
+            this.chartPPG.ChartAreas.Add(chartArea2);
             this.chartPPG.ContextMenuStrip = this.contextMenuStrip1;
-            legend4.Name = "Legend1";
-            this.chartPPG.Legends.Add(legend4);
+            legend2.Name = "Legend1";
+            this.chartPPG.Legends.Add(legend2);
             this.chartPPG.Location = new System.Drawing.Point(13, 6);
             this.chartPPG.Margin = new System.Windows.Forms.Padding(4);
             this.chartPPG.Name = "chartPPG";
-            series13.ChartArea = "ChartArea1";
-            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series13.Legend = "Legend1";
-            series13.Name = "Series1";
-            series14.ChartArea = "ChartArea1";
-            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series14.Legend = "Legend1";
-            series14.Name = "Series2";
-            series15.ChartArea = "ChartArea1";
-            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series15.Legend = "Legend1";
-            series15.Name = "Series3";
-            series16.ChartArea = "ChartArea1";
-            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series16.Legend = "Legend1";
-            series16.Name = "Series4";
-            this.chartPPG.Series.Add(series13);
-            this.chartPPG.Series.Add(series14);
-            this.chartPPG.Series.Add(series15);
-            this.chartPPG.Series.Add(series16);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Legend = "Legend1";
+            series6.Name = "Series2";
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series7.Legend = "Legend1";
+            series7.Name = "Series3";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series8.Legend = "Legend1";
+            series8.Name = "Series4";
+            this.chartPPG.Series.Add(series5);
+            this.chartPPG.Series.Add(series6);
+            this.chartPPG.Series.Add(series7);
+            this.chartPPG.Series.Add(series8);
             this.chartPPG.Size = new System.Drawing.Size(963, 391);
             this.chartPPG.TabIndex = 1;
             this.chartPPG.Text = "chartPPG";
@@ -271,7 +271,7 @@
             this.buttonSmoothingPeriod.Name = "buttonSmoothingPeriod";
             this.buttonSmoothingPeriod.Size = new System.Drawing.Size(169, 59);
             this.buttonSmoothingPeriod.TabIndex = 15;
-            this.buttonSmoothingPeriod.Text = "Сгладить период";
+            this.buttonSmoothingPeriod.Text = "Сгладить";
             this.buttonSmoothingPeriod.UseVisualStyleBackColor = true;
             this.buttonSmoothingPeriod.Click += new System.EventHandler(this.buttonSmoothingPeriod_Click_1);
             // 
@@ -315,15 +315,15 @@
             this.textBoxSmoothingPeriod.Size = new System.Drawing.Size(256, 22);
             this.textBoxSmoothingPeriod.TabIndex = 19;
             // 
-            // labelValueSmoothingPeriod
+            // labelValueSmoothingWindow
             // 
-            this.labelValueSmoothingPeriod.AutoSize = true;
-            this.labelValueSmoothingPeriod.Location = new System.Drawing.Point(1551, 196);
-            this.labelValueSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.labelValueSmoothingPeriod.Name = "labelValueSmoothingPeriod";
-            this.labelValueSmoothingPeriod.Size = new System.Drawing.Size(16, 17);
-            this.labelValueSmoothingPeriod.TabIndex = 20;
-            this.labelValueSmoothingPeriod.Text = "3";
+            this.labelValueSmoothingWindow.AutoSize = true;
+            this.labelValueSmoothingWindow.Location = new System.Drawing.Point(1551, 196);
+            this.labelValueSmoothingWindow.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.labelValueSmoothingWindow.Name = "labelValueSmoothingWindow";
+            this.labelValueSmoothingWindow.Size = new System.Drawing.Size(16, 17);
+            this.labelValueSmoothingWindow.TabIndex = 20;
+            this.labelValueSmoothingWindow.Text = "3";
             // 
             // buttonFindDerivate
             // 
@@ -341,53 +341,53 @@
             this.buttonCancelSmoothingPeriod.Location = new System.Drawing.Point(1180, 223);
             this.buttonCancelSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5);
             this.buttonCancelSmoothingPeriod.Name = "buttonCancelSmoothingPeriod";
-            this.buttonCancelSmoothingPeriod.Size = new System.Drawing.Size(212, 59);
+            this.buttonCancelSmoothingPeriod.Size = new System.Drawing.Size(162, 59);
             this.buttonCancelSmoothingPeriod.TabIndex = 22;
-            this.buttonCancelSmoothingPeriod.Text = "Отменить сглаживание периода";
+            this.buttonCancelSmoothingPeriod.Text = "Отменить сглаживание";
             this.buttonCancelSmoothingPeriod.UseVisualStyleBackColor = true;
             this.buttonCancelSmoothingPeriod.Click += new System.EventHandler(this.buttonCancelSmoothingPeriod_Click);
             // 
             // buttonApplySmoothing
             // 
-            this.buttonApplySmoothing.Location = new System.Drawing.Point(1402, 223);
+            this.buttonApplySmoothing.Location = new System.Drawing.Point(1352, 223);
             this.buttonApplySmoothing.Margin = new System.Windows.Forms.Padding(5);
             this.buttonApplySmoothing.Name = "buttonApplySmoothing";
             this.buttonApplySmoothing.Size = new System.Drawing.Size(164, 59);
             this.buttonApplySmoothing.TabIndex = 23;
-            this.buttonApplySmoothing.Text = "Применить";
+            this.buttonApplySmoothing.Text = "Применить сглаживание";
             this.buttonApplySmoothing.UseVisualStyleBackColor = true;
             this.buttonApplySmoothing.Click += new System.EventHandler(this.buttonApplySmoothing_Click);
             // 
             // chartDPPG
             // 
-            chartArea1.Name = "ChartArea1";
-            this.chartDPPG.ChartAreas.Add(chartArea1);
+            chartArea3.Name = "ChartArea1";
+            this.chartDPPG.ChartAreas.Add(chartArea3);
             this.chartDPPG.ContextMenuStrip = this.contextMenuStrip1;
-            legend1.Name = "Legend1";
-            this.chartDPPG.Legends.Add(legend1);
+            legend3.Name = "Legend1";
+            this.chartDPPG.Legends.Add(legend3);
             this.chartDPPG.Location = new System.Drawing.Point(13, 405);
             this.chartDPPG.Margin = new System.Windows.Forms.Padding(4);
             this.chartDPPG.Name = "chartDPPG";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Series2";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "Series3";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Legend = "Legend1";
-            series4.Name = "Series4";
-            this.chartDPPG.Series.Add(series1);
-            this.chartDPPG.Series.Add(series2);
-            this.chartDPPG.Series.Add(series3);
-            this.chartDPPG.Series.Add(series4);
+            series9.ChartArea = "ChartArea1";
+            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series9.Legend = "Legend1";
+            series9.Name = "Series1";
+            series10.ChartArea = "ChartArea1";
+            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series10.Legend = "Legend1";
+            series10.Name = "Series2";
+            series11.ChartArea = "ChartArea1";
+            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series11.Legend = "Legend1";
+            series11.Name = "Series3";
+            series12.ChartArea = "ChartArea1";
+            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series12.Legend = "Legend1";
+            series12.Name = "Series4";
+            this.chartDPPG.Series.Add(series9);
+            this.chartDPPG.Series.Add(series10);
+            this.chartDPPG.Series.Add(series11);
+            this.chartDPPG.Series.Add(series12);
             this.chartDPPG.Size = new System.Drawing.Size(963, 278);
             this.chartDPPG.TabIndex = 24;
             this.chartDPPG.Text = "chart2";
@@ -454,34 +454,34 @@
             // 
             // chartDDPPG
             // 
-            chartArea2.Name = "ChartArea1";
-            this.chartDDPPG.ChartAreas.Add(chartArea2);
+            chartArea4.Name = "ChartArea1";
+            this.chartDDPPG.ChartAreas.Add(chartArea4);
             this.chartDDPPG.ContextMenuStrip = this.contextMenuStrip1;
-            legend2.Name = "Legend1";
-            this.chartDDPPG.Legends.Add(legend2);
+            legend4.Name = "Legend1";
+            this.chartDDPPG.Legends.Add(legend4);
             this.chartDDPPG.Location = new System.Drawing.Point(13, 690);
             this.chartDDPPG.Margin = new System.Windows.Forms.Padding(4);
             this.chartDDPPG.Name = "chartDDPPG";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Legend = "Legend1";
-            series6.Name = "Series2";
-            series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series7.Legend = "Legend1";
-            series7.Name = "Series3";
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series8.Legend = "Legend1";
-            series8.Name = "Series4";
-            this.chartDDPPG.Series.Add(series5);
-            this.chartDDPPG.Series.Add(series6);
-            this.chartDDPPG.Series.Add(series7);
-            this.chartDDPPG.Series.Add(series8);
+            series13.ChartArea = "ChartArea1";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series13.Legend = "Legend1";
+            series13.Name = "Series1";
+            series14.ChartArea = "ChartArea1";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series14.Legend = "Legend1";
+            series14.Name = "Series2";
+            series15.ChartArea = "ChartArea1";
+            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series15.Legend = "Legend1";
+            series15.Name = "Series3";
+            series16.ChartArea = "ChartArea1";
+            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series16.Legend = "Legend1";
+            series16.Name = "Series4";
+            this.chartDDPPG.Series.Add(series13);
+            this.chartDDPPG.Series.Add(series14);
+            this.chartDDPPG.Series.Add(series15);
+            this.chartDDPPG.Series.Add(series16);
             this.chartDDPPG.Size = new System.Drawing.Size(963, 226);
             this.chartDDPPG.TabIndex = 29;
             this.chartDDPPG.Text = "chart3";
@@ -533,7 +533,7 @@
             this.Controls.Add(this.buttonApplySmoothing);
             this.Controls.Add(this.buttonCancelSmoothingPeriod);
             this.Controls.Add(this.buttonFindDerivate);
-            this.Controls.Add(this.labelValueSmoothingPeriod);
+            this.Controls.Add(this.labelValueSmoothingWindow);
             this.Controls.Add(this.textBoxSmoothingPeriod);
             this.Controls.Add(this.buttonTagSmoothingPeriod);
             this.Controls.Add(this.FullSearchCharacteristics);
@@ -587,7 +587,7 @@
         private System.Windows.Forms.Button FullSearchCharacteristics;
         private System.Windows.Forms.Button buttonTagSmoothingPeriod;
         private System.Windows.Forms.TextBox textBoxSmoothingPeriod;
-        private System.Windows.Forms.Label labelValueSmoothingPeriod;
+        private System.Windows.Forms.Label labelValueSmoothingWindow;
         private System.Windows.Forms.Button buttonFindDerivate;
         private System.Windows.Forms.Button buttonCancelSmoothingPeriod;
         private System.Windows.Forms.Button buttonApplySmoothing;
