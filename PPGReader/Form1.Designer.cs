@@ -544,7 +544,7 @@
             this.groupBox1.Controls.Add(this.buttonTagSmoothingPeriod);
             this.groupBox1.Controls.Add(this.buttonIncreaseScale);
             this.groupBox1.Controls.Add(this.FullSearchCharacteristics);
-            this.groupBox1.Controls.Add(this.labelValueSmoothingPeriod);
+            this.groupBox1.Controls.Add(this.labelValueSmoothingWindow);
             this.groupBox1.Controls.Add(this.buttonIncreaseWindow);
             this.groupBox1.Controls.Add(this.comboBoxDifferentiationMethod);
             this.groupBox1.Controls.Add(this.buttonDecreaseWindow);
