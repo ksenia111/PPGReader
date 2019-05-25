@@ -553,7 +553,7 @@
             this.groupBox1.Controls.Add(this.buttonApplySmoothing);
             this.groupBox1.Controls.Add(this.buttonCancelSmoothingPeriod);
             this.groupBox1.Location = new System.Drawing.Point(757, 12);
-            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Name = "groupBox1"; 
             this.groupBox1.Size = new System.Drawing.Size(484, 609);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
