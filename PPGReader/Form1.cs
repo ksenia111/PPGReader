@@ -45,6 +45,7 @@ namespace PPGReader
         int[] forDrawing;
         string selectedState;
         string selectedSmoothingMethod;
+        bool IsAllPPGSmoothed;
 
         public Form1()
         {
@@ -130,6 +131,7 @@ namespace PPGReader
             return singlingPoints;
         }
 
+        int endOfSmoothedData;
         /// <summary>
         /// Скользящее среднее
         /// </summary>
@@ -141,7 +143,7 @@ namespace PPGReader
             if (p % 2 == 0)
             {
                 p++; //если окно четное, увеличиваем на 1 для симметрии
-                labelValueSmoothingPeriod.Text = Convert.ToString(p);
+                labelValueSmoothingWindow.Text = Convert.ToString(p);
             }
             int m = (p - 1) / 2; //размах окна влево и вправо от текущей позиции
             int n = points.Length;// - m * 2;
@@ -164,9 +166,10 @@ namespace PPGReader
                 }
                 else if ((i + m) > (n - 1))
                 {
-                    k1 = i - n + i + 1;
-                    k2 = n - 1;
-                    z = k2 - k1 + 1;
+                    SmoothedData[i] = points[i];
+                    //k1 = i - n + i + 1;
+                    //k2 = n - 1;
+                    //z = k2 - k1 + 1;
                 }
                 else
                 {
@@ -182,6 +185,7 @@ namespace PPGReader
                 SmoothedData[i] = sum / z;
             }
 
+            endOfSmoothedData = n - m;
             return SmoothedData;
         }
 
@@ -199,9 +203,14 @@ namespace PPGReader
                 SmoothedData[i] = (7 * points[i] + 6 * (points[i + 1] + points[i - 1]) + 3 * (points[i + 2] + points[i - 2]) - 2 * (points[i + 3] + points[i - 3])) / 21;
             }
 
-            SmoothedData[n - 3] = (points[n - 7] - 4 * points[n - 6] + 2 * points[n - 5] + 12 * points[n - 4] + 19 * points[n - 3] + 16 * points[n - 2] - 4 * points[n - 1]) / 42;
-            SmoothedData[n - 2] = (4 * points[n - 7] - 7 * points[n - 6] - 4 * points[n - 5] + 6 * points[n - 4] + 16 * points[n - 3] + 19 * points[n - 2] + 8 * points[n - 1]) / 42;
-            SmoothedData[n - 1] = (-2 * points[n - 7] + 4 * points[n - 6] + points[n - 5] - 4 * points[n - 4] - 4 * points[n - 3] + 8 * points[n - 2] + 39 * points[n - 1]) / 42;
+            SmoothedData[n - 3] = points[n - 3];
+            SmoothedData[n - 2] = points[n - 2];
+            SmoothedData[n - 1] = points[n - 1];
+
+            endOfSmoothedData = n - 4;
+            //SmoothedData[n - 3] = (points[n - 7] - 4 * points[n - 6] + 2 * points[n - 5] + 12 * points[n - 4] + 19 * points[n - 3] + 16 * points[n - 2] - 4 * points[n - 1]) / 42;
+            //SmoothedData[n - 2] = (4 * points[n - 7] - 7 * points[n - 6] - 4 * points[n - 5] + 6 * points[n - 4] + 16 * points[n - 3] + 19 * points[n - 2] + 8 * points[n - 1]) / 42;
+            //SmoothedData[n - 1] = (-2 * points[n - 7] + 4 * points[n - 6] + points[n - 5] - 4 * points[n - 4] - 4 * points[n - 3] + 8 * points[n - 2] + 39 * points[n - 1]) / 42;
 
             return SmoothedData;
         }
@@ -224,7 +233,7 @@ namespace PPGReader
             int[] smoothedData = new int[Period];
             if (selectedSmoothingMethod == null || selectedSmoothingMethod == "Сглаживание методом скользящего среднего")
             {
-                int window = Convert.ToInt32(labelValueSmoothingPeriod.Text);
+                int window = Convert.ToInt32(labelValueSmoothingWindow.Text);
                 smoothedData = MovingAverageMethod(beginPeriod, endPeriod, window, pointsForSmoothing);
 
             }
@@ -356,6 +365,7 @@ namespace PPGReader
             chartDPPG.Series[0].Points.Clear();
             chartDDPPG.Series[0].Points.Clear();
             chartDPPG.ChartAreas[0].AxisX.ScaleView.Size = 400;
+            buttonSmoothingPeriod.Text = "Сгладить";
         }
 
         //Рисование ФПГ
@@ -739,22 +749,22 @@ namespace PPGReader
         //увеличение окна
         private void buttonIncreaseWindow_Click_1(object sender, EventArgs e)
         {
-            int window = Convert.ToInt32(labelValueSmoothingPeriod.Text);
+            int window = Convert.ToInt32(labelValueSmoothingWindow.Text);
             increaseClick = window;
             increaseClick += 2;
-            labelValueSmoothingPeriod.Text = Convert.ToString(increaseClick);
+            labelValueSmoothingWindow.Text = Convert.ToString(increaseClick);
         }
 
         //уменьшение окна
         private void buttonDecreaseWindow_Click_1(object sender, EventArgs e)
         {
-            int window = Convert.ToInt32(labelValueSmoothingPeriod.Text);
+            int window = Convert.ToInt32(labelValueSmoothingWindow.Text);
 
             if (window > 3)
             {
                 decreaseClick = window;
                 decreaseClick -= 2;
-                labelValueSmoothingPeriod.Text = Convert.ToString(decreaseClick);
+                labelValueSmoothingWindow.Text = Convert.ToString(decreaseClick);
             }
             if (window <= 3) MessageBox.Show("Невозможно уменьшить окно сглаживания",
                                              "Ошибка",
@@ -770,26 +780,49 @@ namespace PPGReader
             textBoxSmoothingPeriod.Text = "";
             beginSmoothingPeriod = 0;
             endSmoothingPeriod = 0;
+            buttonSmoothingPeriod.Text = "Сгладить период";
         }
-
 
         //сглаживание
         private void buttonSmoothingPeriod_Click_1(object sender, EventArgs e)
         {
-            if (endSmoothingPeriod == 0) MessageBox.Show("Отметьте период сглаживания",
+            IsAllPPGSmoothed = false;
+            if (drawChartClick == false) MessageBox.Show("Сначала нарисуйте график",
                                              "Ошибка",
                                              MessageBoxButtons.OK,
-                                             MessageBoxIcon.Hand);
+                                             MessageBoxIcon.Error);
             else
             {
-                int beginPeriod = Convert.ToInt32(beginSmoothingPeriod);
-                int endPeriod = Convert.ToInt32(endSmoothingPeriod);
-                int Period = endPeriod - beginPeriod;
-                //int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
+                if (endSmoothingPeriod == 0)
+                {
+                    DialogResult result = MessageBox.Show("При нажатии кнопки \"ОК\" сгладится весь график. Если хотите сгладить определенный период, то нажмите \"Отмена\" и отметьте начало и конец периода",
+                       "Сообщение",
+                       MessageBoxButtons.OKCancel,
+                       MessageBoxIcon.Information);
+                    if (result == DialogResult.Cancel) { }
+                    //MessageBox.Show("Отметьте начало и конец периода и нажмите \"Сгладить\"",
+                    //                             "Сообщение",
+                    //                             MessageBoxButtons.OK,
+                    //                             MessageBoxIcon.Information);
+                    else
+                    {
+                        IsAllPPGSmoothed = true;
+                        int beginPeriod = 0;
+                        int endPeriod = ppg.points.Length;
+                        int Period = endPeriod - beginPeriod;
 
-                
+                        Smoothing(beginPeriod, endPeriod);
+                    }
+                }
+                else
+                {
+                    int beginPeriod = Convert.ToInt32(beginSmoothingPeriod);
+                    int endPeriod = Convert.ToInt32(endSmoothingPeriod);
+                    int Period = endPeriod - beginPeriod;
+                    //int[] points = duplicatePoints;                   //взяли дубликат точек, уже прореженных
 
-                Smoothing(beginPeriod, endPeriod);
+                    Smoothing(beginPeriod, endPeriod);
+                }
             }
         }
 
@@ -808,11 +841,20 @@ namespace PPGReader
                                                MessageBoxIcon.Hand);
                 else
                 {
-                    int beginPeriod = Convert.ToInt32(beginSmoothingPeriod);
-                    int endPeriod = Convert.ToInt32(endSmoothingPeriod);
-                    int Period = endPeriod - beginPeriod;
-
-                    CancelSmoothing(beginPeriod, endPeriod, forDrawing, duplicatePoints);
+                    if (IsAllPPGSmoothed == false)
+                    {
+                        int beginPeriod = Convert.ToInt32(beginSmoothingPeriod);
+                        int endPeriod = Convert.ToInt32(endSmoothingPeriod);
+                        int Period = endPeriod - beginPeriod;
+                        CancelSmoothing(beginPeriod, endPeriod, forDrawing, duplicatePoints);
+                    }
+                    else
+                    {
+                        int beginPeriod = 0;
+                        int endPeriod = ppg.points.Length - 1;
+                        int Period = endPeriod - beginPeriod;
+                        CancelSmoothing(beginPeriod, endPeriod, forDrawing, duplicatePoints);
+                    }
                 }
             }
         }
@@ -832,6 +874,10 @@ namespace PPGReader
                 smoothingClick = false;
 
                 ApplySmoothing();
+                textBoxSmoothingPeriod.Text = "";
+                beginSmoothingPeriod = 0;
+                endSmoothingPeriod = 0;
+                buttonSmoothingPeriod.Text = "Сгладить";
             }
         }
 
@@ -1881,7 +1927,7 @@ namespace PPGReader
             derivativePoints[n - 1] = (points[n - 1] - points[n - 2]) / h;
             for (int i = 1; i < n - 1; i++)
             {
-                derivativePoints[i] = (points[i + 1] - points[i]) / (2 * h);
+                derivativePoints[i] = Convert.ToDouble(points[i + 1] - points[i]) / Convert.ToDouble(2 * h);
             }
 
             return derivativePoints;
@@ -1894,7 +1940,7 @@ namespace PPGReader
 
             for (int i = n - 2; i > 0; i--)
             {
-                derivativePoints[i + 1] = (points[i - 1] - 4 * points[i] + 3 * points[i + 1]) / (2 * h);
+                derivativePoints[i + 1] = Convert.ToDouble(points[i - 1] - 4 * points[i] + 3 * points[i + 1]) / Convert.ToDouble(2 * h);
                 //if (derivativePoints[i + 1] == 0)
                 //{
                 //    richTextBox1.Text += Convert.ToString(i + 1) + '\n';
@@ -1911,7 +1957,7 @@ namespace PPGReader
 
             for (int i = 2; i < n - 2; i++)
             {
-                derivativePoints[i] = (points[i - 2] - 8 * points[i - 1] + 8 * points[i + 1] - points[i + 2]) / (12 * h);
+                derivativePoints[i] = Convert.ToDouble(points[i - 2] - 8 * points[i - 1] + 8 * points[i + 1] - points[i + 2]) / Convert.ToDouble(12 * h);
                 //if (derivativePoints[i + 1] == 0)
                 //{
                 //    richTextBox1.Text += Convert.ToString(i + 1) + '\n';
@@ -1927,7 +1973,7 @@ namespace PPGReader
             double k1, k2;
             int buf;
             double del1, del2, len;
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < n - 1; i++) 
             {
                 if (derivativePoints[i] < 0 && derivativePoints[i + 1] == 0)
                 {
@@ -1969,7 +2015,7 @@ namespace PPGReader
                 }
             }
 
-            for (int i = 0; i < n; i++)
+            for (int i = 0; i < n - 1; i++) 
             {
                 if (derivativePoints[i] > 0 && derivativePoints[i + 1] == 0)
                 {
@@ -2182,16 +2228,27 @@ namespace PPGReader
                 //Create the WorkSheet 
                 ExcelWorksheet worksheet = excelPackage.Workbook.Worksheets.Add(nameSheet);
 
-                for (int j = 1; j <= countColumns; j++)
+                for (int j = 0; j < countColumns; j++)
                 {
-                    worksheet.Cells[1, j].Value = nameСolumns[j - 1];
+                    worksheet.Cells[1, j + 1].Value = nameСolumns[j];
                 }
 
-                for (int j = 2; j <= countColumns + 1; j++)
-                    for (int i = 1; i <= countValues; i++)
+                for (int i = 0; i < countValues; i++)
+                    for (int j = 0; j < countColumns; j++)
                     {
-                        worksheet.Cells[j, i].Value = valueColumns[j - 2, i - 1];
+                        worksheet.Cells[i + 2, j + 1].Value = valueColumns[i, j];
                     }
+
+                //for (int j = 1; j <= countColumns; j++)
+                //{
+                //    worksheet.Cells[1, j].Value = nameСolumns[j - 1];
+                //}
+
+                //for (int j = 2; j <= countColumns + 1; j++)
+                //    for (int i = 1; i <= countValues; i++)
+                //    {
+                //        worksheet.Cells[j, i].Value = valueColumns[j - 2, i - 1];
+                //    }
 
                 //for (int j = 1; j <= countColumns; j++) 
                 //{ 
@@ -2401,24 +2458,28 @@ namespace PPGReader
 
         private int[] CountZeroInInterval(int[] countZero)
         {
-            int countInterval = 5;
+            int countInterval = 6;
             int[] countZeroInInterval = new int[countInterval];
 
             for (int i = 0; i < countZero.Length; i++)
             {
-                if (countZero[i] < 5) countZeroInInterval[0]++;
+                if (countZero[i] == 0) countZeroInInterval[0]++;
                 else
                 {
-                    if (countZero[i] < 11 && countZero[i] > 5) countZeroInInterval[1]++;
+                    if (countZero[i] < 5) countZeroInInterval[1]++;
                     else
                     {
-                        if (countZero[i] < 16 && countZero[i] > 10) countZeroInInterval[2]++;
+                        if (countZero[i] < 11 && countZero[i] > 4) countZeroInInterval[2]++;
                         else
                         {
-                            if (countZero[i] < 21 && countZero[i] > 15) countZeroInInterval[3]++;
+                            if (countZero[i] < 16 && countZero[i] > 10) countZeroInInterval[3]++;
                             else
                             {
-                                if (countZero[i] > 20) countZeroInInterval[4]++;
+                                if (countZero[i] < 21 && countZero[i] > 15) countZeroInInterval[4]++;
+                                else
+                                {
+                                    if (countZero[i] > 20) countZeroInInterval[5]++;
+                                }
                             }
                         }
                     }
@@ -2433,24 +2494,25 @@ namespace PPGReader
 
 
             const int countColumns = 13;
-            const int countLines = 5;
+            const int countLines = 6;
             string[] nameColumns = new string[countColumns] { "Интервалы | Параметры", "Коэф. прореж. 1", "Коэф. прореж. 2", "Коэф. прореж. 3", "Коэф. прореж. 4",
             "Коэф. прореж. 1, сглаж. скользящ.средн.", "Коэф. прореж. 1, сглаж. полиномами",
             "Коэф. прореж. 2, сглаж. скользящ.средн.", "Коэф. прореж. 2, сглаж. полиномами",
             "Коэф. прореж. 3, сглаж. скользящ.средн.", "Коэф. прореж. 3, сглаж. полиномами",
             "Коэф. прореж. 4, сглаж. скользящ.средн.", "Коэф. прореж. 4, сглаж. полиномами"};
-            string[,] valueColumns = new string[countColumns, countLines];
+            string[,] valueColumns = new string[countLines, countColumns];
 
             string nameFile;
             string namefile;
 
             int j = 0;
 
-            valueColumns[0, 0] = "0-5";
-            valueColumns[1, 0] = "6-10";
-            valueColumns[2, 0] = "11-15";
-            valueColumns[3, 0] = "16-20";
-            valueColumns[4, 0] = "21и больше";
+            valueColumns[0, 0] = "0";
+            valueColumns[1, 0] = "1-4";
+            valueColumns[2, 0] = "5-10";
+            valueColumns[3, 0] = "11-15";
+            valueColumns[4, 0] = "16-20";
+            valueColumns[5, 0] = "21и больше";
 
             int[] duplicatePoints11;
             int[] duplicatePoints12;
@@ -2496,9 +2558,30 @@ namespace PPGReader
             {
                 valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
             }
-            int zero = 0;
-            int end = duplicatePoints1.Length;
-            
+
+            duplicatePoints11 = MovingAverageMethod(0, duplicatePoints1.Length, 3, duplicatePoints1);
+            derivativePointsCoefThin11 = differentiation1orderAccuracy(duplicatePoints11, 1);
+            derivativePointsCoefThin11 = SmoothingDerivative(derivativePointsCoefThin11);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints11, derivativePointsCoefThin11);
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin11);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 5;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
+            }
+
+            duplicatePoints12 = NonlinearSmoothing(0, duplicatePoints1.Length, duplicatePoints1);
+            derivativePointsCoefThin12 = differentiation1orderAccuracy(duplicatePoints12, 1);
+            derivativePointsCoefThin12 = SmoothingDerivative(derivativePointsCoefThin12);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints11, derivativePointsCoefThin12);
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin12);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 6;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
+            }
 
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
             derivativePointsCoefThin2 = differentiation1orderAccuracy(duplicatePoints2, 2);
@@ -2507,6 +2590,30 @@ namespace PPGReader
             countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
             countZero2InInterval = CountZeroInInterval(countZero2);
             j = 2;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            duplicatePoints21 = MovingAverageMethod(0, duplicatePoints2.Length, 3, duplicatePoints2);
+            derivativePointsCoefThin21 = differentiation1orderAccuracy(duplicatePoints21, 2);
+            derivativePointsCoefThin21 = SmoothingDerivative(derivativePointsCoefThin21);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints21, derivativePointsCoefThin21);
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin21);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 7;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            duplicatePoints22 = NonlinearSmoothing(0, duplicatePoints2.Length, duplicatePoints2);
+            derivativePointsCoefThin22 = differentiation1orderAccuracy(duplicatePoints22, 2);
+            derivativePointsCoefThin22 = SmoothingDerivative(derivativePointsCoefThin22);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints22, derivativePointsCoefThin22);
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin22);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 8;
             for (int i = 0; i < countLines; i++)
             {
                 valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
@@ -2522,6 +2629,66 @@ namespace PPGReader
             for (int i = 0; i < countLines; i++)
             {
                 valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            duplicatePoints31 = MovingAverageMethod(0, duplicatePoints3.Length, 3, duplicatePoints3);
+            derivativePointsCoefThin31 = differentiation1orderAccuracy(duplicatePoints31, 3);
+            derivativePointsCoefThin31 = SmoothingDerivative(derivativePointsCoefThin31);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints31, derivativePointsCoefThin31);
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin31);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 9;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            duplicatePoints32 = NonlinearSmoothing(0, duplicatePoints3.Length, duplicatePoints3);
+            derivativePointsCoefThin32 = differentiation1orderAccuracy(duplicatePoints32, 3);
+            derivativePointsCoefThin32 = SmoothingDerivative(derivativePointsCoefThin32);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints32, derivativePointsCoefThin32);
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin32);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 10;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics4.xlsx";
+            derivativePointsCoefThin4 = differentiation1orderAccuracy(duplicatePoints4, 4);
+            derivativePointsCoefThin4 = SmoothingDerivative(derivativePointsCoefThin4);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints4, derivativePointsCoefThin4);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin4);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 4;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
+            }
+
+            duplicatePoints41 = MovingAverageMethod(0, duplicatePoints4.Length, 3, duplicatePoints4);
+            derivativePointsCoefThin41 = differentiation1orderAccuracy(duplicatePoints41, 4);
+            derivativePointsCoefThin41 = SmoothingDerivative(derivativePointsCoefThin41);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints41, derivativePointsCoefThin41);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin41);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 11;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
+            }
+
+            duplicatePoints42 = NonlinearSmoothing(0, duplicatePoints4.Length, duplicatePoints4);
+            derivativePointsCoefThin42 = differentiation1orderAccuracy(duplicatePoints42, 4);
+            derivativePointsCoefThin42 = SmoothingDerivative(derivativePointsCoefThin42);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints42, derivativePointsCoefThin42);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin42);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 12;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
             }
 
             string nameSheet = "Дифференцирование первого порядка точности";
@@ -2542,6 +2709,30 @@ namespace PPGReader
                 valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
             }
 
+            duplicatePoints11 = MovingAverageMethod(0, duplicatePoints1.Length, 3, duplicatePoints1);
+            derivativePointsCoefThin11 = differentiation2orderAccuracy(duplicatePoints11, 1);
+            derivativePointsCoefThin11 = SmoothingDerivative(derivativePointsCoefThin11);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints11, derivativePointsCoefThin11);
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin11);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 5;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
+            }
+
+            duplicatePoints12 = NonlinearSmoothing(0, duplicatePoints1.Length, duplicatePoints1);
+            derivativePointsCoefThin12 = differentiation2orderAccuracy(duplicatePoints12, 1);
+            derivativePointsCoefThin12 = SmoothingDerivative(derivativePointsCoefThin12);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints11, derivativePointsCoefThin12);
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin12);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 6;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
+            }
+
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
             derivativePointsCoefThin2 = differentiation2orderAccuracy(duplicatePoints2, 2);
             derivativePointsCoefThin2 = SmoothingDerivative(derivativePointsCoefThin2);
@@ -2549,6 +2740,30 @@ namespace PPGReader
             countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
             countZero2InInterval = CountZeroInInterval(countZero2);
             j = 2;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            duplicatePoints21 = MovingAverageMethod(0, duplicatePoints2.Length, 3, duplicatePoints2);
+            derivativePointsCoefThin21 = differentiation2orderAccuracy(duplicatePoints21, 2);
+            derivativePointsCoefThin21 = SmoothingDerivative(derivativePointsCoefThin21);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints21, derivativePointsCoefThin21);
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin21);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 7;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            duplicatePoints22 = NonlinearSmoothing(0, duplicatePoints2.Length, duplicatePoints2);
+            derivativePointsCoefThin22 = differentiation2orderAccuracy(duplicatePoints22, 2);
+            derivativePointsCoefThin22 = SmoothingDerivative(derivativePointsCoefThin22);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints22, derivativePointsCoefThin22);
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin22);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 8;
             for (int i = 0; i < countLines; i++)
             {
                 valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
@@ -2566,6 +2781,30 @@ namespace PPGReader
                 valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
             }
 
+            duplicatePoints31 = MovingAverageMethod(0, duplicatePoints3.Length, 3, duplicatePoints3);
+            derivativePointsCoefThin31 = differentiation2orderAccuracy(duplicatePoints31, 3);
+            derivativePointsCoefThin31 = SmoothingDerivative(derivativePointsCoefThin31);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints31, derivativePointsCoefThin31);
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin31);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 9;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            duplicatePoints32 = NonlinearSmoothing(0, duplicatePoints3.Length, duplicatePoints3);
+            derivativePointsCoefThin32 = differentiation2orderAccuracy(duplicatePoints32, 3);
+            derivativePointsCoefThin32 = SmoothingDerivative(derivativePointsCoefThin32);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints32, derivativePointsCoefThin32);
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin32);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 10;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics4.xlsx";
             derivativePointsCoefThin4 = differentiation2orderAccuracy(duplicatePoints4, 4);
             derivativePointsCoefThin4 = SmoothingDerivative(derivativePointsCoefThin4);
@@ -2573,6 +2812,30 @@ namespace PPGReader
             countZero4 = CountZero(periodPPG, derivativePointsCoefThin4);
             countZero4InInterval = CountZeroInInterval(countZero4);
             j = 4;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
+            }
+
+            duplicatePoints41 = MovingAverageMethod(0, duplicatePoints4.Length, 3, duplicatePoints4);
+            derivativePointsCoefThin41 = differentiation2orderAccuracy(duplicatePoints41, 4);
+            derivativePointsCoefThin41 = SmoothingDerivative(derivativePointsCoefThin41);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints41, derivativePointsCoefThin41);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin41);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 11;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
+            }
+
+            duplicatePoints42 = NonlinearSmoothing(0, duplicatePoints4.Length, duplicatePoints4);
+            derivativePointsCoefThin42 = differentiation2orderAccuracy(duplicatePoints42, 4);
+            derivativePointsCoefThin42 = SmoothingDerivative(derivativePointsCoefThin42);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints42, derivativePointsCoefThin42);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin42);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 12;
             for (int i = 0; i < countLines; i++)
             {
                 valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
@@ -2596,6 +2859,30 @@ namespace PPGReader
                 valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
             }
 
+            duplicatePoints11 = MovingAverageMethod(0, duplicatePoints1.Length, 3, duplicatePoints1);
+            derivativePointsCoefThin11 = differentiation4points(duplicatePoints11, 1);
+            derivativePointsCoefThin11 = SmoothingDerivative(derivativePointsCoefThin11);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints11, derivativePointsCoefThin11);
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin11);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 5;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
+            }
+
+            duplicatePoints12 = NonlinearSmoothing(0, duplicatePoints1.Length, duplicatePoints1);
+            derivativePointsCoefThin12 = differentiation4points(duplicatePoints12, 1);
+            derivativePointsCoefThin12 = SmoothingDerivative(derivativePointsCoefThin12);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints11, derivativePointsCoefThin12);
+            countZero1 = CountZero(periodPPG, derivativePointsCoefThin12);
+            countZero1InInterval = CountZeroInInterval(countZero1);
+            j = 6;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero1InInterval[i]);
+            }
+
             namefile = @"J:\Documents\8 семестр\Диплом\Characteristics2.xlsx";
             derivativePointsCoefThin2 = differentiation4points(duplicatePoints2, 2);
             derivativePointsCoefThin2 = SmoothingDerivative(derivativePointsCoefThin2);
@@ -2603,6 +2890,30 @@ namespace PPGReader
             countZero2 = CountZero(periodPPG, derivativePointsCoefThin2);
             countZero2InInterval = CountZeroInInterval(countZero2);
             j = 2;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            duplicatePoints21 = MovingAverageMethod(0, duplicatePoints2.Length, 3, duplicatePoints2);
+            derivativePointsCoefThin21 = differentiation4points(duplicatePoints21, 2);
+            derivativePointsCoefThin21 = SmoothingDerivative(derivativePointsCoefThin21);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints21, derivativePointsCoefThin21);
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin21);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 7;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
+            }
+
+            duplicatePoints22 = NonlinearSmoothing(0, duplicatePoints2.Length, duplicatePoints2);
+            derivativePointsCoefThin22 = differentiation4points(duplicatePoints22, 2);
+            derivativePointsCoefThin22 = SmoothingDerivative(derivativePointsCoefThin22);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints22, derivativePointsCoefThin22);
+            countZero2 = CountZero(periodPPG, derivativePointsCoefThin22);
+            countZero2InInterval = CountZeroInInterval(countZero2);
+            j = 8;
             for (int i = 0; i < countLines; i++)
             {
                 valueColumns[i, j] = Convert.ToString(countZero2InInterval[i]);
@@ -2618,6 +2929,66 @@ namespace PPGReader
             for (int i = 0; i < countLines; i++)
             {
                 valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            duplicatePoints31 = MovingAverageMethod(0, duplicatePoints3.Length, 3, duplicatePoints3);
+            derivativePointsCoefThin31 = differentiation4points(duplicatePoints31, 3);
+            derivativePointsCoefThin31 = SmoothingDerivative(derivativePointsCoefThin31);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints31, derivativePointsCoefThin31);
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin31);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 9;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            duplicatePoints32 = NonlinearSmoothing(0, duplicatePoints3.Length, duplicatePoints3);
+            derivativePointsCoefThin32 = differentiation4points(duplicatePoints32, 3);
+            derivativePointsCoefThin32 = SmoothingDerivative(derivativePointsCoefThin32);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints32, derivativePointsCoefThin32);
+            countZero3 = CountZero(periodPPG, derivativePointsCoefThin32);
+            countZero3InInterval = CountZeroInInterval(countZero3);
+            j = 10;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero3InInterval[i]);
+            }
+
+            namefile = @"J:\Documents\8 семестр\Диплом\Characteristics4.xlsx";
+            derivativePointsCoefThin4 = differentiation4points(duplicatePoints4, 4);
+            derivativePointsCoefThin4 = SmoothingDerivative(derivativePointsCoefThin4);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints4, derivativePointsCoefThin4);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin4);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 4;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
+            }
+
+            duplicatePoints41 = MovingAverageMethod(0, duplicatePoints4.Length, 3, duplicatePoints4);
+            derivativePointsCoefThin41 = differentiation4points(duplicatePoints41, 4);
+            derivativePointsCoefThin41 = SmoothingDerivative(derivativePointsCoefThin41);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints41, derivativePointsCoefThin41);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin41);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 11;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
+            }
+
+            duplicatePoints42 = NonlinearSmoothing(0, duplicatePoints4.Length, duplicatePoints4);
+            derivativePointsCoefThin42 = differentiation4points(duplicatePoints42, 4);
+            derivativePointsCoefThin42 = SmoothingDerivative(derivativePointsCoefThin42);
+            periodPPG = FindPeriods(CountPeriods, namefile, duplicatePoints42, derivativePointsCoefThin42);
+            countZero4 = CountZero(periodPPG, derivativePointsCoefThin42);
+            countZero4InInterval = CountZeroInInterval(countZero4);
+            j = 12;
+            for (int i = 0; i < countLines; i++)
+            {
+                valueColumns[i, j] = Convert.ToString(countZero4InInterval[i]);
             }
 
             nameSheet = "Дифференцирование по четырем узловым точкам";
@@ -2704,14 +3075,14 @@ namespace PPGReader
             selectedSmoothingMethod = comboBoxSmoothingMethod.SelectedItem.ToString();
             if (selectedSmoothingMethod== "Сглаживание методом скользящего среднего")
             {
-                labelValueSmoothingPeriod.Visible = true;
+                labelValueSmoothingWindow.Visible = true;
                 buttonIncreaseWindow.Visible = true;
                 buttonDecreaseWindow.Visible = true;
                 labelSmoothingWindow.Visible = true;
             }
             if (selectedSmoothingMethod == "Сглаживание полиномами 2 порядка по 7 точкам")
             {
-                labelValueSmoothingPeriod.Visible = false;
+                labelValueSmoothingWindow.Visible = false;
                 buttonIncreaseWindow.Visible = false;
                 buttonDecreaseWindow.Visible = false;
                 labelSmoothingWindow.Visible = false;
@@ -2771,12 +3142,12 @@ namespace PPGReader
             comboBoxSmoothingMethod.Width = (int)Math.Round(groupBox1.Width * 0.5);
             labelSmoothingWindow.Width = (int)Math.Round(groupBox1.Width * 0.2);
             labelSmoothingWindow.Left = comboBoxSmoothingMethod.Left + comboBoxSmoothingMethod.Width + widthIndentation;
-            labelValueSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.1);
-            labelValueSmoothingPeriod.Left = labelSmoothingWindow.Left + labelSmoothingWindow.Width + widthIndentation;
+            labelValueSmoothingWindow.Width = (int)Math.Round(groupBox1.Width * 0.1);
+            labelValueSmoothingWindow.Left = labelSmoothingWindow.Left + labelSmoothingWindow.Width + widthIndentation;
             buttonIncreaseWindow.Width = (int)Math.Round(groupBox1.Width * 0.1);
             buttonDecreaseWindow.Width = (int)Math.Round(groupBox1.Width * 0.1);
-            buttonIncreaseWindow.Left = labelValueSmoothingPeriod.Left + labelValueSmoothingPeriod.Width + widthIndentation;
-            buttonDecreaseWindow.Left = labelValueSmoothingPeriod.Left + labelValueSmoothingPeriod.Width + widthIndentation;
+            buttonIncreaseWindow.Left = labelValueSmoothingWindow.Left + labelValueSmoothingWindow.Width + widthIndentation;
+            buttonDecreaseWindow.Left = labelValueSmoothingWindow.Left + labelValueSmoothingWindow.Width + widthIndentation;
 
             buttonSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.3);
             buttonCancelSmoothingPeriod.Width = (int)Math.Round(groupBox1.Width * 0.3);
