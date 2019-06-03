@@ -130,6 +130,7 @@
             this.chartPPG.Size = new System.Drawing.Size(722, 261);
             this.chartPPG.TabIndex = 1;
             this.chartPPG.Text = "chartPPG";
+            this.chartPPG.AxisViewChanged += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ViewEventArgs>(this.chartPPG_AxisViewChanged);
             this.chartPPG.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseClick);
             this.chartPPG.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseDown);
             this.chartPPG.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseMove);
@@ -172,7 +173,7 @@
             // textBoxPath
             // 
             this.textBoxPath.Location = new System.Drawing.Point(52, 27);
-            this.textBoxPath.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBoxPath.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxPath.Name = "textBoxPath";
             this.textBoxPath.Size = new System.Drawing.Size(279, 20);
             this.textBoxPath.TabIndex = 5;
@@ -180,7 +181,7 @@
             // textBoxW
             // 
             this.textBoxW.Location = new System.Drawing.Point(47, 63);
-            this.textBoxW.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBoxW.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxW.MaximumSize = new System.Drawing.Size(20, 20);
             this.textBoxW.Name = "textBoxW";
             this.textBoxW.Size = new System.Drawing.Size(20, 20);
@@ -224,7 +225,7 @@
             // textBoxSinglingRate
             // 
             this.textBoxSinglingRate.Location = new System.Drawing.Point(219, 63);
-            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxSinglingRate.MaximumSize = new System.Drawing.Size(18, 20);
             this.textBoxSinglingRate.Name = "textBoxSinglingRate";
             this.textBoxSinglingRate.Size = new System.Drawing.Size(18, 20);
@@ -289,7 +290,7 @@
             // FullSearchCharacteristics
             // 
             this.FullSearchCharacteristics.Location = new System.Drawing.Point(8, 394);
-            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(2);
             this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
             this.FullSearchCharacteristics.Size = new System.Drawing.Size(200, 22);
             this.FullSearchCharacteristics.TabIndex = 17;
@@ -300,7 +301,7 @@
             // buttonTagSmoothingPeriod
             // 
             this.buttonTagSmoothingPeriod.Location = new System.Drawing.Point(7, 147);
-            this.buttonTagSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonTagSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4);
             this.buttonTagSmoothingPeriod.Name = "buttonTagSmoothingPeriod";
             this.buttonTagSmoothingPeriod.Size = new System.Drawing.Size(215, 24);
             this.buttonTagSmoothingPeriod.TabIndex = 18;
@@ -311,7 +312,7 @@
             // textBoxSmoothingPeriod
             // 
             this.textBoxSmoothingPeriod.Location = new System.Drawing.Point(230, 151);
-            this.textBoxSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.textBoxSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4);
             this.textBoxSmoothingPeriod.MaximumSize = new System.Drawing.Size(193, 20);
             this.textBoxSmoothingPeriod.Name = "textBoxSmoothingPeriod";
             this.textBoxSmoothingPeriod.Size = new System.Drawing.Size(193, 20);
@@ -320,7 +321,7 @@
             // buttonFindDerivate
             // 
             this.buttonFindDerivate.Location = new System.Drawing.Point(8, 334);
-            this.buttonFindDerivate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonFindDerivate.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFindDerivate.Name = "buttonFindDerivate";
             this.buttonFindDerivate.Size = new System.Drawing.Size(200, 25);
             this.buttonFindDerivate.TabIndex = 21;
@@ -331,7 +332,7 @@
             // buttonCancelSmoothingPeriod
             // 
             this.buttonCancelSmoothingPeriod.Location = new System.Drawing.Point(152, 223);
-            this.buttonCancelSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonCancelSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancelSmoothingPeriod.Name = "buttonCancelSmoothingPeriod";
             this.buttonCancelSmoothingPeriod.Size = new System.Drawing.Size(159, 48);
             this.buttonCancelSmoothingPeriod.TabIndex = 22;
@@ -342,7 +343,7 @@
             // buttonApplySmoothing
             // 
             this.buttonApplySmoothing.Location = new System.Drawing.Point(319, 223);
-            this.buttonApplySmoothing.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonApplySmoothing.Margin = new System.Windows.Forms.Padding(4);
             this.buttonApplySmoothing.Name = "buttonApplySmoothing";
             this.buttonApplySmoothing.Size = new System.Drawing.Size(123, 48);
             this.buttonApplySmoothing.TabIndex = 23;
@@ -383,6 +384,7 @@
             this.chartDPPG.Size = new System.Drawing.Size(722, 226);
             this.chartDPPG.TabIndex = 24;
             this.chartDPPG.Text = "chart2";
+            this.chartDPPG.AxisViewChanged += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ViewEventArgs>(this.chartDPPG_AxisViewChanged);
             // 
             // comboBoxDifferentiationMethod
             // 
@@ -403,7 +405,7 @@
             // buttonFindCountOfZeros
             // 
             this.buttonFindCountOfZeros.Location = new System.Drawing.Point(7, 275);
-            this.buttonFindCountOfZeros.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonFindCountOfZeros.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFindCountOfZeros.Name = "buttonFindCountOfZeros";
             this.buttonFindCountOfZeros.Size = new System.Drawing.Size(131, 51);
             this.buttonFindCountOfZeros.TabIndex = 26;
@@ -414,7 +416,7 @@
             // EndWatch
             // 
             this.EndWatch.Location = new System.Drawing.Point(8, 447);
-            this.EndWatch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.EndWatch.Margin = new System.Windows.Forms.Padding(2);
             this.EndWatch.Name = "EndWatch";
             this.EndWatch.Size = new System.Drawing.Size(200, 24);
             this.EndWatch.TabIndex = 29;
@@ -425,7 +427,7 @@
             // WriteCharacteristics
             // 
             this.WriteCharacteristics.Location = new System.Drawing.Point(8, 420);
-            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(2);
             this.WriteCharacteristics.Name = "WriteCharacteristics";
             this.WriteCharacteristics.Size = new System.Drawing.Size(200, 23);
             this.WriteCharacteristics.TabIndex = 27;
@@ -436,7 +438,7 @@
             // buttonFindSecondDerivate
             // 
             this.buttonFindSecondDerivate.Location = new System.Drawing.Point(8, 365);
-            this.buttonFindSecondDerivate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonFindSecondDerivate.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFindSecondDerivate.Name = "buttonFindSecondDerivate";
             this.buttonFindSecondDerivate.Size = new System.Drawing.Size(200, 25);
             this.buttonFindSecondDerivate.TabIndex = 28;
@@ -485,7 +487,7 @@
             "Сглаживание методом скользящего среднего",
             "Сглаживание полиномами 2 порядка по 7 точкам"});
             this.comboBoxSmoothingMethod.Location = new System.Drawing.Point(7, 187);
-            this.comboBoxSmoothingMethod.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxSmoothingMethod.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxSmoothingMethod.Name = "comboBoxSmoothingMethod";
             this.comboBoxSmoothingMethod.Size = new System.Drawing.Size(268, 21);
             this.comboBoxSmoothingMethod.TabIndex = 30;
@@ -501,7 +503,7 @@
             "Градиентный метод",
             "Метод Ньютона"});
             this.comboBoxFindCharacteristic.Location = new System.Drawing.Point(213, 394);
-            this.comboBoxFindCharacteristic.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxFindCharacteristic.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxFindCharacteristic.Name = "comboBoxFindCharacteristic";
             this.comboBoxFindCharacteristic.Size = new System.Drawing.Size(218, 21);
             this.comboBoxFindCharacteristic.TabIndex = 28;
@@ -566,7 +568,7 @@
             this.Controls.Add(this.chartDDPPG);
             this.Controls.Add(this.chartDPPG);
             this.Controls.Add(this.chartPPG);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "PPGReader";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;

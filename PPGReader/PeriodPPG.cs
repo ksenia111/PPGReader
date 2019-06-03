@@ -23,6 +23,12 @@ namespace PPGReader
         public int IterationC = 0;
         public int IterationD = 0;
         public int IterationE = 0;
+        public int ErrorEnd = 0;
+        public int ErrorA = 0;
+        public int ErrorB = 0;
+        public int ErrorC = 0;
+        public int ErrorD = 0;
+        public int ErrorE = 0;
 
         public PeriodPPG()
         {
