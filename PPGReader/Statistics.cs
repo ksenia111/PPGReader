@@ -53,6 +53,10 @@ namespace PPGReader
         public double[] Min;
         public double[] Max;
         public double[] Dispersion;
+        public double[] ErrorAverage;
+        public double[] ErrorMin;
+        public double[] ErrorMax;
+        public double[] ErrorDispersion;
 
         public StatisticPoint()
         {
@@ -60,6 +64,11 @@ namespace PPGReader
             Min = new double[countColumn];
             Max = new double[countColumn];
             Dispersion = new double[countColumn];
+            ErrorAverage = new double[countColumn];
+            ErrorMin = new double[countColumn];
+            ErrorMax = new double[countColumn];
+            ErrorAverage = new double[countColumn];
+
         }
 
         public void SetStatistics(int countColumn)
@@ -68,6 +77,10 @@ namespace PPGReader
             Array.Resize(ref Min, countColumn);
             Array.Resize(ref Max, countColumn);
             Array.Resize(ref Dispersion, countColumn);
+            Array.Resize(ref ErrorAverage ,countColumn);
+            Array.Resize(ref ErrorMin, countColumn);
+            Array.Resize(ref ErrorMax, countColumn);
+            Array.Resize(ref ErrorAverage, countColumn);
         }
     }
 }

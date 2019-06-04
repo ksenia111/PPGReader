@@ -29,25 +29,25 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea4 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend4 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series13 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series14 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series15 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series16 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series7 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series8 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series9 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series10 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series11 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series12 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.buttonDrawPPG = new System.Windows.Forms.Button();
             this.chartPPG = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -82,6 +82,7 @@
             this.comboBoxFindCharacteristic = new System.Windows.Forms.ComboBox();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.labelValueSmoothingWindow = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chartPPG)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartDPPG)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.chartDDPPG)).BeginInit();
@@ -101,37 +102,37 @@
             // chartPPG
             // 
             this.chartPPG.Anchor = System.Windows.Forms.AnchorStyles.Right;
-            chartArea1.Name = "ChartArea1";
-            this.chartPPG.ChartAreas.Add(chartArea1);
+            chartArea4.Name = "ChartArea1";
+            this.chartPPG.ChartAreas.Add(chartArea4);
             this.chartPPG.ContextMenuStrip = this.contextMenuStrip1;
-            legend1.Name = "Legend1";
-            this.chartPPG.Legends.Add(legend1);
-            this.chartPPG.Location = new System.Drawing.Point(13, 15);
-            this.chartPPG.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            legend4.Name = "Legend1";
+            this.chartPPG.Legends.Add(legend4);
+            this.chartPPG.Location = new System.Drawing.Point(12, 12);
             this.chartPPG.Name = "chartPPG";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Legend = "Legend1";
-            series1.Name = "Series1";
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Legend = "Legend1";
-            series2.Name = "Series2";
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Legend = "Legend1";
-            series3.Name = "Series3";
-            series4.ChartArea = "ChartArea1";
-            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series4.Legend = "Legend1";
-            series4.Name = "Series4";
-            this.chartPPG.Series.Add(series1);
-            this.chartPPG.Series.Add(series2);
-            this.chartPPG.Series.Add(series3);
-            this.chartPPG.Series.Add(series4);
-            this.chartPPG.Size = new System.Drawing.Size(963, 321);
+            series13.ChartArea = "ChartArea1";
+            series13.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series13.Legend = "Legend1";
+            series13.Name = "Series1";
+            series14.ChartArea = "ChartArea1";
+            series14.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series14.Legend = "Legend1";
+            series14.Name = "Series2";
+            series15.ChartArea = "ChartArea1";
+            series15.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series15.Legend = "Legend1";
+            series15.Name = "Series3";
+            series16.ChartArea = "ChartArea1";
+            series16.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series16.Legend = "Legend1";
+            series16.Name = "Series4";
+            this.chartPPG.Series.Add(series13);
+            this.chartPPG.Series.Add(series14);
+            this.chartPPG.Series.Add(series15);
+            this.chartPPG.Series.Add(series16);
+            this.chartPPG.Size = new System.Drawing.Size(722, 261);
             this.chartPPG.TabIndex = 1;
             this.chartPPG.Text = "chartPPG";
+            this.chartPPG.AxisViewChanged += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ViewEventArgs>(this.chartPPG_AxisViewChanged);
             this.chartPPG.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseClick);
             this.chartPPG.MouseDown += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseDown);
             this.chartPPG.MouseMove += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseMove);
@@ -165,28 +166,28 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(29, 81);
-            this.label2.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.label2.Location = new System.Drawing.Point(163, 60);
+            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(17, 17);
+            this.label2.Size = new System.Drawing.Size(45, 13);
             this.label2.TabIndex = 4;
-            this.label2.Text = "w";
+            this.label2.Text = "мВ/дел";
             // 
             // textBoxPath
             // 
-            this.textBoxPath.Location = new System.Drawing.Point(69, 33);
-            this.textBoxPath.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.textBoxPath.Location = new System.Drawing.Point(52, 27);
+            this.textBoxPath.Margin = new System.Windows.Forms.Padding(5);
             this.textBoxPath.Name = "textBoxPath";
             this.textBoxPath.Size = new System.Drawing.Size(371, 22);
             this.textBoxPath.TabIndex = 5;
             // 
             // textBoxW
             // 
-            this.textBoxW.Location = new System.Drawing.Point(63, 78);
-            this.textBoxW.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.textBoxW.MaximumSize = new System.Drawing.Size(25, 20);
+            this.textBoxW.Location = new System.Drawing.Point(139, 57);
+            this.textBoxW.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxW.MaximumSize = new System.Drawing.Size(20, 20);
             this.textBoxW.Name = "textBoxW";
-            this.textBoxW.Size = new System.Drawing.Size(25, 22);
+            this.textBoxW.Size = new System.Drawing.Size(18, 20);
             this.textBoxW.TabIndex = 6;
             this.textBoxW.Text = "5";
             // 
@@ -217,8 +218,8 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(109, 86);
-            this.label3.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
+            this.label3.Location = new System.Drawing.Point(8, 88);
+            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(163, 17);
             this.label3.TabIndex = 9;
@@ -226,9 +227,9 @@
             // 
             // textBoxSinglingRate
             // 
-            this.textBoxSinglingRate.Location = new System.Drawing.Point(292, 78);
-            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
-            this.textBoxSinglingRate.MaximumSize = new System.Drawing.Size(23, 20);
+            this.textBoxSinglingRate.Location = new System.Drawing.Point(139, 85);
+            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(5);
+            this.textBoxSinglingRate.MaximumSize = new System.Drawing.Size(18, 20);
             this.textBoxSinglingRate.Name = "textBoxSinglingRate";
             this.textBoxSinglingRate.Size = new System.Drawing.Size(23, 22);
             this.textBoxSinglingRate.TabIndex = 10;
@@ -291,8 +292,8 @@
             // 
             // FullSearchCharacteristics
             // 
-            this.FullSearchCharacteristics.Location = new System.Drawing.Point(11, 485);
-            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.FullSearchCharacteristics.Location = new System.Drawing.Point(8, 394);
+            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(2);
             this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
             this.FullSearchCharacteristics.Size = new System.Drawing.Size(267, 27);
             this.FullSearchCharacteristics.TabIndex = 17;
@@ -302,8 +303,8 @@
             // 
             // buttonTagSmoothingPeriod
             // 
-            this.buttonTagSmoothingPeriod.Location = new System.Drawing.Point(9, 181);
-            this.buttonTagSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.buttonTagSmoothingPeriod.Location = new System.Drawing.Point(7, 147);
+            this.buttonTagSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4);
             this.buttonTagSmoothingPeriod.Name = "buttonTagSmoothingPeriod";
             this.buttonTagSmoothingPeriod.Size = new System.Drawing.Size(287, 30);
             this.buttonTagSmoothingPeriod.TabIndex = 18;
@@ -313,17 +314,17 @@
             // 
             // textBoxSmoothingPeriod
             // 
-            this.textBoxSmoothingPeriod.Location = new System.Drawing.Point(307, 186);
-            this.textBoxSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.textBoxSmoothingPeriod.MaximumSize = new System.Drawing.Size(256, 20);
+            this.textBoxSmoothingPeriod.Location = new System.Drawing.Point(230, 151);
+            this.textBoxSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4);
+            this.textBoxSmoothingPeriod.MaximumSize = new System.Drawing.Size(193, 20);
             this.textBoxSmoothingPeriod.Name = "textBoxSmoothingPeriod";
             this.textBoxSmoothingPeriod.Size = new System.Drawing.Size(256, 22);
             this.textBoxSmoothingPeriod.TabIndex = 19;
             // 
             // buttonFindDerivate
             // 
-            this.buttonFindDerivate.Location = new System.Drawing.Point(11, 411);
-            this.buttonFindDerivate.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.buttonFindDerivate.Location = new System.Drawing.Point(8, 334);
+            this.buttonFindDerivate.Margin = new System.Windows.Forms.Padding(4);
             this.buttonFindDerivate.Name = "buttonFindDerivate";
             this.buttonFindDerivate.Size = new System.Drawing.Size(267, 31);
             this.buttonFindDerivate.TabIndex = 21;
@@ -333,8 +334,8 @@
             // 
             // buttonCancelSmoothingPeriod
             // 
-            this.buttonCancelSmoothingPeriod.Location = new System.Drawing.Point(203, 274);
-            this.buttonCancelSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.buttonCancelSmoothingPeriod.Location = new System.Drawing.Point(152, 223);
+            this.buttonCancelSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4);
             this.buttonCancelSmoothingPeriod.Name = "buttonCancelSmoothingPeriod";
             this.buttonCancelSmoothingPeriod.Size = new System.Drawing.Size(212, 59);
             this.buttonCancelSmoothingPeriod.TabIndex = 22;
@@ -344,8 +345,8 @@
             // 
             // buttonApplySmoothing
             // 
-            this.buttonApplySmoothing.Location = new System.Drawing.Point(425, 274);
-            this.buttonApplySmoothing.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.buttonApplySmoothing.Location = new System.Drawing.Point(319, 223);
+            this.buttonApplySmoothing.Margin = new System.Windows.Forms.Padding(4);
             this.buttonApplySmoothing.Name = "buttonApplySmoothing";
             this.buttonApplySmoothing.Size = new System.Drawing.Size(164, 59);
             this.buttonApplySmoothing.TabIndex = 23;
@@ -356,37 +357,37 @@
             // chartDPPG
             // 
             this.chartDPPG.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea2.Name = "ChartArea1";
-            this.chartDPPG.ChartAreas.Add(chartArea2);
+            chartArea1.Name = "ChartArea1";
+            this.chartDPPG.ChartAreas.Add(chartArea1);
             this.chartDPPG.ContextMenuStrip = this.contextMenuStrip1;
-            legend2.Name = "Legend1";
-            this.chartDPPG.Legends.Add(legend2);
-            this.chartDPPG.Location = new System.Drawing.Point(13, 343);
-            this.chartDPPG.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            legend1.Name = "Legend1";
+            this.chartDPPG.Legends.Add(legend1);
+            this.chartDPPG.Location = new System.Drawing.Point(12, 279);
             this.chartDPPG.Name = "chartDPPG";
-            series5.ChartArea = "ChartArea1";
-            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series5.Legend = "Legend1";
-            series5.Name = "Series1";
-            series6.ChartArea = "ChartArea1";
-            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series6.Legend = "Legend1";
-            series6.Name = "Series2";
-            series7.ChartArea = "ChartArea1";
-            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series7.Legend = "Legend1";
-            series7.Name = "Series3";
-            series8.ChartArea = "ChartArea1";
-            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series8.Legend = "Legend1";
-            series8.Name = "Series4";
-            this.chartDPPG.Series.Add(series5);
-            this.chartDPPG.Series.Add(series6);
-            this.chartDPPG.Series.Add(series7);
-            this.chartDPPG.Series.Add(series8);
-            this.chartDPPG.Size = new System.Drawing.Size(963, 278);
+            series1.ChartArea = "ChartArea1";
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Legend = "Legend1";
+            series1.Name = "Series1";
+            series2.ChartArea = "ChartArea1";
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Legend = "Legend1";
+            series2.Name = "Series2";
+            series3.ChartArea = "ChartArea1";
+            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Legend = "Legend1";
+            series3.Name = "Series3";
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Legend = "Legend1";
+            series4.Name = "Series4";
+            this.chartDPPG.Series.Add(series1);
+            this.chartDPPG.Series.Add(series2);
+            this.chartDPPG.Series.Add(series3);
+            this.chartDPPG.Series.Add(series4);
+            this.chartDPPG.Size = new System.Drawing.Size(722, 226);
             this.chartDPPG.TabIndex = 24;
             this.chartDPPG.Text = "chart2";
+            this.chartDPPG.AxisViewChanged += new System.EventHandler<System.Windows.Forms.DataVisualization.Charting.ViewEventArgs>(this.chartDPPG_AxisViewChanged);
             // 
             // comboBoxDifferentiationMethod
             // 
@@ -406,8 +407,8 @@
             // 
             // buttonFindCountOfZeros
             // 
-            this.buttonFindCountOfZeros.Location = new System.Drawing.Point(9, 338);
-            this.buttonFindCountOfZeros.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonFindCountOfZeros.Location = new System.Drawing.Point(7, 275);
+            this.buttonFindCountOfZeros.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFindCountOfZeros.Name = "buttonFindCountOfZeros";
             this.buttonFindCountOfZeros.Size = new System.Drawing.Size(175, 63);
             this.buttonFindCountOfZeros.TabIndex = 26;
@@ -417,8 +418,8 @@
             // 
             // EndWatch
             // 
-            this.EndWatch.Location = new System.Drawing.Point(11, 550);
-            this.EndWatch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.EndWatch.Location = new System.Drawing.Point(8, 447);
+            this.EndWatch.Margin = new System.Windows.Forms.Padding(2);
             this.EndWatch.Name = "EndWatch";
             this.EndWatch.Size = new System.Drawing.Size(267, 30);
             this.EndWatch.TabIndex = 29;
@@ -428,8 +429,8 @@
             // 
             // WriteCharacteristics
             // 
-            this.WriteCharacteristics.Location = new System.Drawing.Point(11, 517);
-            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.WriteCharacteristics.Location = new System.Drawing.Point(8, 420);
+            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(2);
             this.WriteCharacteristics.Name = "WriteCharacteristics";
             this.WriteCharacteristics.Size = new System.Drawing.Size(267, 28);
             this.WriteCharacteristics.TabIndex = 27;
@@ -439,8 +440,8 @@
             // 
             // buttonFindSecondDerivate
             // 
-            this.buttonFindSecondDerivate.Location = new System.Drawing.Point(11, 449);
-            this.buttonFindSecondDerivate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.buttonFindSecondDerivate.Location = new System.Drawing.Point(8, 365);
+            this.buttonFindSecondDerivate.Margin = new System.Windows.Forms.Padding(2);
             this.buttonFindSecondDerivate.Name = "buttonFindSecondDerivate";
             this.buttonFindSecondDerivate.Size = new System.Drawing.Size(267, 31);
             this.buttonFindSecondDerivate.TabIndex = 28;
@@ -451,35 +452,34 @@
             // chartDDPPG
             // 
             this.chartDDPPG.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            chartArea3.Name = "ChartArea1";
-            this.chartDDPPG.ChartAreas.Add(chartArea3);
+            chartArea2.Name = "ChartArea1";
+            this.chartDDPPG.ChartAreas.Add(chartArea2);
             this.chartDDPPG.ContextMenuStrip = this.contextMenuStrip1;
-            legend3.Name = "Legend1";
-            this.chartDDPPG.Legends.Add(legend3);
-            this.chartDDPPG.Location = new System.Drawing.Point(13, 620);
-            this.chartDDPPG.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            legend2.Name = "Legend1";
+            this.chartDDPPG.Legends.Add(legend2);
+            this.chartDDPPG.Location = new System.Drawing.Point(101, 504);
             this.chartDDPPG.Name = "chartDDPPG";
-            series9.ChartArea = "ChartArea1";
-            series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series9.Legend = "Legend1";
-            series9.Name = "Series1";
-            series10.ChartArea = "ChartArea1";
-            series10.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series10.Legend = "Legend1";
-            series10.Name = "Series2";
-            series11.ChartArea = "ChartArea1";
-            series11.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series11.Legend = "Legend1";
-            series11.Name = "Series3";
-            series12.ChartArea = "ChartArea1";
-            series12.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series12.Legend = "Legend1";
-            series12.Name = "Series4";
-            this.chartDDPPG.Series.Add(series9);
-            this.chartDDPPG.Series.Add(series10);
-            this.chartDDPPG.Series.Add(series11);
-            this.chartDDPPG.Series.Add(series12);
-            this.chartDDPPG.Size = new System.Drawing.Size(963, 154);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Legend = "Legend1";
+            series5.Name = "Series1";
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Legend = "Legend1";
+            series6.Name = "Series2";
+            series7.ChartArea = "ChartArea1";
+            series7.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series7.Legend = "Legend1";
+            series7.Name = "Series3";
+            series8.ChartArea = "ChartArea1";
+            series8.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series8.Legend = "Legend1";
+            series8.Name = "Series4";
+            this.chartDDPPG.Series.Add(series5);
+            this.chartDDPPG.Series.Add(series6);
+            this.chartDDPPG.Series.Add(series7);
+            this.chartDDPPG.Series.Add(series8);
+            this.chartDDPPG.Size = new System.Drawing.Size(722, 125);
             this.chartDDPPG.TabIndex = 29;
             this.chartDDPPG.Text = "chart3";
             // 
@@ -489,8 +489,8 @@
             this.comboBoxSmoothingMethod.Items.AddRange(new object[] {
             "Сглаживание методом скользящего среднего",
             "Сглаживание полиномами 2 порядка по 7 точкам"});
-            this.comboBoxSmoothingMethod.Location = new System.Drawing.Point(9, 230);
-            this.comboBoxSmoothingMethod.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.comboBoxSmoothingMethod.Location = new System.Drawing.Point(7, 187);
+            this.comboBoxSmoothingMethod.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxSmoothingMethod.Name = "comboBoxSmoothingMethod";
             this.comboBoxSmoothingMethod.Size = new System.Drawing.Size(356, 24);
             this.comboBoxSmoothingMethod.TabIndex = 30;
@@ -505,8 +505,8 @@
             "Полный перебор значений",
             "Градиентный метод",
             "Метод Ньютона"});
-            this.comboBoxFindCharacteristic.Location = new System.Drawing.Point(284, 485);
-            this.comboBoxFindCharacteristic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.comboBoxFindCharacteristic.Location = new System.Drawing.Point(213, 394);
+            this.comboBoxFindCharacteristic.Margin = new System.Windows.Forms.Padding(2);
             this.comboBoxFindCharacteristic.Name = "comboBoxFindCharacteristic";
             this.comboBoxFindCharacteristic.Size = new System.Drawing.Size(289, 24);
             this.comboBoxFindCharacteristic.TabIndex = 28;
@@ -516,6 +516,7 @@
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.labelValueSmoothingWindow);
             this.groupBox1.Controls.Add(this.label1);
             this.groupBox1.Controls.Add(this.EndWatch);
@@ -545,11 +546,9 @@
             this.groupBox1.Controls.Add(this.buttonFindDerivate);
             this.groupBox1.Controls.Add(this.buttonApplySmoothing);
             this.groupBox1.Controls.Add(this.buttonCancelSmoothingPeriod);
-            this.groupBox1.Location = new System.Drawing.Point(1009, 15);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Location = new System.Drawing.Point(740, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.groupBox1.Size = new System.Drawing.Size(645, 750);
+            this.groupBox1.Size = new System.Drawing.Size(378, 609);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = " ";
@@ -563,16 +562,26 @@
             this.labelValueSmoothingWindow.TabIndex = 31;
             this.labelValueSmoothingWindow.Text = "3";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(9, 60);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(125, 13);
+            this.label4.TabIndex = 32;
+            this.label4.Text = "Параметр записи ФПГ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1371, 750);
+            this.ClientSize = new System.Drawing.Size(1119, 609);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chartDDPPG);
             this.Controls.Add(this.chartDPPG);
             this.Controls.Add(this.chartPPG);
-            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "PPGReader";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
@@ -623,6 +632,7 @@
         private System.Windows.Forms.ComboBox comboBoxFindCharacteristic;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label labelValueSmoothingWindow;
+        private System.Windows.Forms.Label label4;
     }
 }
 
