@@ -90,9 +90,10 @@
             // 
             // buttonDrawPPG
             // 
-            this.buttonDrawPPG.Location = new System.Drawing.Point(8, 109);
+            this.buttonDrawPPG.Location = new System.Drawing.Point(11, 134);
+            this.buttonDrawPPG.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.buttonDrawPPG.Name = "buttonDrawPPG";
-            this.buttonDrawPPG.Size = new System.Drawing.Size(169, 31);
+            this.buttonDrawPPG.Size = new System.Drawing.Size(225, 38);
             this.buttonDrawPPG.TabIndex = 30;
             this.buttonDrawPPG.Text = "Нарисовать график";
             this.buttonDrawPPG.Click += new System.EventHandler(this.buttonDrawPPG_Click);
@@ -105,7 +106,8 @@
             this.chartPPG.ContextMenuStrip = this.contextMenuStrip1;
             legend1.Name = "Legend1";
             this.chartPPG.Legends.Add(legend1);
-            this.chartPPG.Location = new System.Drawing.Point(10, 12);
+            this.chartPPG.Location = new System.Drawing.Point(13, 15);
+            this.chartPPG.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chartPPG.Name = "chartPPG";
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -127,7 +129,7 @@
             this.chartPPG.Series.Add(series2);
             this.chartPPG.Series.Add(series3);
             this.chartPPG.Series.Add(series4);
-            this.chartPPG.Size = new System.Drawing.Size(722, 261);
+            this.chartPPG.Size = new System.Drawing.Size(963, 321);
             this.chartPPG.TabIndex = 1;
             this.chartPPG.Text = "chartPPG";
             this.chartPPG.MouseClick += new System.Windows.Forms.MouseEventHandler(this.chartPPG_MouseClick);
@@ -143,47 +145,48 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(8, 476);
+            this.richTextBox1.Location = new System.Drawing.Point(11, 586);
+            this.richTextBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(463, 123);
+            this.richTextBox1.Size = new System.Drawing.Size(616, 150);
             this.richTextBox1.TabIndex = 2;
             this.richTextBox1.Text = "";
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(7, 30);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(9, 37);
+            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(36, 13);
+            this.label1.Size = new System.Drawing.Size(45, 17);
             this.label1.TabIndex = 3;
             this.label1.Text = "Файл";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(22, 66);
-            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label2.Location = new System.Drawing.Point(29, 81);
+            this.label2.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(15, 13);
+            this.label2.Size = new System.Drawing.Size(17, 17);
             this.label2.TabIndex = 4;
             this.label2.Text = "w";
             // 
             // textBoxPath
             // 
-            this.textBoxPath.Location = new System.Drawing.Point(52, 27);
-            this.textBoxPath.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBoxPath.Location = new System.Drawing.Point(69, 33);
+            this.textBoxPath.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
             this.textBoxPath.Name = "textBoxPath";
-            this.textBoxPath.Size = new System.Drawing.Size(279, 20);
+            this.textBoxPath.Size = new System.Drawing.Size(371, 22);
             this.textBoxPath.TabIndex = 5;
             // 
             // textBoxW
             // 
-            this.textBoxW.Location = new System.Drawing.Point(47, 63);
-            this.textBoxW.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.textBoxW.MaximumSize = new System.Drawing.Size(20, 20);
+            this.textBoxW.Location = new System.Drawing.Point(63, 78);
+            this.textBoxW.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.textBoxW.MaximumSize = new System.Drawing.Size(25, 20);
             this.textBoxW.Name = "textBoxW";
-            this.textBoxW.Size = new System.Drawing.Size(20, 20);
+            this.textBoxW.Size = new System.Drawing.Size(25, 22);
             this.textBoxW.TabIndex = 6;
             this.textBoxW.Text = "5";
             // 
@@ -191,10 +194,10 @@
             // 
             this.buttonIncreaseScale.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonIncreaseScale.Image = ((System.Drawing.Image)(resources.GetObject("buttonIncreaseScale.Image")));
-            this.buttonIncreaseScale.Location = new System.Drawing.Point(245, 101);
-            this.buttonIncreaseScale.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.buttonIncreaseScale.Location = new System.Drawing.Point(327, 124);
+            this.buttonIncreaseScale.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
             this.buttonIncreaseScale.Name = "buttonIncreaseScale";
-            this.buttonIncreaseScale.Size = new System.Drawing.Size(43, 18);
+            this.buttonIncreaseScale.Size = new System.Drawing.Size(57, 22);
             this.buttonIncreaseScale.TabIndex = 7;
             this.buttonIncreaseScale.UseVisualStyleBackColor = false;
             this.buttonIncreaseScale.Click += new System.EventHandler(this.buttonIncreaseScale_Click);
@@ -203,10 +206,10 @@
             // 
             this.buttonDecreaseScale.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonDecreaseScale.Image = ((System.Drawing.Image)(resources.GetObject("buttonDecreaseScale.Image")));
-            this.buttonDecreaseScale.Location = new System.Drawing.Point(245, 123);
-            this.buttonDecreaseScale.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.buttonDecreaseScale.Location = new System.Drawing.Point(327, 151);
+            this.buttonDecreaseScale.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
             this.buttonDecreaseScale.Name = "buttonDecreaseScale";
-            this.buttonDecreaseScale.Size = new System.Drawing.Size(43, 18);
+            this.buttonDecreaseScale.Size = new System.Drawing.Size(57, 22);
             this.buttonDecreaseScale.TabIndex = 8;
             this.buttonDecreaseScale.UseVisualStyleBackColor = false;
             this.buttonDecreaseScale.Click += new System.EventHandler(this.buttonDecreaseScale_Click);
@@ -214,30 +217,30 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(82, 70);
-            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label3.Location = new System.Drawing.Point(109, 86);
+            this.label3.Margin = new System.Windows.Forms.Padding(7, 0, 7, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(126, 13);
+            this.label3.Size = new System.Drawing.Size(163, 17);
             this.label3.TabIndex = 9;
             this.label3.Text = "Частота прореживания";
             // 
             // textBoxSinglingRate
             // 
-            this.textBoxSinglingRate.Location = new System.Drawing.Point(219, 63);
-            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
-            this.textBoxSinglingRate.MaximumSize = new System.Drawing.Size(18, 20);
+            this.textBoxSinglingRate.Location = new System.Drawing.Point(292, 78);
+            this.textBoxSinglingRate.Margin = new System.Windows.Forms.Padding(7, 6, 7, 6);
+            this.textBoxSinglingRate.MaximumSize = new System.Drawing.Size(23, 20);
             this.textBoxSinglingRate.Name = "textBoxSinglingRate";
-            this.textBoxSinglingRate.Size = new System.Drawing.Size(18, 20);
+            this.textBoxSinglingRate.Size = new System.Drawing.Size(23, 22);
             this.textBoxSinglingRate.TabIndex = 10;
             this.textBoxSinglingRate.Text = "5";
             // 
             // labelSmoothingWindow
             // 
             this.labelSmoothingWindow.AutoSize = true;
-            this.labelSmoothingWindow.Location = new System.Drawing.Point(281, 190);
-            this.labelSmoothingWindow.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.labelSmoothingWindow.Location = new System.Drawing.Point(375, 234);
+            this.labelSmoothingWindow.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.labelSmoothingWindow.Name = "labelSmoothingWindow";
-            this.labelSmoothingWindow.Size = new System.Drawing.Size(103, 13);
+            this.labelSmoothingWindow.Size = new System.Drawing.Size(130, 17);
             this.labelSmoothingWindow.TabIndex = 11;
             this.labelSmoothingWindow.Text = "Окно сглаживания";
             // 
@@ -245,10 +248,10 @@
             // 
             this.buttonIncreaseWindow.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonIncreaseWindow.Image = ((System.Drawing.Image)(resources.GetObject("buttonIncreaseWindow.Image")));
-            this.buttonIncreaseWindow.Location = new System.Drawing.Point(413, 177);
-            this.buttonIncreaseWindow.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.buttonIncreaseWindow.Location = new System.Drawing.Point(551, 218);
+            this.buttonIncreaseWindow.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
             this.buttonIncreaseWindow.Name = "buttonIncreaseWindow";
-            this.buttonIncreaseWindow.Size = new System.Drawing.Size(43, 18);
+            this.buttonIncreaseWindow.Size = new System.Drawing.Size(57, 22);
             this.buttonIncreaseWindow.TabIndex = 13;
             this.buttonIncreaseWindow.UseVisualStyleBackColor = false;
             this.buttonIncreaseWindow.Click += new System.EventHandler(this.buttonIncreaseWindow_Click_1);
@@ -257,20 +260,20 @@
             // 
             this.buttonDecreaseWindow.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.buttonDecreaseWindow.Image = ((System.Drawing.Image)(resources.GetObject("buttonDecreaseWindow.Image")));
-            this.buttonDecreaseWindow.Location = new System.Drawing.Point(413, 199);
-            this.buttonDecreaseWindow.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.buttonDecreaseWindow.Location = new System.Drawing.Point(551, 245);
+            this.buttonDecreaseWindow.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
             this.buttonDecreaseWindow.Name = "buttonDecreaseWindow";
-            this.buttonDecreaseWindow.Size = new System.Drawing.Size(43, 18);
+            this.buttonDecreaseWindow.Size = new System.Drawing.Size(57, 22);
             this.buttonDecreaseWindow.TabIndex = 14;
             this.buttonDecreaseWindow.UseVisualStyleBackColor = false;
             this.buttonDecreaseWindow.Click += new System.EventHandler(this.buttonDecreaseWindow_Click_1);
             // 
             // buttonSmoothingPeriod
             // 
-            this.buttonSmoothingPeriod.Location = new System.Drawing.Point(7, 223);
-            this.buttonSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.buttonSmoothingPeriod.Location = new System.Drawing.Point(9, 274);
+            this.buttonSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 2, 5, 2);
             this.buttonSmoothingPeriod.Name = "buttonSmoothingPeriod";
-            this.buttonSmoothingPeriod.Size = new System.Drawing.Size(127, 48);
+            this.buttonSmoothingPeriod.Size = new System.Drawing.Size(169, 59);
             this.buttonSmoothingPeriod.TabIndex = 15;
             this.buttonSmoothingPeriod.Text = "Сгладить";
             this.buttonSmoothingPeriod.UseVisualStyleBackColor = true;
@@ -279,19 +282,19 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(184, 118);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(245, 145);
+            this.label5.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(53, 13);
+            this.label5.Size = new System.Drawing.Size(68, 17);
             this.label5.TabIndex = 16;
             this.label5.Text = "Масштаб";
             // 
             // FullSearchCharacteristics
             // 
-            this.FullSearchCharacteristics.Location = new System.Drawing.Point(8, 394);
-            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.FullSearchCharacteristics.Location = new System.Drawing.Point(11, 485);
+            this.FullSearchCharacteristics.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.FullSearchCharacteristics.Name = "FullSearchCharacteristics";
-            this.FullSearchCharacteristics.Size = new System.Drawing.Size(200, 22);
+            this.FullSearchCharacteristics.Size = new System.Drawing.Size(267, 27);
             this.FullSearchCharacteristics.TabIndex = 17;
             this.FullSearchCharacteristics.Text = "Найти характеристики";
             this.FullSearchCharacteristics.UseVisualStyleBackColor = true;
@@ -299,10 +302,10 @@
             // 
             // buttonTagSmoothingPeriod
             // 
-            this.buttonTagSmoothingPeriod.Location = new System.Drawing.Point(7, 147);
-            this.buttonTagSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonTagSmoothingPeriod.Location = new System.Drawing.Point(9, 181);
+            this.buttonTagSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.buttonTagSmoothingPeriod.Name = "buttonTagSmoothingPeriod";
-            this.buttonTagSmoothingPeriod.Size = new System.Drawing.Size(215, 24);
+            this.buttonTagSmoothingPeriod.Size = new System.Drawing.Size(287, 30);
             this.buttonTagSmoothingPeriod.TabIndex = 18;
             this.buttonTagSmoothingPeriod.Text = "Отметить период сглаживания";
             this.buttonTagSmoothingPeriod.UseVisualStyleBackColor = true;
@@ -310,19 +313,19 @@
             // 
             // textBoxSmoothingPeriod
             // 
-            this.textBoxSmoothingPeriod.Location = new System.Drawing.Point(230, 151);
-            this.textBoxSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.textBoxSmoothingPeriod.MaximumSize = new System.Drawing.Size(193, 20);
+            this.textBoxSmoothingPeriod.Location = new System.Drawing.Point(307, 186);
+            this.textBoxSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.textBoxSmoothingPeriod.MaximumSize = new System.Drawing.Size(256, 20);
             this.textBoxSmoothingPeriod.Name = "textBoxSmoothingPeriod";
-            this.textBoxSmoothingPeriod.Size = new System.Drawing.Size(193, 20);
+            this.textBoxSmoothingPeriod.Size = new System.Drawing.Size(256, 22);
             this.textBoxSmoothingPeriod.TabIndex = 19;
             // 
             // buttonFindDerivate
             // 
-            this.buttonFindDerivate.Location = new System.Drawing.Point(8, 334);
-            this.buttonFindDerivate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonFindDerivate.Location = new System.Drawing.Point(11, 411);
+            this.buttonFindDerivate.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.buttonFindDerivate.Name = "buttonFindDerivate";
-            this.buttonFindDerivate.Size = new System.Drawing.Size(200, 25);
+            this.buttonFindDerivate.Size = new System.Drawing.Size(267, 31);
             this.buttonFindDerivate.TabIndex = 21;
             this.buttonFindDerivate.Text = "Найти производную";
             this.buttonFindDerivate.UseVisualStyleBackColor = true;
@@ -330,10 +333,10 @@
             // 
             // buttonCancelSmoothingPeriod
             // 
-            this.buttonCancelSmoothingPeriod.Location = new System.Drawing.Point(152, 223);
-            this.buttonCancelSmoothingPeriod.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonCancelSmoothingPeriod.Location = new System.Drawing.Point(203, 274);
+            this.buttonCancelSmoothingPeriod.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.buttonCancelSmoothingPeriod.Name = "buttonCancelSmoothingPeriod";
-            this.buttonCancelSmoothingPeriod.Size = new System.Drawing.Size(159, 48);
+            this.buttonCancelSmoothingPeriod.Size = new System.Drawing.Size(212, 59);
             this.buttonCancelSmoothingPeriod.TabIndex = 22;
             this.buttonCancelSmoothingPeriod.Text = "Отменить сглаживание";
             this.buttonCancelSmoothingPeriod.UseVisualStyleBackColor = true;
@@ -341,10 +344,10 @@
             // 
             // buttonApplySmoothing
             // 
-            this.buttonApplySmoothing.Location = new System.Drawing.Point(319, 223);
-            this.buttonApplySmoothing.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.buttonApplySmoothing.Location = new System.Drawing.Point(425, 274);
+            this.buttonApplySmoothing.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.buttonApplySmoothing.Name = "buttonApplySmoothing";
-            this.buttonApplySmoothing.Size = new System.Drawing.Size(123, 48);
+            this.buttonApplySmoothing.Size = new System.Drawing.Size(164, 59);
             this.buttonApplySmoothing.TabIndex = 23;
             this.buttonApplySmoothing.Text = "Применить сглаживание";
             this.buttonApplySmoothing.UseVisualStyleBackColor = true;
@@ -358,7 +361,8 @@
             this.chartDPPG.ContextMenuStrip = this.contextMenuStrip1;
             legend2.Name = "Legend1";
             this.chartDPPG.Legends.Add(legend2);
-            this.chartDPPG.Location = new System.Drawing.Point(10, 279);
+            this.chartDPPG.Location = new System.Drawing.Point(13, 343);
+            this.chartDPPG.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chartDPPG.Name = "chartDPPG";
             series5.ChartArea = "ChartArea1";
             series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -380,7 +384,7 @@
             this.chartDPPG.Series.Add(series6);
             this.chartDPPG.Series.Add(series7);
             this.chartDPPG.Series.Add(series8);
-            this.chartDPPG.Size = new System.Drawing.Size(722, 226);
+            this.chartDPPG.Size = new System.Drawing.Size(963, 278);
             this.chartDPPG.TabIndex = 24;
             this.chartDPPG.Text = "chart2";
             // 
@@ -392,20 +396,20 @@
             "Дифференцирование первого порядка точности",
             "Дифференцирование второго порядка точности",
             "Дифференцирование по 4 узловым точкам"});
-            this.comboBoxDifferentiationMethod.Location = new System.Drawing.Point(213, 337);
-            this.comboBoxDifferentiationMethod.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.comboBoxDifferentiationMethod.Location = new System.Drawing.Point(284, 415);
+            this.comboBoxDifferentiationMethod.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
             this.comboBoxDifferentiationMethod.Name = "comboBoxDifferentiationMethod";
-            this.comboBoxDifferentiationMethod.Size = new System.Drawing.Size(271, 21);
+            this.comboBoxDifferentiationMethod.Size = new System.Drawing.Size(360, 24);
             this.comboBoxDifferentiationMethod.TabIndex = 25;
             this.comboBoxDifferentiationMethod.Text = "Дифференцирование первого порядка точности";
             this.comboBoxDifferentiationMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxDifferentiationMethod_SelectedIndexChanged);
             // 
             // buttonFindCountOfZeros
             // 
-            this.buttonFindCountOfZeros.Location = new System.Drawing.Point(7, 275);
-            this.buttonFindCountOfZeros.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonFindCountOfZeros.Location = new System.Drawing.Point(9, 338);
+            this.buttonFindCountOfZeros.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonFindCountOfZeros.Name = "buttonFindCountOfZeros";
-            this.buttonFindCountOfZeros.Size = new System.Drawing.Size(131, 51);
+            this.buttonFindCountOfZeros.Size = new System.Drawing.Size(175, 63);
             this.buttonFindCountOfZeros.TabIndex = 26;
             this.buttonFindCountOfZeros.Text = "Посчитать количество нулей на периодах";
             this.buttonFindCountOfZeros.UseVisualStyleBackColor = true;
@@ -413,10 +417,10 @@
             // 
             // EndWatch
             // 
-            this.EndWatch.Location = new System.Drawing.Point(8, 447);
-            this.EndWatch.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.EndWatch.Location = new System.Drawing.Point(11, 550);
+            this.EndWatch.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.EndWatch.Name = "EndWatch";
-            this.EndWatch.Size = new System.Drawing.Size(200, 24);
+            this.EndWatch.Size = new System.Drawing.Size(267, 30);
             this.EndWatch.TabIndex = 29;
             this.EndWatch.Text = "Просмотр периодов закончен";
             this.EndWatch.UseVisualStyleBackColor = true;
@@ -424,10 +428,10 @@
             // 
             // WriteCharacteristics
             // 
-            this.WriteCharacteristics.Location = new System.Drawing.Point(8, 420);
-            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.WriteCharacteristics.Location = new System.Drawing.Point(11, 517);
+            this.WriteCharacteristics.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.WriteCharacteristics.Name = "WriteCharacteristics";
-            this.WriteCharacteristics.Size = new System.Drawing.Size(200, 23);
+            this.WriteCharacteristics.Size = new System.Drawing.Size(267, 28);
             this.WriteCharacteristics.TabIndex = 27;
             this.WriteCharacteristics.Text = "Записать характеристики";
             this.WriteCharacteristics.UseVisualStyleBackColor = true;
@@ -435,10 +439,10 @@
             // 
             // buttonFindSecondDerivate
             // 
-            this.buttonFindSecondDerivate.Location = new System.Drawing.Point(8, 365);
-            this.buttonFindSecondDerivate.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.buttonFindSecondDerivate.Location = new System.Drawing.Point(11, 449);
+            this.buttonFindSecondDerivate.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.buttonFindSecondDerivate.Name = "buttonFindSecondDerivate";
-            this.buttonFindSecondDerivate.Size = new System.Drawing.Size(200, 25);
+            this.buttonFindSecondDerivate.Size = new System.Drawing.Size(267, 31);
             this.buttonFindSecondDerivate.TabIndex = 28;
             this.buttonFindSecondDerivate.Text = "Найти вторую производную";
             this.buttonFindSecondDerivate.UseVisualStyleBackColor = true;
@@ -452,7 +456,8 @@
             this.chartDDPPG.ContextMenuStrip = this.contextMenuStrip1;
             legend3.Name = "Legend1";
             this.chartDDPPG.Legends.Add(legend3);
-            this.chartDDPPG.Location = new System.Drawing.Point(10, 504);
+            this.chartDDPPG.Location = new System.Drawing.Point(13, 620);
+            this.chartDDPPG.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.chartDDPPG.Name = "chartDDPPG";
             series9.ChartArea = "ChartArea1";
             series9.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -474,7 +479,7 @@
             this.chartDDPPG.Series.Add(series10);
             this.chartDDPPG.Series.Add(series11);
             this.chartDDPPG.Series.Add(series12);
-            this.chartDDPPG.Size = new System.Drawing.Size(722, 125);
+            this.chartDDPPG.Size = new System.Drawing.Size(963, 154);
             this.chartDDPPG.TabIndex = 29;
             this.chartDDPPG.Text = "chart3";
             // 
@@ -484,10 +489,10 @@
             this.comboBoxSmoothingMethod.Items.AddRange(new object[] {
             "Сглаживание методом скользящего среднего",
             "Сглаживание полиномами 2 порядка по 7 точкам"});
-            this.comboBoxSmoothingMethod.Location = new System.Drawing.Point(7, 187);
-            this.comboBoxSmoothingMethod.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxSmoothingMethod.Location = new System.Drawing.Point(9, 230);
+            this.comboBoxSmoothingMethod.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxSmoothingMethod.Name = "comboBoxSmoothingMethod";
-            this.comboBoxSmoothingMethod.Size = new System.Drawing.Size(268, 21);
+            this.comboBoxSmoothingMethod.Size = new System.Drawing.Size(356, 24);
             this.comboBoxSmoothingMethod.TabIndex = 30;
             this.comboBoxSmoothingMethod.Text = "Сглаживание методом скользящего среднего";
             this.comboBoxSmoothingMethod.SelectedIndexChanged += new System.EventHandler(this.comboBoxSmoothingMethod_SelectedIndexChanged);
@@ -500,10 +505,10 @@
             "Полный перебор значений",
             "Градиентный метод",
             "Метод Ньютона"});
-            this.comboBoxFindCharacteristic.Location = new System.Drawing.Point(213, 394);
-            this.comboBoxFindCharacteristic.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.comboBoxFindCharacteristic.Location = new System.Drawing.Point(284, 485);
+            this.comboBoxFindCharacteristic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.comboBoxFindCharacteristic.Name = "comboBoxFindCharacteristic";
-            this.comboBoxFindCharacteristic.Size = new System.Drawing.Size(218, 21);
+            this.comboBoxFindCharacteristic.Size = new System.Drawing.Size(289, 24);
             this.comboBoxFindCharacteristic.TabIndex = 28;
             this.comboBoxFindCharacteristic.Text = "Полный перебор значений";
             this.comboBoxFindCharacteristic.SelectedIndexChanged += new System.EventHandler(this.comboBoxFindCharacteristic_SelectedIndexChanged);
@@ -540,9 +545,11 @@
             this.groupBox1.Controls.Add(this.buttonFindDerivate);
             this.groupBox1.Controls.Add(this.buttonApplySmoothing);
             this.groupBox1.Controls.Add(this.buttonCancelSmoothingPeriod);
-            this.groupBox1.Location = new System.Drawing.Point(757, 12);
+            this.groupBox1.Location = new System.Drawing.Point(1009, 15);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(484, 609);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.groupBox1.Size = new System.Drawing.Size(645, 750);
             this.groupBox1.TabIndex = 31;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = " ";
@@ -550,23 +557,22 @@
             // labelValueSmoothingWindow
             // 
             this.labelValueSmoothingWindow.AutoSize = true;
-            this.labelValueSmoothingWindow.Location = new System.Drawing.Point(385, 190);
-            this.labelValueSmoothingWindow.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.labelValueSmoothingWindow.Location = new System.Drawing.Point(513, 234);
             this.labelValueSmoothingWindow.Name = "labelValueSmoothingWindow";
-            this.labelValueSmoothingWindow.Size = new System.Drawing.Size(13, 13);
+            this.labelValueSmoothingWindow.Size = new System.Drawing.Size(16, 17);
             this.labelValueSmoothingWindow.TabIndex = 31;
             this.labelValueSmoothingWindow.Text = "3";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1028, 609);
+            this.ClientSize = new System.Drawing.Size(1371, 750);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.chartDDPPG);
             this.Controls.Add(this.chartDPPG);
             this.Controls.Add(this.chartPPG);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.Name = "Form1";
             this.Text = "PPGReader";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
