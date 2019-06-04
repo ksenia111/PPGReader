@@ -579,6 +579,7 @@
             this.Controls.Add(this.chartDDPPG);
             this.Controls.Add(this.chartDPPG);
             this.Controls.Add(this.chartPPG);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "Form1";
             this.Text = "PPGReader";
